@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${not #lists.isEmpty(rules)}">
+
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h2>Rule List</h2>
+                <p style="    float: right;">
+                    <a href="/rule/new"><span class="glyphicon glyphicon-plus"></span></a>
+                </p>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Id</th>
+                        <th>Cat Display</th>
+                        <th>Category Id</th>
+                        <th>Containing</th>
+                        <th>Line Order</th>
+                    </tr>
+                    <tr th:each="rule : ${rules}">
+                        <td th:text="${rule.id}"><a href="/rule/${rule.id}">Id</a></td>
+                        <td th:text="${rule.category.name}">cat display</td>
+                        <td th:text="${rule.category.id}">parentCategory id</td>
+                        <td th:text="${rule.containing}">containing</td>
+                        <td th:text="${rule.lineorder}">line order</td>
+                        <td><a th:href="${'/rule/' + rule.id}">View</a></td>
+                        <td><a th:href="${'/rule/edit/' + rule.id}">Edit</a></td>
+                        <td><a th:href="${'/rule/delete/' + rule.id}">Delete</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

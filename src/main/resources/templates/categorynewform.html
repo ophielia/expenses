@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Category Details</h2>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="form-horizontal" th:object="${category}" th:action="@{/category/new}" method="post">
+                        <input type="hidden" th:field="*{id}"/>
+                        <input type="hidden" th:field="*{version}"/>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Name:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" th:field="*{name}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label th:for="parentCategory" class="col-sm-2 control-label">To Category:</label>
+                            <div class="col-sm-4">
+                            <select name="parentCategory">
+                                <option th:each="parentCategory : ${categories}"
+                                        th:value="${parentCategory.getId()}"
+                                        th:text="${parentCategory.getName()}">
+                                </option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Description:</label>
+                            <div class="col-sm-4"><input type="text" class="form-control" th:field="*{description}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Non-Expense Category:</label>
+                            <div class="col-sm-4"><input type="checkbox" class="form-control" th:field="*{nonexpense}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Display Category:</label>
+                            <div class="col-sm-4"><input type="checkbox" class="form-control"
+                                                         th:field="*{displayInList}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-10"></label>
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn btn-default">Submit</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

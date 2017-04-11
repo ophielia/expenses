@@ -1,0 +1,36 @@
+immediate -
+    date format
+    text smaller
+    edit link
+    checkboxes
+    update quickgroups
+    update categories
+    think about credits / debits as colors - not with negative sign.
+
+    pages for yearly edits - one page for both
+    clean-up (pages not working...)
+
+
+
+
+todo list
+
+    quickgroup - validation
+    lockdown rules - null pointers, validation, etc.
+	lockdown categories - null pointers, validation, etc.
+	category - in list switch list to grid
+	category - edit in grid
+	homogynize glyphicons
+	targets - monthly
+	targets - yearly
+	import
+	switch to postgres db
+
+
+migration
+Target
+    targettype => type
+    monthtag => tag
+    yeartag => tag
+
+    rename ExpenseDao => Expense

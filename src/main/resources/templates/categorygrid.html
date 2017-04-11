@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+
+    <style>
+        .ul {
+            margin-left: 2px;
+            margin-right: 2px;
+            padding: 1px 2px;
+
+        }
+
+        .lvl1 {
+            margin-left: 0px;
+        }
+
+        .lvl2 {list-style-type: none;
+            margin-left: 15px;
+        }
+
+        .lvl3 {list-style-type: none;
+            margin-left: 30px;
+        }
+
+        .lvl4 {list-style-type: none;
+            margin-left: 45px;
+        }
+
+        .lvl5 {list-style-type: none;
+            margin-left: 60px;
+        }
+
+
+        .lvl6 {list-style-type: none;
+            margin-left: 75px;
+        }
+
+        .lvl7 {list-style-type: none;
+            margin-left: 90px;
+        }
+
+        .lvl8 {list-style-type: none;
+            margin-left: 105px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${not #lists.isEmpty(categories)}">
+
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h2>Category Grid</h2>
+                <p style="    float: right;">
+                    <a href="/category/new"><span class="glyphicon glyphicon-plus"></span></a>
+                </p>
+
+
+
+                <div th:each="level : ${categories}"
+                     th:classappend="'lvl' + ${level.level}"
+                     th:text="${level.category.name}"></div>
+
+<!--
+                <c:forEach var="level" items="${categorylvllist}" >
+                    <spring:url value="/categories/edit/${level.category.id}?form" var="editlink"></spring:url>
+                    <li class="lvl${level.level}"><a href="${editlink}"> ${level.category.name }
+                        <c:if test="${level.category.nonexpense}" >(${nonexpense})</c:if>
+                        <c:if test="${!level.category.displayinlist}" >(${notshown})</c:if>
+                    </a></li>
+                </c:forEach>
+-->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

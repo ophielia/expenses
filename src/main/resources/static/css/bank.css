@@ -1,0 +1,47 @@
+h2 {color:crimson}
+
+a {color:crimson}
+
+html {
+    background-image: url(/images/abasin.jpg);
+    background-size:cover;
+}
+
+body {
+    background-color: transparent;
+}
+
+table {
+    background-color: white;
+}
+
+td.nowrap {
+    min-width:100px;
+}
+
+table.moretext {
+    font-size:12px;
+}
+
+.listheadernottop {
+    padding-top:20px;
+}
+
+.listglyph {
+    color:crimson;
+}
+.listmember {
+    padding-left:15px;
+}
+
+.buttonglyph {
+    background-color: white;
+    outline-width: 0px;
+    border-width: 0px;
+    color: crimson;
+    padding: 0px;
+}
+
+.topbuffer-med {
+    margin-top:50px;
+}

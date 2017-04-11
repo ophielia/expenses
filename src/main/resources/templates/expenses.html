@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Expenses - Quick Groups</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<script>
+    /*<![CDATA[*/
+    $(document).ready(function () {
+
+        $("th[id^='aSort']").click(
+            function () {
+                HandleSortClick(event.transaction, 'aSort');
+            }
+        );
+
+        $("span[id^='clearLine']").click(
+            function () {
+                HandleClick(event.transaction, 'clearLine');
+            }
+        );
+        $("span[id^='removeLine']").click(
+            function () {
+                HandleClick(event.transaction, 'removeLine');
+            }
+        );
+
+    });
+
+    function HandleSortClick(param, prefix) {
+        var editIndex = getIndex(prefix, param.id);
+        var inputAction = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "sort").val("sort");
+        var inputSort = document.getElementById("sortField");
+        inputSort.setAttribute("value", editIndex);
+        $("#expenseListForm").append(inputAction);
+
+        $("#expenseListForm").submit();
+    }
+
+
+    function getIndex(prefix, text) {
+        // gets a substring of the text, starting at the char after the length of the prefix
+        var stripped = text.substr(prefix.length);
+        return stripped;
+    }
+
+
+    /*]]>*/
+</script>
+
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Expenses</h2>
+            <form id="expenseListForm" class="form-horizontal form-inline" th:object="${expenseModel}" th:action="@{/expense/list}"
+                  method="post">
+                <input th:field="*{sortField}" type="hidden"/>
+                <input th:field="*{sortDirection}" type="hidden"/>
+                <div class="container-fluid">
+                    <h4>Search Criteria</h4>
+                    <div class="row">
+                        <div class="col-md-2">Date Range</div>
+                        <div class="col-md-2">Category Type</div>
+                        <div class="col-md-2">Category</div>
+                        <div class="col-md-2">+ / -</div>
+                        <div class="col-md-2">Subcategories</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><select th:field="*{dateRangeByType}">
+                            <option th:each="daterange : ${T(meg.swapout.expense.services.DateRangeType).values()}"
+                                    th:value="${daterange}" th:text="${daterange.displayName}"></option>
+                        </select></div>
+                        <div class="col-md-2"><select th:field="*{categorizedType}">
+                            <option th:each="cattype : ${T(meg.swapout.expense.services.CategorizedType).values()}"
+                                    th:value="${cattype}" th:text="${cattype.displayName}"></option>
+                        </select></div>
+                        <div class="col-md-2"><select th:field="*{category}">
+                            <option value="">- - - - - - - -</option>
+                            <option th:each="parentCategory : ${categorylist}"
+                                    th:value="${parentCategory.getId()}"
+                                    th:text="${parentCategory.getName()}">
+                            </option>
+                        </select></div>
+                        <div class="col-md-2"><select th:field="*{transactionType}">
+                            <option th:each="transtype : ${T(meg.swapout.expense.services.TransactionType).values()}"
+                                    th:value="${transtype}" th:text="${transtype.displayName}"></option>
+                        </select></div>
+                        <div class="col-md-2"><input type="checkbox"/> include subcategories</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8"></div>
+                        <div class="col-md-3">
+                            <input type="submit" value="Search"/>
+                            <input type="submit" value="Clear" name="clearCriteria"/>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="container topbuffer-med ">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-sm-5 input-group"><select th:field="*{batchUpdate}" th:errorclass="fieldError">
+                                    <option value="0">- - - - - -</option>
+                                    <option th:each="category : ${categorylist}"
+                                            th:value="${category.getId()}"
+                                            th:text="${category.getName()}">
+                                    </option>
+                                </select> <input type="submit" name="updatecat" value="Update Categories For Selected"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table table-bordered table-striped table-hover moretext">
+                                    <thead class="thead-inverse">
+                                    <th></th>
+                                    <th id="aSortDate">Date</th>
+                                    <th id="aSortCat">Category</th>
+                                    <th id="aSortDetail">Desciption</th>
+                                    <th id="aSortAmount">Amount</th>
+                                    <th></th>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="exp,stat : *{expenses}">
+                                        <td><input th:name="'idref['+${stat.index}+']'" th:value="${exp.id}"
+                                                   type="hidden"/>
+                                            <input type="checkbox" th:field="*{checked[__${stat.index}__]}"/></td>
+                                        <td class="nowrap" th:text="${#dates.format(exp.transdate, 'MM-dd-yyyy')}"></td>
+                                        <td th:text="${exp.catName}"/>
+                                        <td th:text="${exp.detail}"/>
+                                        <td th:text="${exp.displayamount}"/>
+                                        <td><a th:href="${'/expense/edit/' + exp.transid}" class="glyphicon glyphicon-pencil listglyph"></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

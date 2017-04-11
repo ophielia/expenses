@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Spring Framework Guru</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+    <h2>Category Details</h2>
+    <div class="panel">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Category Id:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static" th:text="${category.id}">Product Id</p></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Name:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static" th:text="${category.name}">name</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Description:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static" th:text="${category.description}">description</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Non-Expense Category:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static" th:text="${category.nonexpense}">url....</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Display Category:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static" th:text="${category.displayInList}">url....</p>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>
