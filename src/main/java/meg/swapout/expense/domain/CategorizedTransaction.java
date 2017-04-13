@@ -41,17 +41,8 @@ public class CategorizedTransaction {
     @JoinColumn(name = "banktaid")
     private RawTransaction banktrans;
 
-    @Transient
-    private String catdisplay;
 
-
-    public String getCatdisplay() {
-        return catdisplay;
-    }
-
-    public void setCatdisplay(String catdisplay) {
-        this.catdisplay = catdisplay;
-    }
+    private Double displayAmount;
 
     public Long getId() {
         return id;
@@ -112,6 +103,19 @@ public class CategorizedTransaction {
 
     public void setBanktrans(RawTransaction banktrans) {
         this.banktrans = banktrans;
+    }
+
+    public Double getDisplayAmount() {
+        if (this.amount==null) {
+            return 0D;
+        }
+        return this.amount*-1;
+    }
+
+    public void setDisplayAmount(Double displayAmount) {
+        if (displayAmount!=null) {
+            this.amount = displayAmount*-1;
+        }
     }
 
 

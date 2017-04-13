@@ -2,6 +2,7 @@ package meg.swapout.expense.controllers.models;
 
 import meg.swapout.expense.domain.CategorizedTransaction;
 import meg.swapout.expense.domain.Category;
+import meg.swapout.expense.domain.QuickGroup;
 import meg.swapout.expense.domain.RawTransaction;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class ExpenseModel {
     private List<CategorizedTransaction> details;
 
     private Category category;
+
+    private QuickGroup quickGroup;
+
     private int inEdit;
     private int toEdit;
 
@@ -65,5 +69,13 @@ public class ExpenseModel {
 
     public void setInEdit(int inEdit) {
         this.inEdit = inEdit;
+    }
+
+    public QuickGroup getQuickGroup() {
+        return quickGroup;
+    }
+
+    public void setQuickGroup(QuickGroup quickGroup) {
+        this.quickGroup = quickGroup;
     }
 }

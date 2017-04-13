@@ -123,7 +123,10 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     @Override
     public List<CategorizedTransaction> distributeAmount(RawTransaction transaction, List<CategorizedTransaction> details, boolean remainderOnly) {
         // determine amount to be distributed
-        Double amountToDistribute = remainderOnly ? getRemainder(transaction, details) : transaction.getAmount();
+        Double amountToDistribute = getRemainder(transaction, details, remainderOnly);
+        if (amountToDistribute == null) {
+            return null;
+        }
 
         // find count of details in which to distribute
         int distributeCount = remainderOnly ? getDistributeCount(details) : details.size();
@@ -134,13 +137,16 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
         // get last amount
         Double lastAmount = amountPerDetail;
         if ((distributeCount * amountPerDetail) != amountToDistribute) {
-            lastAmount = lastAmount + ((distributeCount * amountPerDetail) - amountToDistribute);
+            lastAmount = lastAmount + (amountToDistribute - (distributeCount * amountPerDetail));
         }
 
         // set amounts in details
-        int count = 1;
+        List<CategorizedTransaction> results = new ArrayList<>();
+        int count = 0;
         for (CategorizedTransaction detail : details) {
-            if (remainderOnly && detail.getAmount() != 0.0) {
+            count++;
+            if (remainderOnly && detail.getAmount() != null && detail.getAmount() != 0.0) {
+                results.add(detail);
                 continue;
             }
             if (count == distributeCount) {
@@ -148,16 +154,40 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
             } else {
                 detail.setAmount(amountPerDetail);
             }
+            results.add(detail);
+
         }
         // return details list
         return details;
     }
 
     private int getDistributeCount(List<CategorizedTransaction> details) {
-        return 1;
+        if (details == null) {
+            return 1;
+        }
+        int count = 0;
+        for (CategorizedTransaction detail : details) {
+            if (detail.getAmount() == null || detail.getAmount() == 0D) {
+                count++;
+            }
+        }
+        return count;
     }
 
-    private Double getRemainder(RawTransaction transaction, List<CategorizedTransaction> details) {
-        return 1D;
+    private Double getRemainder(RawTransaction transaction, List<CategorizedTransaction> details, boolean remainderOnly) {
+        if (transaction == null || details == null) {
+            return null;
+        }
+
+        Double transamount = transaction.getAmount();
+        if (!remainderOnly) {
+            return transamount;
+        }
+        Double sumofparts = 0D;
+        for (CategorizedTransaction detail : details) {
+            sumofparts += detail.getAmount() != null ? detail.getAmount() : 0D;
+        }
+
+        return transamount - sumofparts;
     }
 }

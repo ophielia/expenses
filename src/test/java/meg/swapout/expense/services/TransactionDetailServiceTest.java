@@ -202,7 +202,7 @@ public class TransactionDetailServiceTest {
         details.add(categorizedTransaction2);
 
         // call method
-        List<CategorizedTransaction> result = transactionDetailService.distributeAmount(trans,details,false);
+        List<CategorizedTransaction> result = transactionDetailService.distributeAmount(trans,details,true);
 
         // afterwards, should have each detail with 25
         Assert.assertNotNull(result);

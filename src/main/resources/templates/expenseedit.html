@@ -69,15 +69,15 @@
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <div >
+                        <div>
                             <label class="col-sm-2">Date:</label>
-                            <div th:text="*{#dates.format(transaction.transdate, 'MM-dd-yyyy')}"     ></div>
+                            <div th:text="*{#dates.format(transaction.transdate, 'MM-dd-yyyy')}"></div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div>
                             <label class="col-sm-2 ">Amount:</label>
-                            <div >
+                            <div>
                                 <p th:text="*{transaction.amount} * -1"></p></div>
                         </div>
                     </div>
@@ -88,21 +88,36 @@
                         <div>
                             <label class="col-sm-2">Description:</label>
                             <div class="col-sm-10">
-                                <p  th:text="*{transaction.description}"></p></div>
+                                <p th:text="*{transaction.description}"></p></div>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div >
+                        <div>
                             <label class="col-sm-2 ">Detail:</label>
                             <div class="col-sm-10">
-                                <p  th:text="*{transaction.detail}"></p></div>
+                                <p th:text="*{transaction.detail}"></p></div>
                         </div>
                     </div>
 
                 </div>
 
                 <hr/>
-                <button type="submit" class="glyphicon glyphicon-plus buttonglyph" name="addDetail"/>
+                <div class="col-sm-6">
+                    <button type="submit" class="glyphicon glyphicon-plus buttonglyph" name="addDetail"/>
+                </div>
+                <div class="col-sm-6" style="text-align:right;padding-bottom: 5px">
+                    <button type="submit" name="addQuickGroup" class="btn btn-default">Quick Group - Add</button>
+                    <button type="submit" name="replaceWithQuickGroup" class="btn btn-default">Quick Group - Replace
+                    </button>
+                    <select th:field="*{quickGroup}" th:errorclass="fieldError">
+                        <option value="0">- - - - - -</option>
+                        <option th:each="quickgroup : ${quickgrouplist}"
+                                th:value="${quickgroup.getId()}"
+                                th:text="${quickgroup.getName()}">
+                        </option>
+                    </select>
+
+                </div>
                 <table class="table table-striped">
                     <tr>
                         <th>Category</th>
@@ -116,7 +131,7 @@
                         <th:block th:unless="${stat.index}==${expenseModel.inEdit}"
                                   th:with="catIsNull=${detail.category == null}">
                             <td><span th:text="${catIsNull}?'- - - - ':${detail.category.name}"></span>
-                            <td th:text="${detail.amount}"></td>
+                            <td th:text="${detail.displayAmount}"></td>
                             <input type="hidden" th:field="*{details[__${stat.index}__].id}"/>
                             <input type="hidden" th:field="*{details[__${stat.index}__].version}"/>
                             <input type="hidden" th:field="*{details[__${stat.index}__].amount}"/>
@@ -134,10 +149,10 @@
                                 </option>
                             </select>
                             </td>
-                            <td><input type="text" th:field="*{details[__${stat.index}__].amount}"
-                                       th:value="${detail.amount}"/><input type="hidden"
-                                                                               th:field="*{details[__${stat.index}__].id}"
-                                                                               th:value="${detail.id}"/>
+                            <td><input type="text" th:field="*{details[__${stat.index}__].displayAmount}"
+                                       th:value="${detail.displayAmount}"/><input type="hidden"
+                                                                                  th:field="*{details[__${stat.index}__].id}"
+                                                                                  th:value="${detail.id}"/>
                                 <input type="hidden" th:field="*{details[__${stat.index}__].version}"
                                        th:value="${detail.version}"/></td>
                             <td></td>
@@ -151,9 +166,17 @@
                 </table>
                 <div class="form-group">
                     <label class="control-label col-sm-10"></label>
-                    <div class="col-sm-4">
-                        <button type="submit" class="btn btn-default">Save</button>
+                    <div class="col-sm-8">
                         <button type="submit" name="clearAllLines" class="btn btn-default">Clear All</button>
+                        <button type="submit" name="distributeAmount" class="btn btn-default">Distribute Amount</button>
+                        <button type="submit" name="distributeAmountRemainder" class="btn btn-default">Distribute
+                            Remainder
+                        </button>
+                    </div>
+                    <div class="col-sm-4" style="text-align:right">
+                        <label>Add As Quick Group</label>
+                        <input type="checkbox" id="addAsQG"></input>
+                        <button type="submit" class="btn btn-default">Save</button>
                     </div>
                 </div>
             </form>
