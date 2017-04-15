@@ -2,6 +2,7 @@ package meg.swapout.expense.controllers.models;
 
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.ExpenseDao;
+import meg.swapout.expense.domain.QuickGroup;
 import meg.swapout.expense.services.CategorizedType;
 import meg.swapout.expense.services.DateRangeType;
 import meg.swapout.expense.services.ExpenseCriteria;
@@ -24,7 +25,7 @@ public class ExpenseListModel implements Serializable {
 	private List<String> idref;
 	private Category batchUpdate;
 	private Boolean showSubcats;
-	private Long batchQuickgroup;
+	private QuickGroup batchQuickgroup;
 
 	private ExpenseCriteria searchCriteria;
 
@@ -109,13 +110,13 @@ public class ExpenseListModel implements Serializable {
 		this.searchCriteria.setShowSubcats(showSubcats);
 	}
 
-	public Long getBatchQuickgroup() {
+	public QuickGroup getBatchQuickGroup() {
 		return batchQuickgroup;
 	}
 
 
 
-	public void setBatchQuickgroup(Long batchQuickgroup) {
+	public void setBatchQuickGroup(QuickGroup batchQuickgroup) {
 		this.batchQuickgroup = batchQuickgroup;
 	}
 

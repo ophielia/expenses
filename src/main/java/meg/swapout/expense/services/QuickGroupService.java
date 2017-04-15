@@ -15,5 +15,5 @@ public interface QuickGroupService {
 
     QuickGroup saveQuickGroup(QuickGroup quickGroup);
 
-    List<CategorizedTransaction> getExpDetailsForQuickGroup(double amount, Long quickgroupid);
+    List<CategorizedTransaction> getExpDetailsForQuickGroup(double amount, QuickGroup quickgroup);
 }

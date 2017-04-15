@@ -30,10 +30,9 @@ public class ExpenseListController {
 	
 	@Autowired
 	SearchService searchService;
-	
+
 	@Autowired
-	BankTransactionService transService;
-		
+	TransactionDetailService transactionDetailService;
     @Autowired
 	CategoryService categoryService;
     
@@ -120,7 +119,7 @@ public class ExpenseListController {
 
 		// update expenses
 		List<String> toupdate = model.getCheckedExpenseIds();
-		transService.assignCategoriesToExpenses(model.getBatchUpdate(), toupdate);
+		transactionDetailService.assignCategoriesToTransactionDetails(model.getBatchUpdate(), toupdate);
 
 		// retrieve and set list
 		List<ExpenseDao> list = searchService.getExpenses(model.getSearchCriteria());
@@ -130,6 +129,38 @@ public class ExpenseListController {
 		return "redirect:/expense/list";
 	}
 
+	@RequestMapping(method = RequestMethod.POST, params = "updatequickgroups",produces = "text/html")
+	public String updateMultiQuickGroups(@ModelAttribute("expenseListModel") ExpenseListModel model, Model uiModel, BindingResult bindingResult, HttpServletRequest request) {
+		ExpenseCriteria criteria = model.getSearchCriteria();
+		HttpSession session = request.getSession();
+		session.setAttribute(sessioncriteria,criteria);
+
+		// error checking here
+		modelValidator.validateUpdateQuickGroup(model, bindingResult);
+
+
+		// get expenses to update
+		if (bindingResult.hasErrors()) {
+			// retrieve and set list
+			List<ExpenseDao> list = searchService.getExpenses(criteria);
+			model.setExpenses(list);
+			uiModel.addAttribute("expenseModel",model);
+
+			// return
+			return "expenses";
+		}
+
+		// update expenses
+		List<String> toupdate = model.getCheckedExpenseIds();
+		transactionDetailService.assignQuickGroupToTransactionDetails(model.getBatchQuickGroup(), toupdate);
+
+		// retrieve and set list
+		List<ExpenseDao> list = searchService.getExpenses(model.getSearchCriteria());
+		model.setExpenses(list);
+		uiModel.addAttribute("expenseModel",model);
+		// return
+		return "redirect:/expense/list";
+	}
 
 	/*
 
@@ -155,7 +186,7 @@ public class ExpenseListController {
 		}
 		
 		// update expenses
-		transService.assignQuickGroupToExpenses(model.getBatchQuickgroup(), toupdate);
+		transService.assignQuickGroupToTransactionDetails(model.getBatchQuickgroup(), toupdate);
 		
 		// retrieve and set list
 		List<ExpenseDao> list = searchService.getExpenses(criteria);
@@ -163,31 +194,7 @@ public class ExpenseListController {
 		// return
 		return "expenses";
 	}
-	
-	@RequestMapping(method = RequestMethod.PUT,params="sort" ,produces = "text/html")
-	public String sortExpenses(@RequestParam("sort") String sorttype,@ModelAttribute("expenseListModel") ExpenseListModel model,Model uiModel,HttpServletRequest request) {
-		ExpenseCriteria criteria = model.getSearchCriteria();
-		if (sorttype!=null) {
-			criteria.setSortfield(sorttype);
-		}
-		HttpSession session = request.getSession();
-		session.setAttribute(sessioncriteria,criteria);
-		List<ExpenseDao> list = searchService.getExpenses(criteria);
-		model.setExpenses(list);
-
-		return "expenses";
-	
-	}
-	
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-	    binder.setAutoGrowCollectionLimit(100024);
-	}
-	
-
-
 */
-
 	private ExpenseCriteria getDefaultCriteria() {
 		ExpenseCriteria criteria = new ExpenseCriteria();
 		criteria.setDateRangeByType(DateRangeType.CurrentYear);

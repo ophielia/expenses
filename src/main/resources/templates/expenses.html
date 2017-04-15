@@ -13,18 +13,18 @@
 
         $("th[id^='aSort']").click(
             function () {
-                HandleSortClick(event.transaction, 'aSort');
+                HandleSortClick(event.target, 'aSort');
             }
         );
 
         $("span[id^='clearLine']").click(
             function () {
-                HandleClick(event.transaction, 'clearLine');
+                HandleClick(event.target, 'clearLine');
             }
         );
         $("span[id^='removeLine']").click(
             function () {
-                HandleClick(event.transaction, 'removeLine');
+                HandleClick(event.target, 'removeLine');
             }
         );
 
@@ -117,6 +117,14 @@
                                             th:text="${category.getName()}">
                                     </option>
                                 </select> <input type="submit" name="updatecat" value="Update Categories For Selected"/>
+                                </div>
+                                <div class="col-sm-5 input-group" style="float:right"><select th:field="*{batchQuickGroup}" th:errorclass="fieldError">
+                                    <option value="0">- - - - - -</option>
+                                    <option th:each="category : ${quickgrouplist}"
+                                            th:value="${category.getId()}"
+                                            th:text="${category.getName()}">
+                                    </option>
+                                </select> <input type="submit" name="updatequickgroups" value="Update QuickGroups For Selected"/>
                                 </div>
                             </div>
                             <div class="row">

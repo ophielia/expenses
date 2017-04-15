@@ -221,4 +221,90 @@ public class TransactionDetailServiceTest {
 
     }
 
+    @Test
+    public void testAddQuickGroups() {
+        // make transaction with amount of 120
+        RawTransaction trans = testHelper.buildRawTransaction(1L, "detail","description", 120D);
+
+        // make 4 details - amounts 100 each
+        List<CategorizedTransaction> details = new ArrayList<>();
+        CategorizedTransaction categorizedTransaction = new CategorizedTransaction();
+        categorizedTransaction.setCategory(category1);
+        categorizedTransaction.setAmount(20D);
+        details.add(categorizedTransaction);
+
+        // make quick group details
+        QuickGroup quickGroup = TestHelper.newQuickGroup(11L);
+        QuickGroupDetail detail1 = TestHelper.buildQuickGroupDetail(1L,quickGroup,  category2,75D);
+        QuickGroupDetail detail2 = TestHelper.buildQuickGroupDetail(1L,quickGroup,  category2,25D);
+        List<QuickGroupDetail> qgDetails = new ArrayList<>();
+        qgDetails.add(detail1);
+        qgDetails.add(detail2);
+        quickGroup.setGroupdetails(qgDetails);
+
+        // call method
+        List<CategorizedTransaction> result = transactionDetailService.addQuickGroupToDetails(trans,details,quickGroup,true);
+
+        // afterwards, should have each detail with 25
+        Assert.assertNotNull(result);
+        Assert.assertEquals(3,result.size());
+        int count20 = 0;
+        int count25 = 0;
+        int count75 = 0;
+        for (CategorizedTransaction detail: details) {
+            if (detail.getAmount()==20D) {
+                count20++;
+            } else if (detail.getAmount()==25) {
+                count25++;
+            } else if (detail.getAmount()==75) {
+                count75++;
+            }
+        }
+        Assert.assertEquals(1,count20);
+        Assert.assertEquals(1,count25);
+        Assert.assertEquals(1,count75);
+
+    }
+
+    @Test
+    public void testReplaceQuickGroups() {
+        // make transaction with amount of 120
+        RawTransaction trans = testHelper.buildRawTransaction(1L, "detail","description", 120D);
+
+        // make 4 details - amounts 100 ea™ch
+        List<CategorizedTransaction> details = new ArrayList<>();
+        CategorizedTransaction categorizedTransaction = new CategorizedTransaction();
+        categorizedTransaction.setCategory(category1);
+        categorizedTransaction.setAmount(20D);
+        details.add(categorizedTransaction);
+
+        // make quick group details
+        QuickGroup quickGroup = TestHelper.newQuickGroup(11L);
+        QuickGroupDetail detail1 = TestHelper.buildQuickGroupDetail(1L,quickGroup,  category2,75D);
+        QuickGroupDetail detail2 = TestHelper.buildQuickGroupDetail(1L,quickGroup,  category2,25D);
+        List<QuickGroupDetail> qgDetails = new ArrayList<>();
+        qgDetails.add(detail1);
+        qgDetails.add(detail2);
+        quickGroup.setGroupdetails(qgDetails);
+
+        // call method
+        List<CategorizedTransaction> result = transactionDetailService.addQuickGroupToDetails(trans,details,quickGroup,false);
+
+        // afterwards, should have each detail with 25
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2,result.size());
+        int count30 = 0;
+        int count90 = 0;
+        for (CategorizedTransaction detail: result) {
+            if (detail.getAmount()==30D) {
+                count30++;
+            } else if (detail.getAmount()==90) {
+                count90++;
+            }
+        }
+        Assert.assertEquals(1,count30);
+        Assert.assertEquals(1,count90);
+
+    }
+
 }

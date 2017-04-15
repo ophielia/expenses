@@ -14,17 +14,17 @@
 
         $("span[id^='edit']").click(
             function () {
-                HandleClick(event.transaction, 'editLine');
+                HandleClick(event.target, 'editLine');
             }
         );
         $("span[id^='clearLine']").click(
             function () {
-                HandleClick(event.transaction, 'clearLine');
+                HandleClick(event.target, 'clearLine');
             }
         );
         $("span[id^='removeLine']").click(
             function () {
-                HandleClick(event.transaction, 'removeLine');
+                HandleClick(event.target, 'removeLine');
             }
         );
 

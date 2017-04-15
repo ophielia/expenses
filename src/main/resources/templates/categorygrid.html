@@ -65,8 +65,9 @@
 
 
                 <div th:each="level : ${categories}"
-                     th:classappend="'lvl' + ${level.level}"
-                     th:text="${level.category.name}"></div>
+                     th:classappend="'lvl' + ${level.level}">
+                    <a th:href="${'/category/edit/' + level.category.id}" th:text="${level.category.name}"></a>
+                </div>
 
 <!--
                 <c:forEach var="level" items="${categorylvllist}" >

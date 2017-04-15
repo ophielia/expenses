@@ -83,7 +83,7 @@ public class ExpenseListControllerOrig {
 		}
 		
 		// update expenses
-		transService.assignCategoriesToExpenses(model.getBatchUpdate(), toupdate);
+		transService.assignCategoriesToTransactionDetails(model.getBatchUpdate(), toupdate);
 		
 		// retrieve and set list
 		List<ExpenseDao> list = searchService.getExpenses(criteria);
@@ -113,7 +113,7 @@ public class ExpenseListControllerOrig {
 		}
 		
 		// update expenses
-		transService.assignQuickGroupToExpenses(model.getBatchQuickgroup(), toupdate);
+		transService.assignQuickGroupToTransactionDetails(model.getBatchQuickgroup(), toupdate);
 		
 		// retrieve and set list
 		List<ExpenseDao> list = searchService.getExpenses(criteria);

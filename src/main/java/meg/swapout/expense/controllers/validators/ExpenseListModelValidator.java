@@ -58,7 +58,7 @@ public class ExpenseListModelValidator implements Validator {
 		ExpenseListModel model = (ExpenseListModel) target;
 		
 		// check that the category has been set
-		if (model.getBatchQuickgroup()==null || model.getBatchQuickgroup().longValue()==0) {
+		if (model.getBatchQuickGroup()==null ) {
 			errors.rejectValue("batchQuickgroup",
 					"field_required");
 		}

@@ -97,7 +97,7 @@ public class QuickGroupServiceImpl implements QuickGroupService {
     }
 
     @Override
-    public List<CategorizedTransaction> getExpDetailsForQuickGroup(double amount, Long quickgroupid) {
+    public List<CategorizedTransaction> getExpDetailsForQuickGroup(double amount, QuickGroup quickgroup) {
         return null;
     }
 

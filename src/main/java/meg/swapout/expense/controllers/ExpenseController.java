@@ -142,7 +142,6 @@ public class ExpenseController {
         // get detail and clear category and percentage
         List<CategorizedTransaction> details = expenseModel.getDetails();
         CategorizedTransaction toclear = details.get(toEdit);
-        toclear.setCategory(null);
         toclear.setAmount(0.0D);
         details.set(toEdit, toclear);
         expenseModel.setDetails(details);
@@ -196,6 +195,40 @@ public class ExpenseController {
         List<CategorizedTransaction> detailresult = transactionDetailService.distributeAmount(transaction,details,true);
 
         expenseModel.setDetails(details);
+
+        model.addAttribute("expenseModel", expenseModel);
+        setAmountTotalInModel(expenseModel, model);
+        return "expenseedit";
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.POST, params = {"addQuickGroup"})
+    public String addQuickGroup(@PathVariable Long id, ExpenseModel expenseModel, Model model) {
+        expenseModel = fillExpenseModel(id,expenseModel);
+
+        // get detail and clear category and percentage
+        RawTransaction transaction = expenseModel.getTransaction();
+        List<CategorizedTransaction> details = expenseModel.getDetails();
+        QuickGroup quickGroup = expenseModel.getQuickGroup();
+        List<CategorizedTransaction> detailresult = transactionDetailService.addQuickGroupToDetails(transaction,details,quickGroup,true);
+
+        expenseModel.setDetails(detailresult);
+
+        model.addAttribute("expenseModel", expenseModel);
+        setAmountTotalInModel(expenseModel, model);
+        return "expenseedit";
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.POST, params = {"replaceWithQuickGroup"})
+    public String replaceWithQuickGroup(@PathVariable Long id, ExpenseModel expenseModel, Model model) {
+        expenseModel = fillExpenseModel(id,expenseModel);
+
+        // get detail and clear category and percentage
+        RawTransaction transaction = expenseModel.getTransaction();
+        List<CategorizedTransaction> details = expenseModel.getDetails();
+        QuickGroup quickGroup = expenseModel.getQuickGroup();
+        List<CategorizedTransaction> detailresult = transactionDetailService.addQuickGroupToDetails(transaction,details,quickGroup,false);
+
+        expenseModel.setDetails(detailresult);
 
         model.addAttribute("expenseModel", expenseModel);
         setAmountTotalInModel(expenseModel, model);

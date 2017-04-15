@@ -1,6 +1,8 @@
 package meg.swapout.expense.services;
 
 import meg.swapout.expense.domain.CategorizedTransaction;
+import meg.swapout.expense.domain.Category;
+import meg.swapout.expense.domain.QuickGroup;
 import meg.swapout.expense.domain.RawTransaction;
 
 import java.util.List;
@@ -18,4 +20,11 @@ public interface TransactionDetailService {
     void deleteCategorizedTransaction(Long id);
 
     List<CategorizedTransaction> distributeAmount(RawTransaction transaction, List<CategorizedTransaction> details, boolean remainderOnly);
+
+    List<CategorizedTransaction> addQuickGroupToDetails(RawTransaction transaction, List<CategorizedTransaction> details, QuickGroup quickGroup, boolean addOnly);
+
+    void assignCategoriesToTransactionDetails(Category batchUpdate, List<String> toupdate);
+
+    void assignQuickGroupToTransactionDetails(QuickGroup batchQuickgroup, List<String> toupdate);
+
 }
