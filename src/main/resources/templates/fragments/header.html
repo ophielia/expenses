@@ -10,29 +10,29 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
-                    <ul class="nav navbar-nav">
-                        <li><a href="#" th:href="@{/expense/list}">Expenses</a></li>
-                        <li><a href="#" th:href="@{/rule}">Rules</a></li>
-                        <li><a href="#" th:href="@{/category}">Categories</a></li>
-                        <li><a href="#" th:href="@{/category/grid}">Category Grid</a></li>
-                        <li><a href="#" th:href="@{/transaction/monthly}">Monthly Targets</a></li>
-                        <li><a href="#" th:href="@{/quickgroup}">Quick Groups</a></li>
-                    </ul>
-
+                    <a class="navbar-brand" href="#" th:href="@{/expense/list}">Expenses</a>
                 </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="#" th:href="@{/import}">Import</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/quickgroup}">Quick Groups</a></li>
+                            <li><a th:href="@{/category}">Categories</a></li>
+                            <li><a th:href="@{/category/grid}">Category Grid</a></li>
+                            <li><a th:href="@{/rule}">Rules</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <li><a href="#" th:href="@{/target/monthly}">Targets</a></li>
+                    <li><a href="#" th:href="@{/target/monthly}">Reports</a></li>
+                </ul>
+
             </div>
         </nav>
-
-       <!-- <div class="jumbotron">
-            <div class="row text-center">
-                <div class="">
-                    <h2>Trying Springboot</h2>
-
-                    <h3>i want to deploy easily....</h3>
-                </div>
-            </div>
-        </div>-->
     </div>
 </div>
 </body>

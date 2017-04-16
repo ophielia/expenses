@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Expenses - Quick Groups</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Import File</h2>
+            <form id="expenseListForm" class="form-horizontal form-inline" th:object="${expenseModel}" th:action="@{/expense/list}"
+                  method="post">
+                <input th:field="*{sortField}" type="hidden"/>
+                <input th:field="*{sortDirection}" type="hidden"/>
+
+                Import File
+                <table>
+                    <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+                    <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+                </table>
+
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -124,24 +124,17 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
         return map;
     }
 
-    @Override
-    public void deleteCategorizedTransaction(Long id) {
-        CategorizedTransaction toDelete = getCategorizedTransactionById(id);
-        if (toDelete != null) {
-            categorizedTransactionRepository.delete(toDelete);
-        }
-    }
 
     @Override
     @Transactional
     public void assignCategoriesToTransactionDetails(Category category, List<String> selectedids) {
-        if (category==null || category.getId()==null) {
+        if (category == null || category.getId() == null) {
             return;
         }
-        if (selectedids!=null && selectedids.size()>0) {
+        if (selectedids != null && selectedids.size() > 0) {
             List<ExpenseDao> toupdate = searchService.getExpenseListByIds(selectedids);
             // loop through selected list
-            for (ExpenseDao expense:toupdate) {
+            for (ExpenseDao expense : toupdate) {
                 if (expense.getHascat()) {
                     // if expense has a category already, existing category must be
                     // updated
@@ -188,18 +181,18 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 
     @Override
     public void assignQuickGroupToTransactionDetails(QuickGroup quickgroup, List<String> selectedids) {
-        if (selectedids!=null && selectedids.size()>0) {
+        if (selectedids != null && selectedids.size() > 0) {
             List<ExpenseDao> toupdate = searchService.getExpenseListByIds(selectedids);
 
 
             // loop through selected list
-            for (ExpenseDao expense:toupdate) {
+            for (ExpenseDao expense : toupdate) {
                 // get bank transaction
                 RawTransaction banktrans = transactionRepository.findOne(expense.getTransid());
 
                 // delete existing expense details
                 List<CategorizedTransaction> expdetails = getCategoryExpForTrans(banktrans.getId());
-                if (expdetails!=null&&expdetails.size()>0) {
+                if (expdetails != null && expdetails.size() > 0) {
                     // delete db expense details
                     catTransRep.delete(expdetails);
                 }
@@ -215,8 +208,8 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
                 List<CategorizedTransaction> newdetails = quickGroupToDetails(amount, quickgroup);
 
                 // set bankta in new expensedetails, and save
-                if (newdetails!=null) {
-                    for (CategorizedTransaction exp:newdetails) {
+                if (newdetails != null) {
+                    for (CategorizedTransaction exp : newdetails) {
                         exp.setBanktrans(banktrans);
                     }
                     catTransRep.save(newdetails);
@@ -225,6 +218,14 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
             }
         }
 
+    }
+
+    @Override
+    public List<CategorizedTransaction> getDetailsForTransaction(RawTransaction transaction) {
+        if (transaction == null) {
+            return null;
+        }
+        return categorizedTransactionRepository.findByBankTrans(transaction);
     }
 
     @Override
@@ -271,41 +272,63 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     @Override
     public List<CategorizedTransaction> addQuickGroupToDetails(RawTransaction transaction, List<CategorizedTransaction> details, QuickGroup quickGroup, boolean remainderOnly) {
         // get amount to divy up with quick group
-        Double toDistribute = getRemainder(transaction,details,remainderOnly);
+        Double toDistribute = getRemainder(transaction, details, remainderOnly);
 
         // get return elements
-        List<CategorizedTransaction> returnDetails = remainderOnly?details:new ArrayList<>();
+        List<CategorizedTransaction> returnDetails = remainderOnly ? details : new ArrayList<>();
         if (returnDetails == null) {
-            returnDetails=new ArrayList<>();
+            returnDetails = new ArrayList<>();
         }
 
         // add quickgroup elements to return elements
-        List<CategorizedTransaction> quickGroupDetails = quickGroupToDetails(toDistribute,quickGroup);
+        List<CategorizedTransaction> quickGroupDetails = quickGroupToDetails(toDistribute, quickGroup);
         // return return elements
         returnDetails.addAll(quickGroupDetails);
         return returnDetails;
     }
+
+
+    @Override
+    public void assignCategoryToTransaction(Long transid, Category cat) {
+        // lookup BankTransaction
+        RawTransaction transaction = transactionRepository.findOne(transid);
+
+        // begin creating CategorizedTransaction based upon BankTransaction
+        CategorizedTransaction detail = new CategorizedTransaction();
+        detail.setAmount(transaction.getAmount());
+        detail.setCategory(cat);
+        detail.setCreatedon(new Date());
+        detail.setBanktrans(transaction);
+
+        // add CategorizedTransaction to DB
+        catTransRep.saveAndFlush(detail);
+
+        // update Transaction
+        transaction.setHascat(new Boolean(true));
+        transactionRepository.saveAndFlush(transaction);
+    }
+
 
     private List<CategorizedTransaction> quickGroupToDetails(Double toDistribute, QuickGroup quickGroup) {
         List<CategorizedTransaction> details = new ArrayList<>();
 
         Double totalCheck = 0D;
         List<QuickGroupDetail> quickGroupDetails = quickGroup.getGroupdetails();
-        if (quickGroupDetails==null  || quickGroupDetails.size()==0) {
+        if (quickGroupDetails == null || quickGroupDetails.size() == 0) {
             return details;
         }
 
-        for (QuickGroupDetail quickGroupDetail: quickGroupDetails) {
+        for (QuickGroupDetail quickGroupDetail : quickGroupDetails) {
             CategorizedTransaction newDetails = new CategorizedTransaction();
             Double amount = Math.round(quickGroupDetail.getPercentage() * toDistribute) / 100D;
-            totalCheck+=amount;
+            totalCheck += amount;
             newDetails.setCategory(quickGroupDetail.getCategory());
             newDetails.setAmount(amount);
             details.add(newDetails);
         }
 
         if (totalCheck.doubleValue() != toDistribute.doubleValue()) {
-            CategorizedTransaction detail = details.get(details.size()-1);
+            CategorizedTransaction detail = details.get(details.size() - 1);
             Double adjustment = toDistribute - totalCheck;
             detail.setAmount(detail.getAmount() + adjustment);
         }
@@ -344,7 +367,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     }
 
     private List<CategorizedTransaction> getCategoryExpForTrans(Long transid) {
-        RawTransaction trans =  transactionRepository.findOne(transid);
+        RawTransaction trans = transactionRepository.findOne(transid);
         return catTransRep.findByBankTrans(trans);
     }
 

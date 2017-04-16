@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,20 +70,26 @@ public class ImportManager {
 		return importedobjects;
 	}
 
-	public List<Object> importTransactions(int clientkey, String filestr) {
+	public List<Object> importTransactions(MultipartFile multipartfile) throws IOException {
+		int clientkey = ImportManager.ImportClient.SocGen;
 		// get configs for client
 		FileConfig config = fcman
 				.getFileConfigForClient(clientkey);
 		MapConfig mapconfig = mcman
 				.getMapConfigForClient(clientkey);
-		// archive string to file
+
+		// handle file
 		Date now = new Date();
-		String filename = getArchiveDir() + now.getTime() + "_"+clientkey+"_imp.txt";
+		File tempFile = File.createTempFile( now.getTime() + "_imp", "txt");
+		tempFile.deleteOnExit();
+		boolean success = FileUtils.writeMultipartToTempFile(multipartfile,tempFile);
+
+		if (!success) {
+			return null;
+		}
 
 		// import file into RawTransactions
-		FileUtils.writeStringToFile(filename, filestr);
-		File file = new File(filename);
-		List<Object> newobjects = importFile(config, mapconfig, file);
+		List<Object> newobjects = importFile(config, mapconfig, tempFile);
 
 		// Begin persisting objects
 		// ---- search for date of most recently entered banktrans for

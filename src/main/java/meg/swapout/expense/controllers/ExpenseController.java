@@ -1,6 +1,7 @@
 package meg.swapout.expense.controllers;
 
 import meg.swapout.expense.controllers.models.ExpenseModel;
+import meg.swapout.expense.controllers.validators.ExpenseModelValidator;
 import meg.swapout.expense.domain.CategorizedTransaction;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.QuickGroup;
@@ -54,6 +55,9 @@ public class ExpenseController {
     @Autowired
     private
     RawTransactionRepository transactionRepository;
+
+    @Autowired
+    private ExpenseModelValidator modelValidator;
 
     @RequestMapping("/{id}")
     public String beginEditExpense(@PathVariable Long id, Model model) {
@@ -114,12 +118,26 @@ public class ExpenseController {
 
 
     @RequestMapping(value = "{id}", method = RequestMethod.POST)
-    public String saveRawTransaction(@PathVariable Long id, ExpenseModel ExpenseModel, Model model) {
-        RawTransaction rawTransaction = ExpenseModel.getTransaction();
-        List<CategorizedTransaction> details = ExpenseModel.getDetails();
-        // TODO - validation here
+    public String saveTransactionAndDetails(@PathVariable Long id, ExpenseModel expenseModel, Model model, Errors bindingResult) {
+        expenseModel = fillExpenseModel(id,expenseModel);
 
-        rawTransactionService.saveTransactionAndDetails(rawTransaction,details);
+        modelValidator.validateSaveDetails(expenseModel, bindingResult);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("expenseModel",model);
+
+            // return
+            return "expenses";
+        }
+
+        // call service
+        transactionDetailService.saveDetailsForTransaction(expenseModel.getTransaction(),expenseModel.getDetails());
+
+        // check if quick group should be saved
+        if (expenseModel.isSaveAsQuickGroup()) {
+            QuickGroup quickGroup = quickGroupService.createQuickGroupFromTransactionDetails(id);
+            return "redirect:/quickgroup/edit/" + quickGroup.getId();
+        }
+
         return "redirect:/expense/list";
     }
 

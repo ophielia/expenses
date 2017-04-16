@@ -10,5 +10,11 @@ public interface BankTransactionService {
 
     void addTransaction(RawTransaction trans);
 
+    RawTransaction getById(Long id);
+
     void saveTransactionAndDetails(RawTransaction rawTransaction, List<CategorizedTransaction> details);
+
+    List<RuleAssignment> getRuleAssignments();
+
+    void updateExpenseByRuleAssignments(List<RuleAssignment> toupdate);
 }

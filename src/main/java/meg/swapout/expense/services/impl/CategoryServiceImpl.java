@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -170,6 +171,20 @@ public class CategoryServiceImpl implements CategoryService {
         return null;
     }
 
+    @Override
+    public HashMap<Long, Category> getCategoriesAsMap() {
+        return getCategoriesAsMap(false);
+    }
+
+    private HashMap<Long, Category> getCategoriesAsMap(boolean exclNonDisp) {
+        boolean showNonDisp = !exclNonDisp;
+        HashMap<Long, Category> hash = new HashMap<Long, Category>();
+        List<Category> categories = listAllCategories(showNonDisp);
+        for (Category cat : categories) {
+            hash.put(cat.getId(), cat);
+        }
+        return hash;
+    }
 
     private List<CategoryLevel> getSubcategoriesRecursive(Long parentid,
                                                           int maxlvl, int currentlvl, boolean ignorelvl) {

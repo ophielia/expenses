@@ -17,8 +17,6 @@ public interface TransactionDetailService {
 
     List<CategorizedTransaction> saveDetailsForTransaction(RawTransaction transaction, List<CategorizedTransaction> details);
 
-    void deleteCategorizedTransaction(Long id);
-
     List<CategorizedTransaction> distributeAmount(RawTransaction transaction, List<CategorizedTransaction> details, boolean remainderOnly);
 
     List<CategorizedTransaction> addQuickGroupToDetails(RawTransaction transaction, List<CategorizedTransaction> details, QuickGroup quickGroup, boolean addOnly);
@@ -27,4 +25,7 @@ public interface TransactionDetailService {
 
     void assignQuickGroupToTransactionDetails(QuickGroup batchQuickgroup, List<String> toupdate);
 
+    List<CategorizedTransaction> getDetailsForTransaction(RawTransaction transaction);
+
+    void assignCategoryToTransaction(Long transid, Category cat);
 }

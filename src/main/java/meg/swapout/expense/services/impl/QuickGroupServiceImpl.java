@@ -3,9 +3,12 @@ package meg.swapout.expense.services.impl;
 import meg.swapout.expense.domain.CategorizedTransaction;
 import meg.swapout.expense.domain.QuickGroup;
 import meg.swapout.expense.domain.QuickGroupDetail;
+import meg.swapout.expense.domain.RawTransaction;
 import meg.swapout.expense.repositories.QuickGroupDetailRepository;
 import meg.swapout.expense.repositories.QuickGroupRepository;
+import meg.swapout.expense.services.BankTransactionService;
 import meg.swapout.expense.services.QuickGroupService;
+import meg.swapout.expense.services.TransactionDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,12 @@ public class QuickGroupServiceImpl implements QuickGroupService {
     @Autowired
     private
     QuickGroupRepository quickGroupRepository;
+
+    @Autowired
+    BankTransactionService bankTransactionService;
+
+    @Autowired
+    TransactionDetailService transactionDetailService;
 
     @Autowired
     private
@@ -97,8 +106,56 @@ public class QuickGroupServiceImpl implements QuickGroupService {
     }
 
     @Override
-    public List<CategorizedTransaction> getExpDetailsForQuickGroup(double amount, QuickGroup quickgroup) {
-        return null;
+    public QuickGroup createQuickGroupFromTransactionDetails(Long transactionId) {
+        // get transaction
+        RawTransaction transaction = bankTransactionService.getById(transactionId);
+        if (transaction == null) {
+            return null;
+        }
+
+        // get details
+        List<CategorizedTransaction> details = transactionDetailService.getDetailsForTransaction(transaction);
+        if (details == null) {
+            return null;
+        }
+
+        // create quick group with default name
+        QuickGroup quickGroup = new QuickGroup();
+        quickGroup = saveQuickGroup(quickGroup);
+
+        // create empty list of QuickGroupDetails, total field
+        List<QuickGroupDetail> groupDetails = new ArrayList<>();
+        Double total = 0D;
+        Double transactionTotal = transaction.getAmount();
+        // cycle through transaction details, creating quickgroupdetail for each one
+        for (CategorizedTransaction detail:details) {
+            Double amount = detail.getAmount();
+            total+=amount;
+            Double percentage = Math.round(amount * 10000D/ transactionTotal)/100D;
+
+            QuickGroupDetail quickGroupDetail = new QuickGroupDetail();
+            quickGroupDetail.setCategory(detail.getCategory());
+            quickGroupDetail.setQuickgroup(quickGroup);
+            quickGroupDetail.setPercentage(percentage);
+            groupDetails.add(quickGroupDetail);
+        }
+        // make adjustment, if necessary
+        if (total.doubleValue() != 100D) {
+            Double adjustment = 100D - total;
+            QuickGroupDetail quickGroupDetail = groupDetails.get(groupDetails.size()-1);
+            Double amount = quickGroupDetail.getPercentage();
+            quickGroupDetail.setPercentage(amount + adjustment);
+            groupDetails.set(groupDetails.size()-1,quickGroupDetail);
+        }
+
+        // place details in quickgroup
+        quickGroup.setGroupdetails(groupDetails);
+
+        // save quick group
+        quickGroup = saveQuickGroupWithDetails(quickGroup);
+
+
+        return quickGroup;
     }
 
     private HashMap<Long, QuickGroupDetail> squashDetails(List<QuickGroupDetail> details) {

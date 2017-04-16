@@ -20,6 +20,8 @@ public class ExpenseModel {
 
     private QuickGroup quickGroup;
 
+    private boolean saveAsQuickGroup = false;
+
     private int inEdit;
     private int toEdit;
 
@@ -77,5 +79,13 @@ public class ExpenseModel {
 
     public void setQuickGroup(QuickGroup quickGroup) {
         this.quickGroup = quickGroup;
+    }
+
+    public boolean isSaveAsQuickGroup() {
+        return saveAsQuickGroup;
+    }
+
+    public void setSaveAsQuickGroup(boolean saveAsQuickGroup) {
+        this.saveAsQuickGroup = saveAsQuickGroup;
     }
 }

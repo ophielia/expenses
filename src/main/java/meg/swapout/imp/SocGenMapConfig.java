@@ -10,7 +10,7 @@ import java.util.List;
 class SocGenMapConfig implements MapConfig {
 
 	public String getDestinationClassName() {
-		return "meg.bank.bus.dao.BankTADao";
+		return "meg.swapout.expense.domain.RawTransaction";
 	}
 
 	public List<FieldMapping> getMappings() {
@@ -42,7 +42,7 @@ class SocGenMapConfig implements MapConfig {
 	}
 
 	public String getHelperClassName() {
-		return "meg.bank.bus.imp.SocGenMappingHelper";
+		return "meg.swapout.imp.SocGenMappingHelper";
 	}
 
 }

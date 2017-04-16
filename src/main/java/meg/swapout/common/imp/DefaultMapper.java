@@ -8,13 +8,17 @@ public class DefaultMapper implements Mapper {
 
 	private MapConfig mapconfig;
 
+	private MappingHelper helper;
+
 	public DefaultMapper(MapConfig mapconfig) {
+
 		this.mapconfig = mapconfig;
+		helper = getMappingHelperClass();
+
 	}
 
 	public Object mapObject(Placeholder placeholder) {
 		// instantiate helper class, object
-		MappingHelper helper = getMappingHelperClass();
 		Object mapped = helper.instantiateObject(mapconfig
 				.getDestinationClassName());
 
@@ -106,7 +110,7 @@ public class DefaultMapper implements Mapper {
 		String classname = mapconfig.getHelperClassName();
 		if (classname == null) {
 			// no helper class declared - use the default
-			classname = "meg.util.imp.DefaultMappingHelper";
+			classname = "meg.swapout.common.imp.MappingHelper";
 		}
 
 		try {

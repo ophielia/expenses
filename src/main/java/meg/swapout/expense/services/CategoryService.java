@@ -2,6 +2,7 @@ package meg.swapout.expense.services;
 
 import meg.swapout.expense.domain.Category;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -39,4 +40,5 @@ public interface CategoryService {
     Long getParentIdForCat(Long id);
 
 
+    HashMap<Long, Category> getCategoriesAsMap();
 }
