@@ -130,7 +130,7 @@ public class ExpenseController {
         }
 
         // call service
-        transactionDetailService.saveDetailsForTransaction(expenseModel.getTransaction(),expenseModel.getDetails());
+        transactionDetailService.saveDetailsAndTransaction(expenseModel.getTransaction(),expenseModel.getDetails());
 
         // check if quick group should be saved
         if (expenseModel.isSaveAsQuickGroup()) {

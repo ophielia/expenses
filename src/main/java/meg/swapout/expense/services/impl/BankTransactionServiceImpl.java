@@ -1,15 +1,11 @@
 package meg.swapout.expense.services.impl;
 
-import meg.swapout.expense.domain.CategorizedTransaction;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.RawTransaction;
 import meg.swapout.expense.domain.Rule;
 import meg.swapout.expense.repositories.RawTransactionRepository;
 import meg.swapout.expense.repositories.RuleRepository;
-import meg.swapout.expense.services.BankTransactionService;
-import meg.swapout.expense.services.CategoryService;
-import meg.swapout.expense.services.RuleAssignment;
-import meg.swapout.expense.services.TransactionDetailService;
+import meg.swapout.expense.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -42,12 +38,27 @@ class BankTransactionServiceImpl implements BankTransactionService {
 
     @Override
     public boolean doesDuplicateExist(RawTransaction trans) {
-        return false;
+        boolean exists = false;
+        if (trans != null) {
+            List<RawTransaction> result = rawTransactionRepository.findTransDuplicates(
+                    trans.getAmount(), trans.getTransdate(),
+                    trans.getDescription());
+
+            if (result != null && result.size() > 0) {
+                // this transaction seems to already exist
+                exists = true;
+            }
+        }
+        return exists;
     }
 
     @Override
-    public void addTransaction(RawTransaction trans) {
-
+    public RawTransaction addTransaction(RawTransaction trans) {
+        // set deleted to false
+        trans.setDeleted(new Boolean(false));
+        // call Dao interface here
+        rawTransactionRepository.save(trans);
+        return trans;
     }
 
     @Override
@@ -56,12 +67,6 @@ class BankTransactionServiceImpl implements BankTransactionService {
             return null;
         }
         return rawTransactionRepository.findOne(id);
-    }
-
-
-    @Override
-    public void saveTransactionAndDetails(RawTransaction rawTransaction, List<CategorizedTransaction> details) {
-
     }
 
     @Override
@@ -106,7 +111,7 @@ class BankTransactionServiceImpl implements BankTransactionService {
                         ruleassign = new RuleAssignment(cat);
                     }
                     // add transaction to RuleAssignment
-                    ruleassign.addTransaction(exp);
+                    ruleassign.addTransaction(new RuleTransaction(exp));
                     // reset RuleAssignment in holder
                     assigned.put(rulecatid, ruleassign);
                     // add expenseid to assignedidlist
@@ -132,11 +137,15 @@ class BankTransactionServiceImpl implements BankTransactionService {
             // loop through categories
             for (RuleAssignment rule : assignedcategories) {
                 // for each category group, pull transactions to be assigned
-                List<RawTransaction> transactions = rule.getTransactions();
+                List<RuleTransaction> transactions = rule.getTransactions();
                 Category category = rule.getCategory();
                 if (transactions != null) {
                     // loop through transactions
-                    for (RawTransaction trans : transactions) {
+                    for (RuleTransaction ruleTransaction : transactions) {
+                        RawTransaction trans = ruleTransaction.getTransaction();
+                        if (trans == null) {
+                            continue;
+                        }
                         // assign each transaction to the group
                         transactionDetailService.assignCategoryToTransaction(trans.getId(), category);
                     }

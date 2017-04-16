@@ -5,18 +5,12 @@ import meg.swapout.expense.domain.RawTransaction;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 public class RuleAssignment {
 
 	private Category cat;
-	private List<RawTransaction> transactions;
-	
-	public RuleAssignment(Category cat, List<RawTransaction> transactions) {
-		this.cat = cat;
-		this.transactions = transactions;
-	}
+	private List<RuleTransaction> transactions;
 
 
 	public RuleAssignment(Category category) {
@@ -32,35 +26,17 @@ public class RuleAssignment {
 		this.cat = cat;
 	}
 	
-	public List<RawTransaction> getTransactions() {
+	public List<RuleTransaction> getTransactions() {
 		return this.transactions;
 	}
 	
-	public void setTransactions(List<RawTransaction> transactions) {
+	public void setTransactions(List<RuleTransaction> transactions) {
 		this.transactions = transactions;
 	}
 
-	public Long getCategoryId() {
-		return this.cat.getId();
-	}
-	
-	public void addTransactions(List<RawTransaction> newtrans, Hashtable<Long,Long> assigned) {
-		if (this.transactions==null) {
-			this.transactions = new
-					ArrayList<RawTransaction>();
-		}
-		for (RawTransaction tr:newtrans) {
-			if (!assigned.containsKey(tr.getId())) {
-				this.transactions.add(tr);
-				assigned.put(tr.getId(), new Long(1));
-			}
-		}
-	}
-
-
-	public void addTransaction(RawTransaction exp) {
+	public void addTransaction(RuleTransaction exp) {
 		if (transactions == null) {
-			transactions = new ArrayList<RawTransaction>();
+			transactions = new ArrayList<RuleTransaction>();
 		}
 		transactions.add(exp);
 	}
@@ -68,6 +44,7 @@ public class RuleAssignment {
 
 	public int getTransactionCount() {
 		return transactions!=null?transactions.size():0;
+
 	}
 	
 }

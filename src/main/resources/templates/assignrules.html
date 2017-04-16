@@ -14,20 +14,31 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <h2>Import File</h2>
-            <form id="expenseListForm" class="form-horizontal form-inline" th:object="${expenseModel}" th:action="@{/expense/list}"
+            <h2>Assign By Rules</h2>
+            <form id="expenseListForm" class="form-horizontal form-inline" th:object="${assignmentListModel}"
+                  th:action="@{/ruleassignment}" th:with="count=0"
                   method="post">
-                <input th:field="*{sortField}" type="hidden"/>
-                <input th:field="*{sortDirection}" type="hidden"/>
+                DO STUFF HERE
+                <div th:each="assignment,stat : *{ruleAssignments}">
+                    <h3 th:text="${assignment.category.name}"/>
+                    <ul>
+                        <li th:each="tWrapper,stat:${assignment.transactions}" style="list-style: none;">
+                            <span style="margin-right: 10px;">
+                                <input type="checkbox" th:field="*{checked[__${tWrapper.count}__]}"/>
 
-                Import File
-                <table>
-                    <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-                    <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
-                </table>
+                            </span>
+                            <span th:text="${tWrapper.count}"/>
+                            <span th:text="${tWrapper.transaction.detail} + ' ... ' + ${tWrapper.transaction.amount*-1} + ' EUR'"/></li>
 
+                        <!--
+                        <span th:text="${transaction.detail} + ' ... ' + ${transaction.amount*-1} + ' EUR'"/></li>
+                        <th:block th:each="transaction : ${assignment.transaction}">
+                            <li><input type="checkbox" th:field="*{testList}" th:value="|${test.name}-${enviro}|" /></li>
+                        </th:block>-->
+                    </ul>
+                </div>
 
-
+                <button type="submit" class="btn btn-default">Save</button>
             </form>
         </div>
     </div>

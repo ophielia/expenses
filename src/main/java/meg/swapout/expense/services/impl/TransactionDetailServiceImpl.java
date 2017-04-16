@@ -48,7 +48,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     }
 
     @Override
-    public List<CategorizedTransaction> saveDetailsForTransaction(RawTransaction transaction, List<CategorizedTransaction> details) {
+    public List<CategorizedTransaction> saveDetailsAndTransaction(RawTransaction transaction, List<CategorizedTransaction> details) {
         if (transaction != null) {
 
             // get details from db

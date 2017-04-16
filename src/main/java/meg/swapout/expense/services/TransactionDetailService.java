@@ -15,7 +15,7 @@ public interface TransactionDetailService {
 
     CategorizedTransaction getCategorizedTransactionById(Long id);
 
-    List<CategorizedTransaction> saveDetailsForTransaction(RawTransaction transaction, List<CategorizedTransaction> details);
+    List<CategorizedTransaction> saveDetailsAndTransaction(RawTransaction transaction, List<CategorizedTransaction> details);
 
     List<CategorizedTransaction> distributeAmount(RawTransaction transaction, List<CategorizedTransaction> details, boolean remainderOnly);
 

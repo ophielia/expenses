@@ -2,6 +2,7 @@ package meg.swapout.expense.controllers.models;
 
 import meg.swapout.expense.domain.RawTransaction;
 import meg.swapout.expense.services.RuleAssignment;
+import meg.swapout.expense.services.RuleTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,10 @@ import java.util.List;
 public class AssignmentListModel {
 
 
-	private List<RuleAssignment> assignbycategory;
+	private List<RuleAssignment> ruleAssignments;
 	private List<Boolean> checked;
+
+
 
 
 	public AssignmentListModel(List<RuleAssignment> ruleassignments) {
@@ -21,22 +24,40 @@ public class AssignmentListModel {
 	}
 
 	public List<RuleAssignment> getRuleAssignments() {
-		return assignbycategory;
+		return ruleAssignments;
 	}
 
 	private void setRuleAssignments(List<RuleAssignment> ruleassignment) {
-		this.assignbycategory = ruleassignment;
+		this.ruleAssignments = ruleassignment;
+
+		if (ruleassignment == null) {
+			return;
+		}
+
+		int count=0;
+		checked = new ArrayList<>();
+		for (RuleAssignment rule : ruleassignment) {
+			List<RuleTransaction> ruleTransactions=new ArrayList<>();
+			for (RuleTransaction ruleTransaction:rule.getTransactions()) {
+				ruleTransaction.setCount(count);
+				count++;
+				checked.add(true);
+			}
+		}
+
+/*
 		if (ruleassignment != null) {
 			// get total number of transactions
 			int total = 0;
 			for (RuleAssignment rule : ruleassignment) {
 				total += rule.getTransactionCount();
 			}
-			checked = new ArrayList<>();
+
 			for (int i = 0; i < total; i++) {
 				checked.add(true);
 			}
-		}
+
+		}*/
 	}
 
 	public List<Boolean> getChecked() {
@@ -52,11 +73,11 @@ public class AssignmentListModel {
 		// initialize counter
 		int i = 0;
 		// loop through existing assignments
-		for (RuleAssignment assign : assignbycategory) {
+		for (RuleAssignment assign : ruleAssignments) {
 			// initialize list of selectedtrans
-			List<RawTransaction> selectedtrans = new ArrayList<>();
+			List<RuleTransaction> selectedtrans = new ArrayList<>();
 			// loop through transactions
-			for (RawTransaction banktrans : assign.getTransactions()) {
+			for (RuleTransaction banktrans : assign.getTransactions()) {
 				// check counter against checked list
 				boolean ischecked = this.checked.get(i);
 
