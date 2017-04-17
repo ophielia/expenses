@@ -1,6 +1,6 @@
-package meg.swapout.expense.controllers;
+package meg.swapout.web.controllers;
 
-import meg.swapout.expense.controllers.models.TargetModel;
+import meg.swapout.web.controllers.models.TargetModel;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.Target;
 import meg.swapout.expense.domain.TargetDetail;

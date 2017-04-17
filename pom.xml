@@ -83,6 +83,20 @@
 			<version>42.0.0</version>
 		</dependency>
 
+		<!-- apache fop for reports -->
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>fop</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<!-- for charts in reports -->
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.9</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

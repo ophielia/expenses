@@ -1,7 +1,7 @@
 package meg.swapout.common.imp;
 
 import java.lang.reflect.Method;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 
 public class DefaultMapper implements Mapper {
@@ -41,7 +41,7 @@ public class DefaultMapper implements Mapper {
 			// put object methods in map
 			Class objectclass = mapped.getClass();
 			Method[] methods = objectclass.getMethods();
-			Hashtable methodmap = new Hashtable();
+			HashMap methodmap = new HashMap();
 			for (int i = 0; i < methods.length; i++) {
 				methodmap.put(methods[i].getName(), methods[i]);
 			}
@@ -66,7 +66,7 @@ public class DefaultMapper implements Mapper {
 	 * @param methods
 	 */
 	private void setFieldInObject(Object mapped, Placeholder placeholder,
-			FieldMapping field, Hashtable methods) {
+			FieldMapping field, HashMap methods) {
 		// get setter method
 		String methodname = field.getSetterMethod();
 		Method method = (Method) methods.get(methodname);
@@ -118,11 +118,9 @@ public class DefaultMapper implements Mapper {
 			Class cls = Class.forName(classname);
 
 			// create helper class
-			MappingHelper helper = (MappingHelper) cls.newInstance();
+			return (MappingHelper) cls.newInstance();
 
-			// return helper class
-			return helper;
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			// TODO add error handling here
 		}
 

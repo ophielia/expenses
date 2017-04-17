@@ -17,4 +17,8 @@ public interface TargetService {
     Target saveTarget(Target target);
 
     void deleteTarget(Long id);
+
+    Target loadTargetForMonth(String month);
+
+    Target loadTargetForYear(String year);
 }

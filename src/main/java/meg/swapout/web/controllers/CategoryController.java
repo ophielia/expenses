@@ -1,7 +1,7 @@
-package meg.swapout.expense.controllers;
+package meg.swapout.web.controllers;
 
 
-import meg.swapout.expense.controllers.validators.CategoryValidator;
+import meg.swapout.web.controllers.validators.CategoryValidator;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

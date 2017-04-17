@@ -1,7 +1,7 @@
-package meg.swapout.expense.controllers;
+package meg.swapout.web.controllers;
 
-import meg.swapout.expense.controllers.models.ExpenseModel;
-import meg.swapout.expense.controllers.validators.ExpenseModelValidator;
+import meg.swapout.web.controllers.models.ExpenseModel;
+import meg.swapout.web.controllers.validators.ExpenseModelValidator;
 import meg.swapout.expense.domain.CategorizedTransaction;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.QuickGroup;

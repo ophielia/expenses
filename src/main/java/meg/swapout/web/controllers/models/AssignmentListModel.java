@@ -1,6 +1,5 @@
-package meg.swapout.expense.controllers.models;
+package meg.swapout.web.controllers.models;
 
-import meg.swapout.expense.domain.RawTransaction;
 import meg.swapout.expense.services.RuleAssignment;
 import meg.swapout.expense.services.RuleTransaction;
 
@@ -37,7 +36,6 @@ public class AssignmentListModel {
 		int count=0;
 		checked = new ArrayList<>();
 		for (RuleAssignment rule : ruleassignment) {
-			List<RuleTransaction> ruleTransactions=new ArrayList<>();
 			for (RuleTransaction ruleTransaction:rule.getTransactions()) {
 				ruleTransaction.setCount(count);
 				count++;

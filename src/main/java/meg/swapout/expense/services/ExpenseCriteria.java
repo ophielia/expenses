@@ -1,6 +1,7 @@
 package meg.swapout.expense.services;
 
 import meg.swapout.expense.domain.Category;
+import meg.swapout.reporting.CompareType;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -66,7 +67,7 @@ public class ExpenseCriteria implements Serializable {
 	private TransactionType transactionType;
 	private Long source;
 
-	private Long compareType;
+	private CompareType compareType;
 
 	private Boolean showsubcategories;
 	
@@ -186,11 +187,11 @@ this.excludeNonExpense=excludeNonExpense;
 		this.transactionType = transactionType;
 	}
 
-	public Long getCompareType() {
+	public CompareType getCompareType() {
 		return compareType;
 	}
 
-	public void setCompareType(Long compareType) {
+	public void setCompareType(CompareType compareType) {
 		this.compareType = compareType;
 	}
 

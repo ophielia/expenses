@@ -1,12 +1,12 @@
-package meg.swapout.expense.controllers;
+package meg.swapout.web.controllers;
 
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 
-import meg.swapout.expense.controllers.models.AssignmentListModel;
-import meg.swapout.expense.controllers.validators.ExpenseListModelValidator;
+import meg.swapout.web.controllers.models.AssignmentListModel;
+import meg.swapout.web.controllers.validators.ExpenseListModelValidator;
 import meg.swapout.expense.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,8 +41,7 @@ public class AssignByRulesController {
     public AssignmentListModel populateAssignmentListModel(HttpServletRequest request) {
         // service call which assigns uncategorized expenses by rules
         List<RuleAssignment> assignmentlist=transService.getRuleAssignments();
-        AssignmentListModel model = new AssignmentListModel(assignmentlist);
-        return model;
+        return new AssignmentListModel(assignmentlist);
     }
 
 

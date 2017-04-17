@@ -139,4 +139,16 @@ public class TargetServiceImpl implements TargetService {
             targetRepository.delete(toDelete);
         }
     }
+
+    @Override
+    public Target loadTargetForMonth(String month) {
+        // TODO - implement this
+        return null;
+    }
+
+    @Override
+    public Target loadTargetForYear(String year) {
+        // TODO - implement this
+        return null;
+    }
 }

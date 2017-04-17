@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by margaretmartin on 30/03/2017.
@@ -44,7 +45,7 @@ class BankTransactionServiceImpl implements BankTransactionService {
                     trans.getAmount(), trans.getTransdate(),
                     trans.getDescription());
 
-            if (result != null && result.size() > 0) {
+            if (!result.isEmpty()) {
                 // this transaction seems to already exist
                 exists = true;
             }
@@ -55,7 +56,7 @@ class BankTransactionServiceImpl implements BankTransactionService {
     @Override
     public RawTransaction addTransaction(RawTransaction trans) {
         // set deleted to false
-        trans.setDeleted(new Boolean(false));
+        trans.setDeleted(Boolean.valueOf(false));
         // call Dao interface here
         rawTransactionRepository.save(trans);
         return trans;
@@ -78,12 +79,10 @@ class BankTransactionServiceImpl implements BankTransactionService {
         List<Rule> rules = ruleRepository.findAll(new Sort(Sort.Direction.ASC, "lineorder"));
         // load all uncategorized expenses
         List<RawTransaction> expenses = rawTransactionRepository.findNoCategoryExpenses();
-        // load category reference
-        HashMap<Long, Category> catref = categoryService.getCategoriesAsMap();
 
         // prepare holders
-        HashMap<Long, RuleAssignment> assigned = new HashMap<Long, RuleAssignment>();
-        List<Long> assignedexpenses = new ArrayList<Long>();
+        HashMap<Long, RuleAssignment> assigned = new HashMap<>();
+        List<Long> assignedexpenses = new ArrayList<>();
 
         // loop through all rules, assigning categories
         for (Rule rule : rules) {
@@ -94,40 +93,49 @@ class BankTransactionServiceImpl implements BankTransactionService {
 
             }
 
-            Long rulecatid = cat.getId();
-            for (RawTransaction exp : expenses) {
-                if (assignedexpenses.contains(exp.getId())) {
-                    continue;
-                }
-                // check in detail
-                String searchin = exp.getDetail().toLowerCase();
-                if (searchin.indexOf(searchfor) >= 0) {
-                    // string found
-                    // retrieve or create RuleAssignment
-                    RuleAssignment ruleassign = null;
-                    if (assigned.containsKey(rulecatid)) {
-                        ruleassign = assigned.get(rulecatid);
-                    } else {
-                        ruleassign = new RuleAssignment(cat);
-                    }
-                    // add transaction to RuleAssignment
-                    ruleassign.addTransaction(new RuleTransaction(exp));
-                    // reset RuleAssignment in holder
-                    assigned.put(rulecatid, ruleassign);
-                    // add expenseid to assignedidlist
-                    assignedexpenses.add(exp.getId());
-                }
-            }
+            assignedexpenses = categorizeExpensesForRule(expenses,assigned, assignedexpenses, searchfor,rule);
         }
+
         // return list of ruleassignment objects
-        List<RuleAssignment> results = new ArrayList<RuleAssignment>();
-        for (Long catid : assigned.keySet()) {
-            RuleAssignment check = assigned.get(catid);
+        List<RuleAssignment> results = new ArrayList<>();
+        for (Map.Entry<Long, RuleAssignment> entry : assigned.entrySet()) {
+            RuleAssignment check = entry.getValue();
             if (check.getTransactionCount() > 0) {
                 results.add(check);
             }
         }
+
         return results;
+
+    }
+
+    private List<Long> categorizeExpensesForRule(List<RawTransaction> expenses, HashMap<Long, RuleAssignment> assigned, List<Long> assignedexpenses, String searchString, Rule rule) {
+        Long rulecatid = rule.getCategory().getId();
+
+        for (RawTransaction exp : expenses) {
+            if (assignedexpenses.contains(exp.getId())) {
+                continue;
+            }
+            // check in detail
+            String searchin = exp.getDetail().toLowerCase();
+            if (searchin.indexOf(searchString) >= 0) {
+                // string found
+                // retrieve or create RuleAssignment
+                RuleAssignment ruleassign = null;
+                if (assigned.containsKey(rulecatid)) {
+                    ruleassign = assigned.get(rulecatid);
+                } else {
+                    ruleassign = new RuleAssignment(rule.getCategory());
+                }
+                // add transaction to RuleAssignment
+                ruleassign.addTransaction(new RuleTransaction(exp));
+                // reset RuleAssignment in holder
+                assigned.put(rulecatid, ruleassign);
+                // add expenseid to assignedidlist
+                assignedexpenses.add(exp.getId());
+            }
+        }
+        return assignedexpenses;
 
     }
 

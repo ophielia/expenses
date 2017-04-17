@@ -1,6 +1,6 @@
-package meg.swapout.expense.controllers;
+package meg.swapout.web.controllers;
 
-import meg.swapout.expense.controllers.models.QuickGroupModel;
+import meg.swapout.web.controllers.models.QuickGroupModel;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.QuickGroup;
 import meg.swapout.expense.domain.QuickGroupDetail;

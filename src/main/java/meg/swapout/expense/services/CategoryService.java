@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface CategoryService {
 
+    String OTHERCATEGORYNAME ="OTHER";
+
     Iterable<Category> listAllCategories();
 
     List<Category> listAllCategories(boolean displayOnly);
@@ -41,4 +43,6 @@ public interface CategoryService {
 
 
     HashMap<Long, Category> getCategoriesAsMap();
+
+    Category getCategoryByName(String othercategoryname);
 }

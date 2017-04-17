@@ -1,4 +1,4 @@
-package meg.swapout.expense.controllers;
+package meg.swapout.web.controllers;
 
 
 import meg.swapout.expense.domain.Category;

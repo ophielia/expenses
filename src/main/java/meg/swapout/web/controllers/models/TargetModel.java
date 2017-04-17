@@ -1,4 +1,4 @@
-package meg.swapout.expense.controllers.models;
+package meg.swapout.web.controllers.models;
 
 import meg.swapout.expense.domain.*;
 

@@ -176,6 +176,11 @@ public class CategoryServiceImpl implements CategoryService {
         return getCategoriesAsMap(false);
     }
 
+    @Override
+    public Category getCategoryByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+
     private HashMap<Long, Category> getCategoriesAsMap(boolean exclNonDisp) {
         boolean showNonDisp = !exclNonDisp;
         HashMap<Long, Category> hash = new HashMap<Long, Category>();
