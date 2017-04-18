@@ -39,10 +39,6 @@ public class ImportManager {
 	private
 	BankTransactionService transService;
 
-    @Value("${document.import.archivepath}")
-    private String archivedir;
-	
-
 	public final class ImportClient {
 		public final static int SocGen = 1;
 		public static final int Banesto = 2;
@@ -126,15 +122,5 @@ public class ImportManager {
 		return newobjects;
 
 	}
-
-
-	private String getArchiveDir() {
-		return this.archivedir;
-	}
-
-	public void setArchiveDir(String archivedir) {
-		this.archivedir = archivedir;
-	}
-
 
 }

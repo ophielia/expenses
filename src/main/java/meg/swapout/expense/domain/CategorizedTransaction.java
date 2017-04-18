@@ -41,7 +41,7 @@ public class CategorizedTransaction {
     @JoinColumn(name = "banktaid")
     private RawTransaction banktrans;
 
-
+    @Transient
     private Double displayAmount;
 
     public Long getId() {
