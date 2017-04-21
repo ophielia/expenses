@@ -19,6 +19,8 @@ import java.util.List;
 @Controller
 public class CategoryController {
 
+    private static final String redirectLink = "redirect:/category";
+    private static final String categoryTag = "categories";
     @Autowired
     CategoryService categoryService;
 
@@ -27,26 +29,26 @@ public class CategoryController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("categories", categoryService.listAllCategories());
+        model.addAttribute(categoryTag, categoryService.listAllCategories());
         return "category";
     }
 
     @RequestMapping(value="/grid",method = RequestMethod.GET)
     public String grid(Model model) {
-        model.addAttribute("categories", categoryService.getCategoriesUpToLevel(999));
+        model.addAttribute(categoryTag, categoryService.getCategoriesUpToLevel(999));
         return "categorygrid";
     }
 
     @RequestMapping("/{id}")
     public String showCategory(@PathVariable Long id, Model model) {
-        model.addAttribute("category", categoryService.getCategoryById(id));
+        model.addAttribute(categoryTag, categoryService.getCategoryById(id));
         return "categoryshow";
     }
 
     @RequestMapping("/new")
     public String newCategory(Model model) {
         model.addAttribute("category", new Category());
-        model.addAttribute("categories", categoryService.listAllCategories(true));
+        model.addAttribute(categoryTag, categoryService.listAllCategories(true));
         return "categorynewform";
     }
 
@@ -64,14 +66,14 @@ public class CategoryController {
         // save category
         categoryService.updateCategory(category);
 
-        return "redirect:/category";
+        return redirectLink;
 
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String saveCategory(Category category) {
         categoryService.updateCategory(category);
-        return "redirect:/category";
+        return redirectLink;
     }
 
     @RequestMapping("/edit/{id}")
@@ -86,7 +88,7 @@ public class CategoryController {
         model.addAttribute("category", category);
         model.addAttribute("parentCategoryName", parentCategory != null ? parentCategory.getName() : "Top Level Category");
         model.addAttribute("subcategories", subcategories);
-        model.addAttribute("categories", categoryService.listAllCategories(false));
+        model.addAttribute(categoryTag, categoryService.listAllCategories(false));
 
         return "categoryeditform";
     }
@@ -94,7 +96,7 @@ public class CategoryController {
     @RequestMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         categoryService.deleteCategory(id);
-        return "redirect:/category";
+        return redirectLink;
     }
 
 }

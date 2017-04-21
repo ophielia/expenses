@@ -29,7 +29,15 @@
 
 
                     <li><a href="#" th:href="@{/target/monthly}">Targets</a></li>
-                    <li><a href="#" th:href="@{/target/monthly}">Reports</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="@{/reports?reporttype=FullMonth}">Reports
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/reports?reporttype=FullMonth}">Full Month Report</a></li>
+
+                        </ul>
+                    </li>
+
                 </ul>
 
             </div>

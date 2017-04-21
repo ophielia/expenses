@@ -142,8 +142,14 @@ public class TargetServiceImpl implements TargetService {
 
     @Override
     public Target loadTargetForMonth(String month) {
-        // TODO - implement this
-        return null;
+        // get Target For Tag
+        Target target = targetRepository.findTargetsByTypeAndMonthTag(TargetType.Monthly,month);
+        if (target != null) {
+            return target;
+        }
+        // get Default Target
+        target = targetRepository.findDefaultTargetByType(TargetType.Monthly);
+        return target;
     }
 
     @Override

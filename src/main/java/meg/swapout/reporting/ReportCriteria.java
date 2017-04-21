@@ -27,7 +27,7 @@ public class ReportCriteria implements Serializable {
 
     private String year;
 
-    private Long reporttype;
+    private ReportType reporttype;
     private String imageweblink;
     private String contextpath;
     private String fullimageweblink;
@@ -98,11 +98,11 @@ public class ReportCriteria implements Serializable {
         this.month = month;
     }
 
-    public CompareType getComparetype() {
+    public CompareType getCompareType() {
         return comparetype;
     }
 
-    public void setComparetype(CompareType comparetype) {
+    public void setCompareType(CompareType comparetype) {
         this.comparetype = comparetype;
     }
 
@@ -114,12 +114,12 @@ public class ReportCriteria implements Serializable {
         this.year = year;
     }
 
-    public void setReportType(Long reporttype) {
+    public void setReportType(ReportType reporttype) {
         this.reporttype = reporttype;
 
     }
 
-    public Long getReportType() {
+    public ReportType getReportType() {
         return this.reporttype;
     }
 
@@ -137,7 +137,7 @@ public class ReportCriteria implements Serializable {
         }
         return this.fullimageweblink;
     }
-
+/*
     public void setFullImageLink(String fullimageweblink) {
         this.fullimageweblink = fullimageweblink;
     }
@@ -145,7 +145,7 @@ public class ReportCriteria implements Serializable {
     public String getFullImageLink() {
         return this.fullimageweblink;
     }
-
+*/
     public void setContextPath(String contextpath) {
         this.contextpath = contextpath;
 

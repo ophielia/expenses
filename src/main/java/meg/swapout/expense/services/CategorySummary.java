@@ -45,16 +45,17 @@ public class CategorySummary {
 		this.sum = sum;
 	}	
 	
-	public CategorySummary(double sum) {
+/*	public CategorySummary(double sum) {
 		this.sum = sum;
-	}		
-	
+	}		*/
 	public CategorySummary(Double sum) {
 		if (sum!=null) {
 			this.sum = sum.doubleValue();	
 		}
 		
-	}		
+	}
+
+
 	
 	public CategorySummary(Long year, String catname, double sum) {
 		setYear(year);

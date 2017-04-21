@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import static meg.swapout.reporting.ReportType.*;
+
 @Service
 public class ReportDataFactory {
 	
@@ -18,8 +20,8 @@ public class ReportDataFactory {
     @Value("${document.image.weblinkbase}")
     private String imageweblink;
     
-    @Value("${document.image.fullweblinkbase}")
-    private String fullimageweblink;    
+    // TODO remove this @Value("${document.image.fullweblinkbase}")
+	// TODO remove this private String fullimageweblink;
 	
 	@Autowired
 	private SearchService searchService;
@@ -31,33 +33,30 @@ public class ReportDataFactory {
 	protected TargetService targetService;
 	
 	
-	public final static class ReportType {
-		public static final Long MonthlyTarget = 1L;
-		public static final Long YearlyTargetStatus = 2L;
-		public static final Long FullMonth = 3L;
-		public static final Long Yearly = 4L;
-	}	
+
 	
 	public ReportData createReportData(ReportCriteria reportCriteria) {
 		BankReportData report = null;
 		// get reporttype
-		Long reporttype = reportCriteria.getReportType();
+		ReportType reportType = reportCriteria.getReportType();
 		// set image directory (to tmpdir)
 		reportCriteria.setImageDir(tmpdir);
 		// set weblinkbase
 		reportCriteria.setImageLink(imageweblink);
-		reportCriteria.setFullImageLink(fullimageweblink);
 		// get appropriate report
-		if (reporttype!=null) {
-			// get appropriate report for reporttype
-			if (reporttype.longValue()==ReportType.FullMonth.longValue()) {
-				report = new FullMonthReportData(reportCriteria,searchService,categoryService,targetService);
-			} else if (reporttype.longValue()==ReportType.MonthlyTarget.longValue()) {
-				report = new MonthlyTargetReportData(reportCriteria,searchService,categoryService,targetService);
-			}  else if (reporttype.longValue()==ReportType.YearlyTargetStatus.longValue()) {
-				report = new YearlyTargetStatusReportData(reportCriteria,searchService,categoryService,targetService);
-			}  else if (reporttype.longValue()==ReportType.Yearly.longValue()) {
-				report = new YearlyReportData(reportCriteria,searchService,categoryService,targetService);
+		if (reportType!=null) {
+			switch (reportType) {
+				case FullMonth:
+					report = new FullMonthReportData(reportCriteria,searchService,categoryService,targetService)	;				break;
+				case Yearly:
+					report = new YearlyReportData(reportCriteria,searchService,categoryService,targetService);
+					break;
+				case YearlyTarget:
+					report = new YearlyTargetStatusReportData(reportCriteria,searchService,categoryService,targetService);
+					break;
+				case MonthlyTarget:
+					report = new MonthlyTargetReportData(reportCriteria,searchService,categoryService,targetService);					break;
+
 			}
 
 			if (report!=null) {

@@ -1,52 +1,16 @@
 package meg.swapout.reporting;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import meg.swapout.common.DateUtils;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.ExpenseDao;
 import meg.swapout.expense.domain.Target;
 import meg.swapout.expense.domain.TargetDetail;
 import meg.swapout.expense.services.*;
-import meg.swapout.reporting.elements.ChartData;
-import meg.swapout.reporting.elements.ChartRow;
-import meg.swapout.reporting.elements.ReportData;
-import meg.swapout.reporting.elements.ReportElement;
-import meg.swapout.reporting.elements.ReportLabel;
-import meg.swapout.reporting.elements.TargetProgressDisp;
+import meg.swapout.reporting.elements.*;
 import meg.swapout.reporting.tools.CategorySummaryComparator;
 import meg.swapout.reporting.tools.ChartRowComparator;
 import meg.swapout.reporting.tools.ExpenseComparator;
 import meg.swapout.reporting.tools.UtilityComparator;
-
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -62,8 +26,43 @@ import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.text.*;
+import java.util.*;
+import java.util.List;
+
 @XmlRootElement(name = "reportdata")
 public abstract class BankReportData implements ReportData {
+
+	public static final String DATE = "DATE";
+	public static final String CATEGORY = "Category";
+	public static final String SUBCATEGORY = "SUBCATEGORY";
+	public static final String Detail = "Detail";
+	public static final String AMOUNT = "AMOUNT";
+	public static final String DAYS = "DAYS";
+	public static final String SPENT = "SPENT";
+	public static final String TARGETED = "TARGETED";
+	public static final String Status = "Status";
+	public static final String SUMMARY = "SUMMARY";
+	public static final String FULL_MONTH_TITLE = "Full Month Report";
+	public static final String MONTHLY_TARGET_TITLE = "Monthly Targets Report";
+	public static final String YEARLY_TARGET_TITLE = "Yearly Target Status Report";
+	public static final String YEARLY_SUMMARY_REPORT = "Yearly SUMMARY Report";
+	public static final String ALL_EXPENSES = "All Expenses";
+	public static final String TARGET_STATUS = "Target Status";
+	public static final String SUMMARY_BY_CATEGORY = "SUMMARY By Category";
+	public static final String YEAR_TO_DATE = "Year To DATE";
+	public static final String PERCENTAGE_THROUGH_YEAR = "Percentage Through Year";
+	private static final java.lang.String TOTAL = "TOTAL";
 
 	protected List<ReportElement> elements;
 
@@ -83,29 +82,7 @@ public abstract class BankReportData implements ReportData {
 			new DecimalFormatSymbols(Locale.US));
 	SimpleDateFormat mthyearformat = new SimpleDateFormat("MM-yyyy", Locale.US);
 
-	public final class DispLabel {
-		public static final String Date = "Date";
-		public static final String Category = "Category";
-		public static final String Subcategory = "Subcategory";
-		public static final String Detail = "Detail";
-		public static final String Amount = "Amount";
-		public static final String Days = "Days";
-		public static final String Spent = "Spent";
-		public static final String Targeted = "Targeted";
-		public static final String Status = "Status";
-		public static final String Summary = "Summary";
 
-		public static final String FullMonthTitle = "Full Month Report";
-		public static final String MonthlyTargetTitle = "Monthly Targets Report";
-		public static final String YearlyTargetTitle = "Yearly Target Status Report";
-		public static final String YearlySummaryTitle = "Yearly Summary Report";
-
-		public static final String AllExpenses = "All Expenses";
-		public static final String TargetStatus = "Target Status";
-		public static final String SummaryByCategory = "Summary By Category";
-		public static final String YearToDate = "Year To Date";
-		public static final String PercentageThrYear = "Percentage Through Year";
-	}
 
 	public BankReportData(ReportCriteria reportCriteria,
 			SearchService searchService, CategoryService categoryService,
@@ -206,7 +183,7 @@ public abstract class BankReportData implements ReportData {
 		if (allexpenses == null)
 			return;
 		// build category lookup list
-		Hashtable<Long, String> catlkup = new Hashtable<Long, String>();
+		HashMap<Long, String> catlkup = new HashMap<Long, String>();
 		List<CategoryLevel> categories = categoryService
 				.getCategoriesUpToLevel(1);
 		if (categories != null) {
@@ -278,11 +255,11 @@ public abstract class BankReportData implements ReportData {
 		criteria.setDateStart(origcriteria.getDateStart());
 		// Storage lists
 		List<TargetProgressDisp> displays = new ArrayList<TargetProgressDisp>();
-		Hashtable<Long, TargetDetail> targethash = new Hashtable<Long, TargetDetail>();
+		HashMap<Long, TargetDetail> targethash = new HashMap<Long, TargetDetail>();
 
 		// get Targets for month
 		Target target = targetService.loadTargetForMonth(month);
-		// place targets in Hashtable by categoryid
+		// place targets in HashMap by categoryid
 		List<TargetDetail> details = target.getTargetdetails();
 		for (TargetDetail det : details) {
 			Long catid = det.getCatid();
@@ -297,9 +274,9 @@ public abstract class BankReportData implements ReportData {
 		// prepare chart data
 		ChartData chart = new ChartData();
 		ChartRow headers = new ChartRow();
-		headers.addColumn("Category");
-		headers.addColumn("Spent");
-		headers.addColumn("Targeted");
+		headers.addColumn(CATEGORY);
+		headers.addColumn("SPENT");
+		headers.addColumn("TARGETED");
 		headers.addColumn("Status");
 		chart.setHeaders(headers);
 
@@ -319,7 +296,7 @@ public abstract class BankReportData implements ReportData {
 
 			// loop through results
 			if (results != null && results.size() > 0) {
-				// if results are available, insert totals in Hashtable, add to
+				// if results are available, insert totals in HashMap, add to
 				// category total
 				TargetProgressDisp cat = new TargetProgressDisp();
 				cat.setCatName(catlvl.getCategory().getName());
@@ -366,7 +343,7 @@ public abstract class BankReportData implements ReportData {
 					+ percentage + "%)";
 		}
 		ChartRow row = new ChartRow();
-		row.addColumn("TOTAL");
+		row.addColumn(TOTAL);
 		row.addColumn(nf.format(totalamount));
 		row.addColumn(nf.format(totaltargeted));
 		row.addColumn(status);
@@ -384,7 +361,7 @@ public abstract class BankReportData implements ReportData {
 	}
 
 	protected double getPercentageThrYear(ExpenseCriteria criteria) {
-		double percentageofyear = 100.0;
+		double percentageofyear;
 		ExpenseCriteria fullyearc = new ExpenseCriteria();
 		fullyearc.setDateStart(criteria.getDateStart());
 		Date calyearend = DateUtils.getEndOfCalendarYear(criteria
@@ -408,11 +385,11 @@ public abstract class BankReportData implements ReportData {
 
 	public ReportElement crunchNumbersYearlyTargetProgress(
 			ExpenseCriteria criteria, String lastdatetag,
-			boolean iscurrentyear, Hashtable<Long, TargetDetail> targethash,
+			boolean iscurrentyear, Map<Long, TargetDetail> targethash,
 			double percentageofyear) {
 		// prepare month hashtable (monthkey as key, and TargetProgressDisp as
 		// value
-		Hashtable<String, ArrayList<TargetProgressDisp>> runningTotals = prepareComparisonTable(
+		HashMap<String, ArrayList<TargetProgressDisp>> runningTotals = prepareComparisonTable(
 				criteria, lastdatetag);
 		// get categories
 		List<CategoryLevel> categories = categoryService
@@ -441,7 +418,7 @@ public abstract class BankReportData implements ReportData {
 
 				// loop through results
 				if (results != null && results.size() > 0) {
-					// if results are available, insert totals in Hashtable, add
+					// if results are available, insert totals in HashMap, add
 					// to
 					// category total
 					// MM TODO remove unused
@@ -479,38 +456,6 @@ public abstract class BankReportData implements ReportData {
 			}
 		}
 
-/*
- * 		// calculate totals
-		double totaltargeted = 0;
-		double totalspent = 0;
-		double pointtargeted = 0;
-
-		for (TargetProgressDisp targ : displayspoint) {
-			pointtargeted += targ.getAmountTargeted();
-		}
-		double statusamt = totalspent > totaltargeted ? totalspent
-				- totaltargeted : totaltargeted - totalspent;
-		String summary = totalspent > totaltargeted ? statusamt
-				+ " over target" : statusamt + " under target";
-		double statusamtpoint = totalspent > pointtargeted ? totalspent
-				- pointtargeted : pointtargeted - totalspent;
-		String fmtstatusamt = nf.format(statusamtpoint);
-		String summarypoint = totalspent > pointtargeted ? fmtstatusamt
-				+ " over target" : fmtstatusamt + " under target";
-
-		ChartRow totalrow = new ChartRow();
-		totalrow.addColumn(BankReportData.DispLabel.Summary);
-		totalrow.addColumn(nf.format(totalspent));
-		totalrow.addColumn(nf.format(totaltargeted));
-		totalrow.addColumn(summary);
-
-		ChartRow totalrowpoint = new ChartRow();
-		totalrowpoint.addColumn(BankReportData.DispLabel.Summary);
-		totalrowpoint.addColumn(nf.format(totalspent));
-		totalrowpoint.addColumn(nf.format(pointtargeted));
-		totalrowpoint.addColumn(summarypoint);
-
- */
 		// get url for progress graph
 		String graphprogressurl = generateProgressGraph(runningTotals);
 
@@ -521,7 +466,7 @@ return re;
 	}
 
 	protected String generateProgressGraph(
-			Hashtable<String, ArrayList<TargetProgressDisp>> runningTotals) {
+			HashMap<String, ArrayList<TargetProgressDisp>> runningTotals) {
 		// row keys... are categories
 		// column keys... months - sort to prepare
 		Set<String> months = runningTotals.keySet();
@@ -626,7 +571,7 @@ return re;
 		ChartData chart = new ChartData();
 		ChartRow headers = new ChartRow();
 		headers.addColumn("Catagory");
-		headers.addColumn("Spent");
+		headers.addColumn("SPENT");
 		headers.addColumn("Percentage");
 		chart.setHeaders(headers);
 
@@ -720,7 +665,7 @@ return re;
 
 		// add total to list
 		ChartRow totalrow = new ChartRow();
-		totalrow.addColumn("TOTAL");
+		totalrow.addColumn(TOTAL);
 		totalrow.addColumn(nf.format(charttotal));
 		totalrow.addColumn("100%");
 		chart.addRow(totalrow);
@@ -764,8 +709,8 @@ return re;
 		plot.setCircular(false);
 		plot.setLabelGap(0.02);
 
-		String filecatname = catname.indexOf(" ") >= 0 ? catname.substring(0,
-				catname.indexOf(" ") - 1) : catname;
+		String filecatname = catname.indexOf(' ') >= 0 ? catname.substring(0,
+				catname.indexOf(' ') - 1) : catname;
 		String filename = "fullmonth_" + filecatname + "_"
 				+ (new Date()).getTime() + ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
@@ -801,7 +746,7 @@ return re;
 
 		}
 
-		JFreeChart chart = ChartFactory.createPieChart("Summary", // chart
+		JFreeChart chart = ChartFactory.createPieChart("SUMMARY", // chart
 				// title
 				dataset, // data
 				false, // include legend
@@ -827,13 +772,13 @@ return re;
 	}
 
 	/**
-	 * prepares a Hashtable with keys starting from the beginning of each
+	 * prepares a HashMap with keys starting from the beginning of each
 	 * month.#
 	 * 
 	 * @param criteria
 	 * @return
 	 */
-	protected Hashtable<String, ArrayList<TargetProgressDisp>> prepareComparisonTable(
+	protected HashMap<String, ArrayList<TargetProgressDisp>> prepareComparisonTable(
 			ExpenseCriteria criteria, String lastdatetag) {
 		// prepare criteria for taglist call
 		Date origbegin = criteria.getDateStart();
@@ -845,8 +790,8 @@ return re;
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		criteria.setDateStart(cal.getTime());
 
-		// initialize the Hashtable
-		Hashtable<String, ArrayList<TargetProgressDisp>> runningTotals = new Hashtable<String, ArrayList<TargetProgressDisp>>();
+		// initialize the HashMap
+		HashMap<String, ArrayList<TargetProgressDisp>> runningTotals = new HashMap<String, ArrayList<TargetProgressDisp>>();
 		// get month tag list
 		List<String> monthtags = getMonthTagList(criteria, "MM-dd-yyyy");
 		// remove January - first month of year doesn't make sense
@@ -876,7 +821,7 @@ return re;
 		criteria.setShowSubcats(true);
 		List<CategorySummary> expenses = searchService
 				.getExpenseTotal(criteria);
-		if (expenses != null && expenses.size() > 0) {
+		if (!expenses.isEmpty()) {
 			double total = 0;
 			// loop through category expenses
 			for (CategorySummary catsum : expenses) {
@@ -899,13 +844,13 @@ return re;
 
 		// create headers
 		ChartRow headers = new ChartRow();
-		headers.addColumn(BankReportData.DispLabel.Subcategory);
-		headers.addColumn(BankReportData.DispLabel.Amount);
+		headers.addColumn(SUBCATEGORY);
+		headers.addColumn(AMOUNT);
 
 		// get subcategories
 		List<CategoryLevel> catlevels = categoryService.getAllSubcategories(cat
 				.getCategory());
-		CategorySummary totalsum = new CategorySummary("TOTAL",
+		CategorySummary totalsum = new CategorySummary(TOTAL,
 				daycount);
 
 		// do one query to grab all subcategories
@@ -913,7 +858,7 @@ return re;
 		catcriteria.setCategoryLevelList(catlevels);
 		catcriteria.setShowSubcats(true);
 
-		List<CategorySummary> displays = new ArrayList<CategorySummary>();
+		List<CategorySummary> displays;
 		if (numbymonth) {
 			displays = searchService
 					.getExpenseTotalByMonthAndCategory(catcriteria);
@@ -1001,13 +946,13 @@ return re;
 			criteria.setDateStart(startdate);
 
 			// Storage lists
-			Hashtable<String, List<CategorySummary>> results = new Hashtable<String, List<CategorySummary>>();
+			HashMap<String, List<CategorySummary>> results = new HashMap<String, List<CategorySummary>>();
 			ChartData chartdata = new ChartData();
 			ChartRow headers = new ChartRow();
-			headers.addColumn("Category");
+			headers.addColumn(CATEGORY);
 
 			// prepare month tag lookup for detailed report
-			Hashtable<String, Integer> taglkup = new Hashtable<String, Integer>();
+			HashMap<String, Integer> taglkup = new HashMap<String, Integer>();
 			if (detailedchart) {
 				List<String> monthtags = getMonthTagList(criteria,
 						dateformatstr);
@@ -1023,7 +968,7 @@ return re;
 			if (detailedchart) {
 				headers.addColumn("Total");
 			} else {
-				headers.addColumn("Amount");
+				headers.addColumn(AMOUNT);
 			}
 			headers.addColumn("Avg per Month");
 
@@ -1046,7 +991,7 @@ return re;
 
 				// loop through results
 				double rowtotal = 0;
-				if (totals != null && totals.size() > 0) {
+				if (!totals.isEmpty()) {
 					// create ChartRow to hold data
 					ChartRow row = new ChartRow();
 					row.addColumn(catlvl.getCategory().getName());
@@ -1086,23 +1031,23 @@ return re;
 
 			// get url for graph
 			int sorttype = UtilityComparator.Sort.ByMonth;
-			if (dateformatstr.equals("MM-yyyy")) {
+			if (("MM-yyyy").equals(dateformatstr)) {
 				sorttype = UtilityComparator.Sort.ByMonthYearStr;
 			}
 			String graphurl = generateYearToDateGraph(null, results, sorttype);
 
 			// add average per month info, and totals row
 			ChartRow total = new ChartRow();
-			total.addColumn("TOTAL");
+			total.addColumn(TOTAL);
 			int startcol = 1;
 
-			Hashtable<Integer, Double> columntotals = new Hashtable<Integer, Double>();
+			HashMap<Integer, Double> columntotals = new HashMap<Integer, Double>();
 			for ( ChartRow row: chartdata.getRows()) {
-				Double rowsum = new Double(0);
+				Double rowsum = 0D;
 				if (startcol != totalscolumn) {
 					for (int i = startcol; i < totalscolumn; i++) {
 						String val = row.getColumn(i);
-						if (!val.equals("")) {
+						if (!"".equals(val)) {
 							Integer colkey = new Integer(i);
 							Double colamt = 0D;
 							try {
@@ -1182,7 +1127,7 @@ return re;
 	}
 
 	protected String generateYearToDateGraph(String title,
-			Hashtable<String, List<CategorySummary>> results, int sorttype) {
+			HashMap<String, List<CategorySummary>> results, int sorttype) {
 		// row keys... are categories
 		// column keys... months - sort to prepare
 		Set<String> months = results.keySet();
@@ -1317,13 +1262,13 @@ return re;
 			criteria.setDateStart(startdate);
 
 			// Storage lists
-			Hashtable<String, List<CategorySummary>> results = new Hashtable<String, List<CategorySummary>>();
+			HashMap<String, List<CategorySummary>> results = new HashMap<String, List<CategorySummary>>();
 			ChartData chartdata = new ChartData();
 			ChartRow headers = new ChartRow();
-			headers.addColumn("Category");
+			headers.addColumn(CATEGORY);
 
 			// prepare month tag lookup for detailed report
-			Hashtable<String, Integer> taglkup = new Hashtable<String, Integer>();
+			HashMap<String, Integer> taglkup = new HashMap<String, Integer>();
 			if (detailedchart) {
 				List<String> yeartags = new ArrayList<String>();
 				for (int i = beginyear; i <= desiredyear; i++) {
@@ -1341,7 +1286,7 @@ return re;
 			if (detailedchart) {
 				headers.addColumn("Total");
 			} else {
-				headers.addColumn("Amount");
+				headers.addColumn(AMOUNT);
 			}
 			headers.addColumn("Avg per Month");
 
@@ -1363,7 +1308,7 @@ return re;
 
 				// loop through results
 				double rowtotal = 0;
-				if (totals != null && totals.size() > 0) {
+				if (!totals.isEmpty()) {
 					// create ChartRow to hold data
 					ChartRow row = new ChartRow();
 					row.addColumn(catlvl.getCategory().getName());
@@ -1405,19 +1350,19 @@ return re;
 
 			// totals row and total column
 			ChartRow total = new ChartRow();
-			total.addColumn("TOTAL");
+			total.addColumn(TOTAL);
 			int startcol = 1;
 
-			Hashtable<Integer, Double> columntotals = new Hashtable<Integer, Double>();
+			HashMap<Integer, Double> columntotals = new HashMap<Integer, Double>();
 			for (Iterator<ChartRow> iter = chartdata.getRows().iterator(); iter.hasNext();) {
 				ChartRow row = (ChartRow) iter.next();
 
-				Double rowsum = new Double(0);
+				Double rowsum = 0D;
 				// MM add avg per monthinfo
 				if (startcol != totalscolumn) {
 					for (int i = startcol; i < totalscolumn; i++) {
 						String val = row.getColumn(i);
-						Integer colkey = new Integer(i);
+						Integer colkey = i;
 						Double colamt = 0D;
 						try {
 							Number amount = nf.parse(val);
@@ -1470,9 +1415,7 @@ return re;
 					sumtotal += coltotal;
 				}
 			} else {
-				for (Iterator<ChartRow> iter = chartdata.getRows().iterator(); iter
-						.hasNext();) {
-					ChartRow row = (ChartRow) iter.next();
+			    for (ChartRow row:chartdata.getRows()) {
 					String val = row.getColumn(totalscolumn);
 					Number amount;
 					try {
@@ -1514,7 +1457,7 @@ return re;
 	protected void addValuesOverTime(ExpenseCriteria criteria,
 			TargetDetail target, TargetProgressDisp catpt,
 			String lastdatetag,
-			Hashtable<String, ArrayList<TargetProgressDisp>> runningTotals) {
+			HashMap<String, ArrayList<TargetProgressDisp>> runningTotals) {
 		// get info
 		String catname = catpt.getCatName();
 
@@ -1522,13 +1465,10 @@ return re;
 		ExpenseCriteria timecriteria = criteria.clone();
 
 		// get keys of hashtable
-		Enumeration<String> datekeys = runningTotals.keys();
+		Set<String> datekeys = runningTotals.keySet();
 
 		// loop through keys
-		while (datekeys.hasMoreElements()) {
-			String datekey = datekeys.nextElement();
-
-			
+        for (String datekey:datekeys) {
 				// convert key to date
 				Date rundate = null;
 				try {
@@ -1564,7 +1504,7 @@ return re;
 					targetrun.setAmountSpent(spent);
 					targetrun.setAmountTargeted(partialtarget);
 					targetrun.setCatName(catname);
-					// add TargetProgressDisp object to list in Hashtable
+					// add TargetProgressDisp object to list in HashMap
 					ArrayList<TargetProgressDisp> list = runningTotals
 							.get(datekey);
 					list.add(targetrun);
@@ -1576,7 +1516,7 @@ return re;
 					targetrun.setCatId(catpt.getCatId());
 					targetrun.setCatName(catpt.getCatName());
 
-					// add TargetProgressDisp object to list in Hashtable
+					// add TargetProgressDisp object to list in HashMap
 					ArrayList<TargetProgressDisp> list = runningTotals
 							.get(datekey);
 					list.add(targetrun);
@@ -1591,7 +1531,7 @@ return re;
 	private String generateTargetGraph(List<TargetProgressDisp> results) {
 		final String exclabel = "Exceeded Target";
 		final String tarlabel = "Target";
-		final String spentlabel = "Spent";
+		final String spentlabel = "SPENT";
 		// row keys... are target, spent and exceeded
 		// column keys... categories
 
@@ -1662,7 +1602,7 @@ return re;
 		// create the chart...
 		JFreeChart chart = ChartFactory.createStackedBarChart("Target Status", // chart
 				// title
-				"Category", // domain axis label
+				CATEGORY, // domain axis label
 				"Status", // range axis label
 				dataset, // data
 				PlotOrientation.HORIZONTAL, // orientation
@@ -1742,4 +1682,32 @@ return re;
 		}
 		return cd;
 	}
+
+	protected  ChartData buildChartDataFromExpenseList(List<ExpenseDao> expenses) {
+		sortAndCategorizeExpenses(expenses);
+		ChartData data = new ChartData();
+		ChartRow headers = new ChartRow();
+		headers.addColumn(BankReportData.DATE);
+		headers.addColumn(BankReportData.CATEGORY);
+		headers.addColumn(BankReportData.SUBCATEGORY);
+		headers.addColumn(BankReportData.Detail);
+		headers.addColumn(BankReportData.AMOUNT);
+		data.setHeaders(headers);
+
+		for (ExpenseDao exp : expenses) {
+			ChartRow row = new ChartRow();
+			row.addColumn(daydateformat.format(exp.getTransdate()));
+			row.addColumn(exp.getDispCat());
+			row.addColumn(exp.getCatName());
+			row.addColumn(exp.getDetail());
+			if (exp.getHascat()) {
+				row.addColumn(nf.format(exp.getCatamount()));
+			} else {
+				row.addColumn(nf.format(exp.getTranstotal()));
+			}
+			data.addRow(row);
+		}
+		return data;
+	}
+
 }

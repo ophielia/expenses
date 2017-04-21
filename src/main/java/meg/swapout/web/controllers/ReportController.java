@@ -1,24 +1,5 @@
 package meg.swapout.web.controllers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-
-
 import meg.swapout.common.DateUtils;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.services.CategoryService;
@@ -26,12 +7,12 @@ import meg.swapout.expense.services.DateRangeType;
 import meg.swapout.expense.services.SearchService;
 import meg.swapout.reporting.ReportCriteria;
 import meg.swapout.reporting.ReportDataFactory;
+import meg.swapout.reporting.ReportType;
 import meg.swapout.reporting.elements.ReportData;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -43,12 +24,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Date;
+import java.util.List;
+
+import static meg.swapout.reporting.ReportType.FullMonth;
+
 @RequestMapping("/reports")
 @Controller
 public class ReportController {
 
 	@Autowired
-	ReportDataFactory reportFactory;
+    ReportDataFactory reportFactory;
 
 
 	@Autowired
@@ -72,20 +68,28 @@ public class ReportController {
 	@RequestMapping(params = "reporttype", produces = "text/html")
 	public String showInput(
 			@ModelAttribute("reportCriteria") ReportCriteria reportCriteria,
-			@RequestParam("reporttype") Long reporttype, Model uiModel,
+			@RequestParam("reporttype") ReportType reporttype, Model uiModel,
 			HttpServletRequest request) {
 		if (reporttype != null) {
 			reportCriteria.setReportType(reporttype);
 		}
-		String view = "reports/monthlytargetinput";
-		if (reporttype.longValue() == ReportDataFactory.ReportType.MonthlyTarget) {
-			view = "reports/monthlytargetinput";
-		} else if (reporttype.longValue() == ReportDataFactory.ReportType.YearlyTargetStatus) {
-			view = "reports/yearlytargetinput";
-		} else if (reporttype.longValue() == ReportDataFactory.ReportType.FullMonth) {
-			view = "reports/fullmonthinput";
-		} else if (reporttype.longValue() == ReportDataFactory.ReportType.Yearly) {
-			view = "reports/yearlyinput";
+		String view = "reports/fullmonthin";
+
+		ReportType reportType = reportCriteria.getReportType();
+		switch (reportType) {
+			case FullMonth:
+			view = "reports/fullmonthin";
+			break;
+            case Yearly:
+				view = "reports/yearlyin";
+				break;
+			case YearlyTarget:
+				view = "reports/yearlytargetin";
+				break;
+			case MonthlyTarget:
+				view = "reports/monthlytargetin";
+				break;
+
 		}
 		return view;
 	}
@@ -94,7 +98,7 @@ public class ReportController {
 	public String showHtmlReport(
 			@ModelAttribute("reportCriteria") ReportCriteria reportCriteria,
 			Model uiModel, HttpServletRequest request) {
-		Long reporttype = reportCriteria.getReportType();
+		ReportType reporttype = reportCriteria.getReportType();
 		ReportData results = processReport(reportCriteria,request);
 
 		// set results in model
@@ -103,13 +107,13 @@ public class ReportController {
 		// determine view
 		String view = "reports/" + results.getJspViewname();
 		
-		if (reporttype.longValue() == ReportDataFactory.ReportType.MonthlyTarget) {
+		if (reporttype == ReportType.MonthlyTarget) {
 			view = "reports/monthlytargetoutput";
-		} else if (reporttype.longValue() == ReportDataFactory.ReportType.YearlyTargetStatus) {
+		} else if (reporttype == ReportType.YearlyTarget) {
 			view = "reports/yearlytargetoutput";
-		} else if (reporttype.longValue() == ReportDataFactory.ReportType.FullMonth) {
-			view = "reports/fullmonthoutput";
-		}else if (reporttype.longValue() == ReportDataFactory.ReportType.Yearly) {
+		} else if (reporttype == FullMonth) {
+			view = "reports/fullmonthout";
+		}else if (reporttype == ReportType.Yearly) {
 			view = "reports/yearlyoutput";
 		}
 		return view;
@@ -133,7 +137,7 @@ public class ReportController {
 	public void showPDFOutput(
 			@ModelAttribute("reportCriteria") ReportCriteria reportCriteria,
 			Model uiModel, HttpServletRequest request,HttpServletResponse response) throws JAXBException, FOPException, IOException, TransformerException {
-		Long reporttype = reportCriteria.getReportType();
+		ReportType reporttype = reportCriteria.getReportType();
 		reportCriteria.setUseFullImageLink(true);
 		ReportData results = processReport(reportCriteria,request);
 		
@@ -209,7 +213,7 @@ public class ReportController {
 
 //	@ModelAttribute("comptype")
 
-	@ModelAttribute("monthselect")
+	@ModelAttribute("monthSelect")
 	protected List<String> referenceMonthList(HttpServletRequest request,
 			Object command, Errors errors) throws Exception {
 			Date oldest = searchService.getFirstTransDate();

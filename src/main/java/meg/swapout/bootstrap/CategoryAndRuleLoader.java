@@ -42,8 +42,8 @@ public class CategoryAndRuleLoader extends AbstractLoader {
         log.info("Saved anotherrule - id:" + anotherrule.getId());
 
         // category relationships
-        CategoryRelationship categoryRelationship = buildCategoryRelationship(category,anothercategory);
-        CategoryRelationship categoryRelationship2 = buildCategoryRelationship(null,category);
+        buildCategoryRelationship(category,anothercategory);
+        buildCategoryRelationship(null,category);
 
 
     }

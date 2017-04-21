@@ -1,5 +1,9 @@
-logging
-
+buggy -
+    rules - remove line order - add automatically
+    round amount in expense edit
+    done - expenseedit isn't setting has category to true
+    save as quick group isn't working - percentages are off
+    
 
 immediate -
     date format

@@ -5,11 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 import meg.swapout.expense.domain.Target;
 import meg.swapout.expense.domain.TargetDetail;
@@ -127,7 +123,7 @@ public class YearlyTargetStatusReportData extends BankReportData {
 		// prepare month hashtable (monthkey as key, and TargetProgressDisp as
 		// value
 
-		Hashtable<String, ArrayList<TargetProgressDisp>> runningTotals = prepareComparisonTable(
+		HashMap<String, ArrayList<TargetProgressDisp>> runningTotals = prepareComparisonTable(
 				criteria, lastdatetag);
 
 		// loop through categories
@@ -215,13 +211,13 @@ public class YearlyTargetStatusReportData extends BankReportData {
 				+ " over target" : fmtstatusamt + " under target";
 				
 		ChartRow totalrow = new ChartRow();
-		totalrow.addColumn(BankReportData.DispLabel.Summary);
+		totalrow.addColumn(BankReportData.SUMMARY);
 		totalrow.addColumn(nf.format(totalspent));	
 		totalrow.addColumn(nf.format(totaltargeted));	
 		totalrow.addColumn(summary);
 		
 		ChartRow totalrowpoint = new ChartRow();
-		totalrowpoint.addColumn(BankReportData.DispLabel.Summary);
+		totalrowpoint.addColumn(BankReportData.SUMMARY);
 		totalrowpoint.addColumn(nf.format(totalspent));	
 		totalrowpoint.addColumn(nf.format(pointtargeted));	
 		totalrowpoint.addColumn(summarypoint);	
@@ -258,10 +254,10 @@ public class YearlyTargetStatusReportData extends BankReportData {
 		el.addUrl(graphprogressurl);
 		// create headers
 		ChartRow headers = new ChartRow();
-		headers.addColumn(BankReportData.DispLabel.Category);
-		headers.addColumn(BankReportData.DispLabel.Spent);	
-		headers.addColumn(BankReportData.DispLabel.Targeted);	
-		headers.addColumn(BankReportData.DispLabel.Status);	
+		headers.addColumn(BankReportData.CATEGORY);
+		headers.addColumn(BankReportData.SPENT);
+		headers.addColumn(BankReportData.TARGETED);
+		headers.addColumn(BankReportData.Status);
 		/*ChartData targetstatus = targetProgressToChart(displayspoint,headers);
 		targetstatus.addRow(totalrow);
 		el.setChart(targetstatus);*/
@@ -287,8 +283,8 @@ public class YearlyTargetStatusReportData extends BankReportData {
 
 
 		// labels
-		ReportLabel titlelbl = new ReportLabel("lbltitle", BankReportData.DispLabel.YearlyTargetTitle + " - " + year);
-		ReportLabel pctlbl = new ReportLabel("lblpctthryear", BankReportData.DispLabel.PercentageThrYear + ":" + nf.format(percentageofyear));
+		ReportLabel titlelbl = new ReportLabel("lbltitle", BankReportData.YEARLY_TARGET_TITLE + " - " + year);
+		ReportLabel pctlbl = new ReportLabel("lblpctthryear", BankReportData.PERCENTAGE_THROUGH_YEAR + ":" + nf.format(percentageofyear));
 		addLabel(titlelbl);
 		addLabel(pctlbl);
 
@@ -325,7 +321,7 @@ public class YearlyTargetStatusReportData extends BankReportData {
 			List<TargetProgressDisp> results, boolean ishoriz) {
 		final String exclabel = "Exceeded Target";
 		final String tarlabel = "Target";
-		final String spentlabel = "Spent";
+		final String spentlabel = "SPENT";
 		// row keys... are target, spent and exceeded
 		// column keys... categories
 

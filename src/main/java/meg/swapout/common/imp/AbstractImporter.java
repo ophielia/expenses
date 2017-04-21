@@ -4,10 +4,6 @@ import java.text.*;
 
 public abstract class AbstractImporter implements Importer {
 
-	private DecimalFormat numberformat = new DecimalFormat();
-
-	private DateFormat dateformat = new SimpleDateFormat();
-
 	public Object formatField(String field, FieldFormat format)
 			throws ParseException {
 		switch (format.getFieldType()) {
@@ -17,11 +13,11 @@ public abstract class AbstractImporter implements Importer {
 			DecimalFormatSymbols symbols = new DecimalFormatSymbols(format.getLocale());
 			symbols.setGroupingSeparator('.');
 			symbols.setDecimalSeparator(',');
-			numberformat = new DecimalFormat(format.getInputPattern(),symbols);
-			field = stripSpaces(field);
-			return numberformat.parse(field);
+			DecimalFormat numberformat = new DecimalFormat(format.getInputPattern(),symbols);
+			String fieldToParse = stripSpaces(field);
+			return numberformat.parse(fieldToParse);
 		case FieldFormat.Type.DateTime:
-			dateformat = new SimpleDateFormat(format.getInputPattern());
+			DateFormat dateformat = new SimpleDateFormat(format.getInputPattern());
 			return dateformat.parse(field);
 
 		default:
@@ -30,11 +26,11 @@ public abstract class AbstractImporter implements Importer {
 	}
 
 	private String stripSpaces(String field) {
-		StringBuffer stripped = new StringBuffer();
-		StringBuffer fieldbuf = new StringBuffer(field);
+		StringBuilder stripped = new StringBuilder();
+		StringBuilder fieldbuf = new StringBuilder(field);
 		for (int 	i = 0; i < field.length(); i++) {
-			if (fieldbuf.substring(i,i+1).equals("+")) continue;
-			if (fieldbuf.substring(i,i+1).equals(" ")) continue;
+			String check =fieldbuf.substring(i,i+1);
+			if (check!=null && (check.equals("+") || check.equals(" "))) continue;
 			stripped.append(fieldbuf.substring(i,i+1));
 		}
 		return stripped.toString();

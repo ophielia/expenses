@@ -16,7 +16,7 @@ public class CategorySummaryComparator implements Comparator {
 	public int compare(Object arg0, Object arg1) {
 		CategorySummary disp1=(CategorySummary)arg0;
 		CategorySummary disp2=(CategorySummary)arg1;
-		// TODO add Date Utils sort here!!
+		// TODO add DATE Utils sort here!!
 		if (sortby==Sort.ByDate) {
 			return sortbydate(disp1,disp2);
 		} else if (sortby==Sort.ByAmount) {

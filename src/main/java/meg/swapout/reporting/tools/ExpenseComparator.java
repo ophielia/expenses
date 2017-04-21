@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 
 public class ExpenseComparator implements Comparator {
-	
+
 	public final static class Sort {
 		public final static int DispCategory=1;
 		public final static int Category=2;

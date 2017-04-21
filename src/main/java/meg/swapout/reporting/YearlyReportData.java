@@ -5,14 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.Target;
@@ -106,7 +99,7 @@ public class YearlyReportData extends BankReportData {
 		// run summary report
 		ReportElement summary = crunchNumbersSummary(criteria, true);
 
-		// run Target Summary report
+		// run Target SUMMARY report
 		// MM TODO - double coding? this.crunchTargetSummary with
 		// BRD.crunchNumbersTargets - get rid of this? parameterize?
 		ReportElement targetsum = crunchTargetSummary(criteria);
@@ -199,7 +192,7 @@ public class YearlyReportData extends BankReportData {
 
 		// labels
 		ReportLabel ltitle = new ReportLabel("lbltitle",
-				BankReportData.DispLabel.YearlySummaryTitle + " - " + year);
+				BankReportData.YEARLY_SUMMARY_REPORT + " - " + year);
 		addLabel(ltitle);
 	}
 
@@ -297,7 +290,7 @@ public class YearlyReportData extends BankReportData {
 		chartdata.setHeaders(headers);
 
 		// initialize bargraph results
-		Hashtable<String, List<CategorySummary>> bargraphres = new Hashtable<String, List<CategorySummary>>();
+		HashMap<String, List<CategorySummary>> bargraphres = new HashMap<String, List<CategorySummary>>();
 
 		// initialize piegraph results
 		List<CategorySummary> piegraphres = new ArrayList<CategorySummary>();
@@ -503,8 +496,8 @@ public class YearlyReportData extends BankReportData {
 		ChartData chartdata = new ChartData();
 		ChartRow headers = new ChartRow();
 		headers.addColumn("Category");
-		headers.addColumn("Spent");
-		headers.addColumn("Targeted");
+		headers.addColumn("SPENT");
+		headers.addColumn("TARGETED");
 		headers.addColumn("Status");
 		chartdata.setHeaders(headers);
 
@@ -616,7 +609,7 @@ public class YearlyReportData extends BankReportData {
 			boolean ishoriz) {
 		final String exclabel = "Exceeded Target";
 		final String tarlabel = "Target";
-		final String spentlabel = "Spent";
+		final String spentlabel = "SPENT";
 		// row keys... are target, spent and exceeded
 		// column keys... categories
 
@@ -881,8 +874,8 @@ public class YearlyReportData extends BankReportData {
 		// put together return objects
 		ReportElement re = new ReportElement();
 		ChartRow headers = new ChartRow();
-		headers.addColumn(BankReportData.DispLabel.Subcategory);
-		headers.addColumn(BankReportData.DispLabel.Amount);
+		headers.addColumn(BankReportData.SUBCATEGORY);
+		headers.addColumn(BankReportData.AMOUNT);
 		ChartData chartdat = catSummaryToChart(disptotals, headers);
 		re.setChart(chartdat);
 		re.addUrl(graphurl);
@@ -985,7 +978,7 @@ public class YearlyReportData extends BankReportData {
 
 
 		// initialize bargraph results
-		Hashtable<String, List<CategorySummary>> bargraphres = new Hashtable<String, List<CategorySummary>>();
+		HashMap<String, List<CategorySummary>> bargraphres = new HashMap<String, List<CategorySummary>>();
 
 		// get direct subcategories for category
 		List<Category> subcats = null;
@@ -1152,7 +1145,7 @@ public class YearlyReportData extends BankReportData {
 		chartdata.setHeaders(headers);
 
 		// initialize bargraph results
-		Hashtable<String, List<CategorySummary>> bargraphres = new Hashtable<String, List<CategorySummary>>();
+		HashMap<String, List<CategorySummary>> bargraphres = new HashMap<String, List<CategorySummary>>();
 
 		// initialize piegraph results
 		List<CategorySummary> piegraphres = new ArrayList<CategorySummary>();
@@ -1324,7 +1317,7 @@ public class YearlyReportData extends BankReportData {
 
 		// assemble ReportElements object
 		ReportElement report = new ReportElement();
-		report.setDisplay(BankReportData.DispLabel.Detail + " - " + category.getName());
+		report.setDisplay(BankReportData.Detail + " - " + category.getName());
 		report.setChart(chartdata);
 		report.addUrl(graphurl);
 		report.addUrl(bargraphurl);

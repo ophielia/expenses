@@ -7,10 +7,14 @@ import java.util.Date;
 import java.util.List;
 
 public class DateUtils {
-	private static SimpleDateFormat dateformat = new SimpleDateFormat("MM-yyyy");
+	static SimpleDateFormat dateformat = new SimpleDateFormat("MM-yyyy");
+
+	private DateUtils() throws IllegalAccessException {
+		throw new IllegalAccessException("Utility class");
+	}
 
 	public static List<String> getMonthsForSelect(Date oldest, Date newest) {
-		List<String> months = new ArrayList<String>();
+		List<String> months = new ArrayList<>();
 
 		Calendar start = Calendar.getInstance();
 		Calendar end = Calendar.getInstance();

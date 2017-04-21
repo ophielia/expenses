@@ -100,7 +100,12 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
         for (CategorizedTransaction detail : details) {
             detail.setBanktrans(transaction);
         }
-        return categorizedTransactionRepository.save(details);
+        List<CategorizedTransaction> toReturn =  categorizedTransactionRepository.save(details);
+
+        transaction.setHascat(true);
+        rawTransactionRepo.save(transaction);
+
+        return toReturn;
     }
 
     private HashMap<Long, CategorizedTransaction> squashDetails(List<CategorizedTransaction> details) {

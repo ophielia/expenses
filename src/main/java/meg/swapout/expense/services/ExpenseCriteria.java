@@ -20,10 +20,10 @@ public class ExpenseCriteria implements Serializable {
 
 
 	public final class SortType {
-		public static final String Date = "Date";
+		public static final String Date = "DATE";
 		public static final String Category = "Cat";
 		public static final String Detail = "Detail";
-		public static final String Amount ="Amount";
+		public static final String Amount ="AMOUNT";
 	}
 	
 	public static final class SortDirection {
