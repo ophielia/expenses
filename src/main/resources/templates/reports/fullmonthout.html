@@ -9,50 +9,158 @@
 <body>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-
-    <div class="panel" style="padding-bottom: 100px">
+    <div class="panel">
         <div class="row">
-            <div class="col-sm-10">
+            <div class="col-md-10" style="padding-left:50px">
+                <div style="padding-bottom: 100px">
+                    <div class="row">
+                        <div class="col-sm-10">
 
-                <h2 th:text="${results.lbltitle}"></h2>
-                <h4 th:text="${results.lblrange}"></h4>
+                            <h2 th:text="${results.lbltitle}"></h2>
+                            <h4 th:text="${results.lblrange}"></h4>
 
-            </div>
-        </div>
-        <div class="container">
-            <div class="row" th:each="url:${results.targets.urls}">
-                <div class="col col-md-12">
-                    <img th:src="${url}"/>
+                        </div>
+                    </div>
+                    <!-- Target and spending section -->
+                    <div class="container">
+                        <div class="row" th:each="url:${results.targets.urls}">
+                            <div class="col col-md-12">
+                                <img class=" center-block" th:src="${url}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container reporttable">
+                        <div class="row" th:each="url:${results.targets.urls}">
+                            <div class="col col-md-12">
+                                <h4 align="center" th:text="${results.lbltarget}"></h4>
+                                <table id="targettable" style="margin:auto" class="table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th th:each="headers:${results.targets.chart.headers.columns}"
+                                            th:text="${headers}">
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tr th:each="chrow:${results.targets.chart.rows}">
+                                        <td th:each="colval:${chrow.columns}" th:text="${colval}"></td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Section -->
+                    <h3 class="reportspacer" thLtext="${results.lblsummary}"></h3>
+                    <div class="container">
+                        <div class="row" th:each="url:${results.summary.urls}">
+                            <div class="col col-md-8 ">
+                                <img th:src="${url}" class="center-block"/>
+                            </div>
+                            <div class="col col-md-4">
+                                <table class="table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th class="bold" th:each="headers:${results.summary.chart.headers.columns}"
+                                            th:text="${headers}">
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+
+                                    <tr th:each="chrow:${results.summary.chart.rows}">
+                                        <td th:each="colval:${chrow.columns}" th:text="${colval}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- YearToDate Section -->
+                    <div class="container reportspacer">
+                        <div class="row" th:each="url:${results.yeartodate.urls}">
+                            <div class="col col-md-12">
+                                <img class=" center-block" th:src="${url}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container reporttable">
+                        <div class="row" th:each="url:${results.yeartodate.urls}">
+                            <div class="col col-md-12">
+                                <h4 align="center" th:text="${results.lbltarget}"></h4>
+                                <table id="targettable" style="margin:auto"
+                                       class="table-bordered table-condensed table-supercondensed">
+                                    <thead>
+                                    <tr>
+                                        <th th:each="headers:${results.yeartodate.chart.headers.columns}"
+                                            th:text="${headers}">
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tr th:each="chrow:${results.yeartodate.chart.rows}">
+                                        <td th:each="colval:${chrow.columns}" th:text="${colval}"></td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Section-->
+                    <h3 class="reportspacer">Categories</h3>
+                    <div class="container">
+                        <div class="row" th:each="catbkout:${results.allcategories.members}">
+                            <h3 th:text="${catbkout.display}"></h3>
+                            <div class="col col-sm-6 ">
+                                <div th:each="url:${catbkout.urls}">
+                                    <img src="${url}"/>
+                                </div>
+                            </div>
+                            <div class="col col-sm-4">
+                                <table class="table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th th:each="hdrname:${catbkout.chart.headers.columns}" th:text="${hdrname}"/>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="row:${catbkout.chart.rows}">
+                                        <td th:each="item:${row.columns}" th:text="${item}">
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- listing all expenses -->
+                    <div class="container">
+                            <div class="col col-sm-10">
+                                <h3 th:text="${results.lblallexpenses}"></h3>
+                                <table class="table-bordered table-condensed">
+                                    <thead>
+                                       <tr>
+                                           <th th:each="hdrname:${results.allexpenses.chart.headers.columns}" th:text="${hdrname}" />
+                                       </tr>
+                                    </thead>
+                                    <tr  th:each="row:${results.allexpenses.chart.rows}">
+                                        <td style="min-width: 110px" th:each="val:${row.columns}" th:text="${val}"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </div>
                 </div>
             </div>
+
         </div>
-
-        <div class="container">
-            <div class="row" th:each="url:${results.targets.urls}">
-                <div class="col col-md-12">
-                <h4 th:text="${results.lbltarget}"></h4>
-                </div>
-            </div>
-            <div class="row" th:each="url:${results.targets.urls}">
-                <div class="col col-md-12">
-
-                    <table class="table-bordered table-condensed">
-                        <tr>
-                            <td th:each="headers:${results.targets.chart.headers.columns}" th:text="${headers}">
-                            </td>
-
-                        </tr>
-                        <tr th:each="chrow:${results.targets.chart.rows}">
-                            <td th:each="colval:${chrow.columns}" th:text="${colval}"></td>
-                        </tr>
-                    </table>
-
-                </div>
-            </div>
-        </div>
-
-
     </div>
+
 
 </div>
 

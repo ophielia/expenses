@@ -15,6 +15,7 @@ table {
     background-color: white;
 }
 
+
 td.nowrap {
     min-width:100px;
 }
@@ -44,4 +45,16 @@ table.moretext {
 
 .topbuffer-med {
     margin-top:50px;
+}
+
+.reporttable {
+    padding-top:15px;
+}
+
+.reportspacer {
+    padding-top:50px;
+}
+
+.table-supercondensed {
+    font-size: smaller;
 }
