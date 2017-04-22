@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    String OTHERCATEGORYNAME ="OTHER";
+    String OTHERCATEGORYNAME ="Other";
 
     Iterable<Category> listAllCategories();
 

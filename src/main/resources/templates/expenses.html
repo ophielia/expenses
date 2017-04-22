@@ -145,7 +145,7 @@
                                         <td class="nowrap" th:text="${#dates.format(exp.transdate, 'MM-dd-yyyy')}"></td>
                                         <td th:text="${exp.catName}"/>
                                         <td th:text="${exp.detail}"/>
-                                        <td th:text="${exp.displayamount}"/>
+                                        <td th:text="${#numbers.formatDecimal(exp.displayamount, 0, 'DEFAULT', 2, 'DEFAULT')}"/>
                                         <td><a th:href="${'/expense/edit/' + exp.transid}" class="glyphicon glyphicon-pencil listglyph"></a></td>
                                     </tr>
                                     </tbody>

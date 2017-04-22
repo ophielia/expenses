@@ -114,7 +114,7 @@ public class ReportController {
 		} else if (reporttype == FullMonth) {
 			view = "reports/fullmonthout";
 		}else if (reporttype == ReportType.Yearly) {
-			view = "reports/yearlyoutput";
+			view = "reports/yearlyout";
 		}
 		return view;
 
@@ -222,7 +222,7 @@ public class ReportController {
 			return DateUtils.getMonthsForSelect(oldest, newest);
 	}
 
-	@ModelAttribute("yearselect")
+	@ModelAttribute("yearSelect")
 	protected List<String> referenceYearList(HttpServletRequest request,
 			Object command, Errors errors) throws Exception {
 		Date oldest = searchService.getFirstTransDate();

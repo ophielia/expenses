@@ -87,7 +87,7 @@ public class DefaultMapper implements Mapper {
 			arglist[0] = ConversionUtils.convertToString(toset);
 		} else if (typename.endsWith("Double")) {
 			arglist[0] = ConversionUtils.convertToDouble(toset);
-		} else if (typename.endsWith("DATE")) {
+		} else if (typename.endsWith("Date")) {
 			arglist[0] = ConversionUtils.convertToDate(toset);
 		} else if (typename.endsWith("Long")) {
 			arglist[0] = ConversionUtils.convertToLong(toset);

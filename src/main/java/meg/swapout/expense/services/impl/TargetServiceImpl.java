@@ -142,19 +142,23 @@ public class TargetServiceImpl implements TargetService {
 
     @Override
     public Target loadTargetForMonth(String month) {
-        // get Target For Tag
-        Target target = targetRepository.findTargetsByTypeAndMonthTag(TargetType.Monthly,month);
-        if (target != null) {
-            return target;
-        }
-        // get Default Target
-        target = targetRepository.findDefaultTargetByType(TargetType.Monthly);
-        return target;
+        return getTargetByTypeAndTag(TargetType.Monthly,month);
     }
 
     @Override
     public Target loadTargetForYear(String year) {
-        // TODO - implement this
-        return null;
+        return getTargetByTypeAndTag(TargetType.Yearly,year);
+    }
+
+    private Target getTargetByTypeAndTag(TargetType targetType,String tag) {
+        // get Target For Tag
+        Target target = targetRepository.findTargetsByTypeAndMonthTag(targetType,tag);
+        if (target != null) {
+            return target;
+        }
+        // get Default Target
+        target = targetRepository.findDefaultTargetByType(targetType);
+        return target;
+
     }
 }

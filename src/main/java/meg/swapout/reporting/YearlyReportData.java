@@ -759,6 +759,7 @@ public class YearlyReportData extends BankReportData {
 		headers.addColumn("Avg Per Month");
 
 		// run numbers for Other category
+		// TODO MM - automatic breakout handlind
 		Category othercat = categoryService
 				.getCategoryByName(CategoryService.OTHERCATEGORYNAME);
 		CategoryLevel catlvl = categoryService.getAsCategoryLevel(othercat
