@@ -25,9 +25,9 @@ import java.util.List;
 @Component
 public class ImportManager {
 
-	private FileConfigManager fcman = new FileConfigManagerImpl();
+	private final FileConfigManager fcman = new FileConfigManagerImpl();
 
-	private MapConfigManager mcman = new MapConfigManagerImpl();
+	private final MapConfigManager mcman = new MapConfigManagerImpl();
 	//private TransactionManager transman ;
 	
 	@Autowired

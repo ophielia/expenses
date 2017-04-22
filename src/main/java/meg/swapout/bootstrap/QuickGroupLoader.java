@@ -13,7 +13,7 @@ import java.util.List;
 //@Component
 public class QuickGroupLoader extends AbstractLoader {
 
-    private Logger log = Logger.getLogger(QuickGroupLoader.class);
+    private final Logger log = Logger.getLogger(QuickGroupLoader.class);
 
     @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {

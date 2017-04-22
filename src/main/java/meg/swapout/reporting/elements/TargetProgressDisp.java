@@ -13,7 +13,7 @@ public class TargetProgressDisp {
 		
 		private Long catId;
 		
-		private DecimalFormat decform= new DecimalFormat("##0.##");
+		private final DecimalFormat decform= new DecimalFormat("##0.##");
 
 		public double getAmountSpent() {
 			return amountSpent;

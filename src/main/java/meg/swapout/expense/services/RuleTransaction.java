@@ -4,7 +4,7 @@ import meg.swapout.expense.domain.RawTransaction;
 
 public class RuleTransaction {
 
-private RawTransaction transaction;
+private final RawTransaction transaction;
 private int count;
 
     public RuleTransaction(RawTransaction transaction) {

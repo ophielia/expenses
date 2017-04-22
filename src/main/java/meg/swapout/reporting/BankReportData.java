@@ -43,7 +43,7 @@ import java.util.List;
 @XmlRootElement(name = "reportdata")
 public abstract class BankReportData implements ReportData {
 
-	public static final String DATE = "DATE";
+	public static final String DATE = "Date";
 	public static final String CATEGORY = "Category";
 	public static final String SUBCATEGORY = "SUBCATEGORY";
 	public static final String Detail = "Detail";
@@ -60,7 +60,7 @@ public abstract class BankReportData implements ReportData {
 	public static final String ALL_EXPENSES = "All Expenses";
 	public static final String TARGET_STATUS = "Target Status";
 	public static final String SUMMARY_BY_CATEGORY = "SUMMARY By Category";
-	public static final String YEAR_TO_DATE = "Year To DATE";
+	public static final String YEAR_TO_DATE = "Year To Date";
 	public static final String PERCENTAGE_THROUGH_YEAR = "Percentage Through Year";
 	private static final java.lang.String TOTAL = "TOTAL";
 
@@ -76,11 +76,11 @@ public abstract class BankReportData implements ReportData {
 
 	protected ReportCriteria reportCriteria;
 
-	protected static SimpleDateFormat daydateformat = new SimpleDateFormat(
+	protected static final SimpleDateFormat daydateformat = new SimpleDateFormat(
 			"MM-dd-yyyy");
-	protected static NumberFormat nf = new DecimalFormat("######.00",
+	protected static final NumberFormat nf = new DecimalFormat("######.00",
 			new DecimalFormatSymbols(Locale.US));
-	SimpleDateFormat mthyearformat = new SimpleDateFormat("MM-yyyy", Locale.US);
+	final SimpleDateFormat mthyearformat = new SimpleDateFormat("MM-yyyy", Locale.US);
 
 
 
@@ -326,7 +326,7 @@ public abstract class BankReportData implements ReportData {
 			}
 		}
 		// add total row to chart data
-		String status = null;
+		String status;
 		if (totaltargeted == 0) {
 			status = "No Target";
 		} else if (totaltargeted == totalamount) {
@@ -588,7 +588,7 @@ return re;
 
 				// create list to be retrieved (depends upon categorylevel
 				// and relationship to breakout level)
-				List<CategoryLevel> subcategories = null;
+				List<CategoryLevel> subcategories;
 				if (catlvl.getLevel() < breakoutlvl) {
 					// retrieve expenses belonging directly to this category
 					// only
@@ -1480,7 +1480,7 @@ return re;
 
 				// process targets for time range
 				// get percentage through year
-				double percentageofyear = 100.0;
+				double percentageofyear;
 				int partofyear = getDayCount(timecriteria);
 				percentageofyear = (Math.round((double) partofyear
 						/ (double) 365 * 10000.0));

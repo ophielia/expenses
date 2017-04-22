@@ -53,9 +53,9 @@ public class ReportController {
 	@Autowired
 	SearchService searchService;
 	
-	private FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+	private final FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
 	
-	private TransformerFactory tFactory = TransformerFactory.newInstance();
+	private final TransformerFactory tFactory = TransformerFactory.newInstance();
 	
 	@RequestMapping(produces = "text/html")
 	public String showAllReports(
@@ -110,7 +110,7 @@ public class ReportController {
 		if (reporttype == ReportType.MonthlyTarget) {
 			view = "reports/monthlytargetoutput";
 		} else if (reporttype == ReportType.YearlyTarget) {
-			view = "reports/yearlytargetoutput";
+			view = "reports/yearlytargetout";
 		} else if (reporttype == FullMonth) {
 			view = "reports/fullmonthout";
 		}else if (reporttype == ReportType.Yearly) {
@@ -121,15 +121,14 @@ public class ReportController {
 	}
 
 	private ReportData processReport(ReportCriteria reportCriteria,HttpServletRequest request) {
-		StringBuffer contextpath = request.getRequestURL();
+		StringBuilder contextpath = new StringBuilder(request.getRequestURL());
 		int i = contextpath.indexOf(request.getServletPath());
 		contextpath.setLength(i);
 		reportCriteria.setContextPath(contextpath.toString());
 	
 
 		// call report service
-		ReportData results = reportFactory.createReportData(reportCriteria);
-		return results;
+		return reportFactory.createReportData(reportCriteria);
 
 	}
 
@@ -137,7 +136,6 @@ public class ReportController {
 	public void showPDFOutput(
 			@ModelAttribute("reportCriteria") ReportCriteria reportCriteria,
 			Model uiModel, HttpServletRequest request,HttpServletResponse response) throws JAXBException, FOPException, IOException, TransformerException {
-		ReportType reporttype = reportCriteria.getReportType();
 		reportCriteria.setUseFullImageLink(true);
 		ReportData results = processReport(reportCriteria,request);
 		
@@ -202,9 +200,7 @@ public class ReportController {
 	protected List<Category> referenceCategoryData(
 			HttpServletRequest request, Object command, Errors errors)
 			throws Exception {
-		List<Category> list = categoryService.listAllCategories(true);
-		// return model
-		return list;
+		return categoryService.listAllCategories(true);
 	}
 
 

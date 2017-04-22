@@ -26,8 +26,8 @@ public class CategorySummary {
 	
 	private Long year;
 	
-	 private SimpleDateFormat monthyearfmt = new SimpleDateFormat("MM-yyyy");
-	 private SimpleDateFormat yearfmt = new SimpleDateFormat("yyyy");
+	 private final SimpleDateFormat monthyearfmt = new SimpleDateFormat("MM-yyyy");
+	 private final SimpleDateFormat yearfmt = new SimpleDateFormat("yyyy");
 	
 
 	public CategorySummary(String catname, int daycount) {

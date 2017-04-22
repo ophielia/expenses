@@ -16,10 +16,10 @@ public class UtilityComparator implements Comparator<String> {
 	}
 	
 	private int sortby = Sort.ByMonthYearStr;
-	private static SimpleDateFormat monthyearformat = new SimpleDateFormat("MM-yyyy");
-	private static SimpleDateFormat monthdayyearformat = new SimpleDateFormat("MM-dd-yyyy");
-	private static SimpleDateFormat yearformat = new SimpleDateFormat("yyyy");
-	private static SimpleDateFormat monthformat = new SimpleDateFormat("MMM",Locale.US);
+	private static final SimpleDateFormat monthyearformat = new SimpleDateFormat("MM-yyyy");
+	private static final SimpleDateFormat monthdayyearformat = new SimpleDateFormat("MM-dd-yyyy");
+	private static final SimpleDateFormat yearformat = new SimpleDateFormat("yyyy");
+	private static final SimpleDateFormat monthformat = new SimpleDateFormat("MMM",Locale.US);
 	
 	public int compare(String disp1, String disp2) {
 

@@ -6,9 +6,9 @@ import java.util.List;
 
 public class DefaultMapper implements Mapper {
 
-	private MapConfig mapconfig;
+	private final MapConfig mapconfig;
 
-	private MappingHelper helper;
+	private final MappingHelper helper;
 
 	public DefaultMapper(MapConfig mapconfig) {
 

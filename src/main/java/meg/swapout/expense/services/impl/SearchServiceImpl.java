@@ -47,7 +47,7 @@ public class SearchServiceImpl implements SearchService {
 			criteria=new ExpenseCriteria();
 		}
 		
-		List<ExpenseDao> expenses = new ArrayList<ExpenseDao>();
+		List<ExpenseDao> expenses;
 		// save orig cat type
 		CategorizedType origcattype = criteria.getCategorizedType();
 		

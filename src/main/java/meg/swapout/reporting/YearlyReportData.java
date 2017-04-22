@@ -51,7 +51,7 @@ public class YearlyReportData extends BankReportData {
 		boolean iscurrentyear = false;
 		String lastdatetag = null;
 		double percentageofyear = 100.0;
-		Date endlastfullmonth = null;
+		Date endlastfullmonth;
 		try {
 			start = dateformat.parse(year);
 			Calendar cal = Calendar.getInstance();
@@ -249,7 +249,7 @@ public class YearlyReportData extends BankReportData {
 					continue;
 				}
 
-				ReportElement re = null;
+				ReportElement re;
 				if (category.getId().longValue() == 57) {
 					re = processMonthlySubCats(cpycriteria, headers, monthtags,
 							monthtaglkup, catlvl, totalscolumn, monthcount,
@@ -297,7 +297,7 @@ public class YearlyReportData extends BankReportData {
 
 		// get all subcategories for category, adding the category
 		// itself
-		List<CategoryLevel> subcats = null;
+		List<CategoryLevel> subcats;
 		subcats = categoryService.getAllSubcategories(category);
 		subcats.add(catlvl);
 		/*
@@ -331,8 +331,8 @@ public class YearlyReportData extends BankReportData {
 			for (String month : monthtags) {
 				// set dates in criteria
 				Date rundate = null;
-				Date startdate = null;
-				Date enddate = null;
+				Date startdate;
+				Date enddate;
 				try {
 					rundate = mthyearformat.parse(month);
 				} catch (ParseException e) {
@@ -569,7 +569,7 @@ public class YearlyReportData extends BankReportData {
 				false);
 
 		// now totals to list
-		String status = null;
+		String status;
 		if (totaltargeted == 0) {
 			status = "No Target";
 		} else if (totaltargeted == totalspent) {
@@ -734,7 +734,7 @@ public class YearlyReportData extends BankReportData {
 
 	private ReportElement crunchNumbersOtherDetail(ExpenseCriteria criteria) {
 		// initialize List of ReportElements
-		ReportElement report = null;
+		ReportElement report;
 
 		// make copy of criteria
 		ExpenseCriteria cpycriteria = criteria.clone();
@@ -982,7 +982,7 @@ public class YearlyReportData extends BankReportData {
 		HashMap<String, List<CategorySummary>> bargraphres = new HashMap<String, List<CategorySummary>>();
 
 		// get direct subcategories for category
-		List<Category> subcats = null;
+		List<Category> subcats;
 		subcats = categoryService.getDirectSubcategories(category.getId());
 		subcats.add(category);
 
@@ -992,7 +992,7 @@ public class YearlyReportData extends BankReportData {
 		// graph
 		for (Category subcat : subcats) {
 			// get all subcategories for this subcategory
-			List<CategoryLevel> detailcats = null;
+			List<CategoryLevel> detailcats;
 			if (subcat.getId() != category.getId()) {
 				detailcats = categoryService.getAllSubcategories(subcat);
 			} else {
@@ -1152,7 +1152,7 @@ public class YearlyReportData extends BankReportData {
 		List<CategorySummary> piegraphres = new ArrayList<CategorySummary>();
 
 		// get direct subcategories for category
-		List<Category> subcats = null;
+		List<Category> subcats;
 		subcats = categoryService.getDirectSubcategories(category.getId());
 		subcats.add(category);
 
@@ -1162,7 +1162,7 @@ public class YearlyReportData extends BankReportData {
 		// graph
 		for (Category subcat : subcats) {
 			// get all subcategories for this subcategory
-			List<CategoryLevel> detailcats = null;
+			List<CategoryLevel> detailcats;
 			if (subcat.getId() != category.getId()) {
 				detailcats = categoryService.getAllSubcategories(subcat);
 			} else {
@@ -1191,8 +1191,8 @@ public class YearlyReportData extends BankReportData {
 			for (String month : monthtags) {
 				// set dates in criteria
 				Date rundate = null;
-				Date startdate = null;
-				Date enddate = null;
+				Date startdate;
+				Date enddate;
 				try {
 					rundate = mthyearformat.parse(month);
 				} catch (ParseException e) {

@@ -17,7 +17,7 @@ public class CategoryAndRuleLoader extends AbstractLoader {
 
 
 
-    private Logger log = Logger.getLogger(CategoryAndRuleLoader.class);
+    private final Logger log = Logger.getLogger(CategoryAndRuleLoader.class);
 
     @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {

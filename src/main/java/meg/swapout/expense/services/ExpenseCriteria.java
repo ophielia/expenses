@@ -20,7 +20,7 @@ public class ExpenseCriteria implements Serializable {
 
 
 	public final class SortType {
-		public static final String Date = "DATE";
+		public static final String Date = "Date";
 		public static final String Category = "Cat";
 		public static final String Detail = "Detail";
 		public static final String Amount ="AMOUNT";
@@ -33,7 +33,7 @@ public class ExpenseCriteria implements Serializable {
 	
 	
 
-	private static Hashtable<Integer, Long> weekhelper;
+	private static final Hashtable<Integer, Long> weekhelper;
 
 	static {
 		weekhelper = new Hashtable<Integer, Long>();
@@ -46,7 +46,7 @@ public class ExpenseCriteria implements Serializable {
 		weekhelper.put(new Integer(Calendar.SATURDAY), new Long(-7));
 	}
 
-	private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
 	private Date startdate;
 

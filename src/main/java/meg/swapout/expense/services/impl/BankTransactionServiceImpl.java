@@ -121,7 +121,7 @@ class BankTransactionServiceImpl implements BankTransactionService {
             if (searchin.indexOf(searchString) >= 0) {
                 // string found
                 // retrieve or create RuleAssignment
-                RuleAssignment ruleassign = null;
+                RuleAssignment ruleassign;
                 if (assigned.containsKey(rulecatid)) {
                     ruleassign = assigned.get(rulecatid);
                 } else {

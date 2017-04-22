@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DelimitedImporter extends AbstractImporter {
 
-	private FileConfig config;
+	private final FileConfig config;
 
 	public DelimitedImporter(FileConfig config) {
 		this.config = config;
@@ -38,7 +38,7 @@ public class DelimitedImporter extends AbstractImporter {
 			// retrieve formats
 			FieldFormat[] formats = config.getFieldFormats();
 
-			String raw = null;
+			String raw;
 			while ((raw = bufread.readLine()) != null) {
 				// break raw line into fields
 				String[] fields = StringUtils
