@@ -108,7 +108,7 @@ public class ReportController {
 		String view = "reports/" + results.getJspViewname();
 		
 		if (reporttype == ReportType.MonthlyTarget) {
-			view = "reports/monthlytargetoutput";
+			view = "reports/monthlytargetout";
 		} else if (reporttype == ReportType.YearlyTarget) {
 			view = "reports/yearlytargetout";
 		} else if (reporttype == FullMonth) {
