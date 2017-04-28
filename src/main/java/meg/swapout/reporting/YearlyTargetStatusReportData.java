@@ -237,7 +237,7 @@ public class YearlyTargetStatusReportData extends BankReportData {
 		if (categories != null) {
 			for (CategoryLevel catlvl : categories) {
 				ReportElement catre = crunchNumbersCategory(criteria, catlvl,
-						false);
+						false,6);
 				if (catre != null) {
 					catre.setDisplay(catlvl.getCategory().getName());
 					allcategory.add(catre);

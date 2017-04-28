@@ -80,4 +80,5 @@ public class ReportElement {
 			this.members.add(member);
 		}
 	}
+
 }

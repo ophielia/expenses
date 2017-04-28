@@ -35,6 +35,8 @@ public interface CategoryService {
 
     Category updateCategory(Category category);
 
+    public List<CategoryLevel> getSubcategoriesUpToLevel(Long categoryid,int level);
+
     List<CategoryLevel> getCategoriesUpToLevel(int level);
 
     CategoryLevel getAsCategoryLevel(Long category);

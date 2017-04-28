@@ -35,4 +35,5 @@ public interface SearchService {
 	public abstract List<CategorySummary> getExpenseTotal(
 			ExpenseCriteria criteria);
 
+    CategorySummary getCategorySummaryByMonthYear(ExpenseCriteria criteria);
 }

@@ -239,8 +239,40 @@ public class SearchServiceImpl implements SearchService {
 
 		return null;		
 	}
-	
-	public List<ExpenseDao> getExpenseListByIds(List<String> idlist) {
+
+    @Override
+    public CategorySummary getCategorySummaryByMonthYear(ExpenseCriteria criteria) {
+		List<CategorySummary> displays = new ArrayList<CategorySummary>();
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<CategorySummary> c = cb.createQuery(CategorySummary.class);
+		Root<ExpenseDao> exp = c.from(ExpenseDao.class);
+		Expression maxExpression = cb.sum(exp.<Number>get("catamount"));
+		c.multiselect(exp.get("monthyear"),maxExpression.alias("sum"))
+				.groupBy(exp.get("monthyear"));
+
+		if (criteria != null) {
+
+			// get where clause
+			List<Predicate> whereclause = getPredicatesForCriteria(criteria,cb,exp);
+
+			// creating the query
+			c.where(cb.and(whereclause.toArray(new Predicate[whereclause.size()])));
+			TypedQuery<CategorySummary> q = entityManager.createQuery(c);
+
+			// setting the parameters
+			setParametersInQuery(criteria,q);
+
+			List<CategorySummary> summaryList =  q.getResultList();
+			if (!summaryList.isEmpty() && summaryList.size()>0) {
+				return summaryList.get(0);
+			}
+		}
+
+		return null;
+	}
+
+    public List<ExpenseDao> getExpenseListByIds(List<String> idlist) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<ExpenseDao> c = cb.createQuery(ExpenseDao.class);
 		Root<ExpenseDao> exp = c.from(ExpenseDao.class);

@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import meg.swapout.common.DateUtils;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.Target;
 import meg.swapout.expense.domain.TargetDetail;
@@ -451,7 +452,7 @@ public class YearlyReportData extends BankReportData {
 		}
 		// make piegraph
 		String graphurl = generateCategoryGraph(piegraphres,
-				category.getName(), 0);
+				category.getName(), 0, 250,250);
 
 		// make bargraph
 		String bargraphurl = generateYearToDateGraph(null, bargraphres,
@@ -785,23 +786,10 @@ public class YearlyReportData extends BankReportData {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(enddate);
 
-		if ((origcriteria.getCompareType() != null)
-				&& origcriteria.getCompareType() == CompareType.LastMonths) {
-			cal.add(Calendar.MONTH, -13);
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-		} else if ((origcriteria.getCompareType() != null)
-				&& origcriteria.getCompareType() == CompareType.CalendarYear) {
-			cal.set(Calendar.MONTH, Calendar.JANUARY);
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-		} else {
-			Date firstdate = searchService.getFirstTransDate();
-			Calendar first = Calendar.getInstance();
-			first.setTime(firstdate);
-			cal.set(Calendar.YEAR, first.get(Calendar.YEAR));
-			cal.set(Calendar.MONTH, first.get(Calendar.MONTH));
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-		}
-		Date startdate = cal.getTime();
+		Date firstdate = searchService.getFirstTransDate();
+
+		Date startdate = DateUtils.getStartDateByCompareType(enddate,firstdate,origcriteria.getCompareType());
+
 		criteria.setDateEnd(enddate);
 		criteria.setDateStart(startdate);
 
@@ -1310,7 +1298,7 @@ public class YearlyReportData extends BankReportData {
 
 		// make piegraph
 		String graphurl = generateCategoryGraph(piegraphres,
-				category.getName(), 0);
+				category.getName(), 0, 250, 250);
 
 		// make bargraph
 		String bargraphurl = generateYearToDateGraph(null, bargraphres,

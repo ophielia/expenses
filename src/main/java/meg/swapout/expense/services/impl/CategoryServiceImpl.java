@@ -135,6 +135,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<CategoryLevel> getSubcategoriesUpToLevel(Long categoryid,int level) {
+        return getSubcategoriesRecursive(categoryid, level, 1, false);
+    }
+
+    @Override
     public CategoryLevel getAsCategoryLevel(Long categoryid) {
         // service of same name
         // get CategoryDao

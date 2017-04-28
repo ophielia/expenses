@@ -115,7 +115,7 @@
                             <h3 th:text="${catbkout.display}"></h3>
                             <div class="col col-sm-6 ">
                                 <div th:each="url:${catbkout.urls}">
-                                    <img src="${url}"/>
+                                    <img th:src="${url}"/>
                                 </div>
                             </div>
                             <div class="col col-sm-4">
@@ -138,6 +138,39 @@
 
                         </div>
                     </div>
+
+                    <!-- Detailed Category Section -->
+                    <h3 class="reportspacer">Categories - More Detail</h3>
+                    <div class="container">
+                        <div class="row" th:each="catbkout:${results.detailedcategories.members}">
+                            <h3 th:text="${catbkout.display}"></h3>
+                            <div class="col col-sm-6 ">
+                                <div th:each="url:${catbkout.urls}">
+                                    <img width="500px" th:src="${url}"/>
+                                </div>
+                            </div>
+                            <div class="col col-sm-4">
+                                <table class="table-bordered table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th th:each="hdrname:${catbkout.chart.headers.columns}" th:text="${hdrname}"/>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="row:${catbkout.chart.rows}">
+                                        <td th:each="item:${row.columns}" th:text="${item}">
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
 
                     <!-- listing all expenses -->
                     <div class="container">

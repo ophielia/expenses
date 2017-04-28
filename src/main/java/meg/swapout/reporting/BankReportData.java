@@ -61,6 +61,7 @@ public abstract class BankReportData implements ReportData {
 	public static final String TARGET_STATUS = "Target Status";
 	public static final String SUMMARY_BY_CATEGORY = "SUMMARY By Category";
 	public static final String YEAR_TO_DATE = "Year To Date";
+	public static final String CATEGORY_DETAIL = "Category Detail";
 	public static final String PERCENTAGE_THROUGH_YEAR = "Percentage Through Year";
 	private static final java.lang.String TOTAL = "TOTAL";
 
@@ -80,7 +81,8 @@ public abstract class BankReportData implements ReportData {
 			"MM-dd-yyyy");
 	protected static final NumberFormat nf = new DecimalFormat("######.00",
 			new DecimalFormatSymbols(Locale.US));
-	final SimpleDateFormat mthyearformat = new SimpleDateFormat("MM-yyyy", Locale.US);
+	private final String monthyearpattern="MM-yyyy";
+	final SimpleDateFormat mthyearformat = new SimpleDateFormat(monthyearpattern, Locale.US);
 
 
 
@@ -172,14 +174,10 @@ public abstract class BankReportData implements ReportData {
 		}
 	}
 
-	public void setLabels(List<ReportLabel> labels) {
-		this.reportlabels = labels;
-	}
-
 	/** Output Methods **/
 
 	/** Utility Methods used by all bank reports **/
-	public void sortAndCategorizeExpenses(List<ExpenseDao> allexpenses) {
+	protected void sortAndCategorizeExpenses(List<ExpenseDao> allexpenses) {
 		if (allexpenses == null)
 			return;
 		// build category lookup list
@@ -383,7 +381,7 @@ public abstract class BankReportData implements ReportData {
 		return percentageofyear;
 	}
 
-	public ReportElement crunchNumbersYearlyTargetProgress(
+	protected ReportElement crunchNumbersYearlyTargetProgress(
 			ExpenseCriteria criteria, String lastdatetag,
 			boolean iscurrentyear, Map<Long, TargetDetail> targethash,
 			double percentageofyear) {
@@ -563,7 +561,7 @@ return re;
 		return reportCriteria.getImageLink() + filename;
 	}
 
-	public ReportElement crunchNumbersSummary(ExpenseCriteria criteria,
+	protected ReportElement crunchNumbersSummary(ExpenseCriteria criteria,
 			boolean avgbymonth) {
 		ReportElement re = new ReportElement();
 
@@ -677,7 +675,7 @@ return re;
 	}
 
 	protected String generateCategoryGraph(
-			List<CategorySummary> catsumdisps, String catname, double sum) {
+			List<CategorySummary> catsumdisps, String catname, double sum, int width, int height) {
 
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		// sort catsumdisps
@@ -715,7 +713,7 @@ return re;
 				+ (new Date()).getTime() + ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 250, 250);
+			ChartUtilities.saveChartAsPNG(imagefile, chart, width, height);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -837,8 +835,11 @@ return re;
 		return row;
 	}
 
-	public ReportElement crunchNumbersCategory(ExpenseCriteria criteria,
-			CategoryLevel cat, boolean numbymonth) {
+	protected ReportElement crunchNumbersCategory(ExpenseCriteria criteria, CategoryLevel cat, boolean numbymonth,int limit) {
+		if (cat == null || cat.getCategory() == null) {
+			return null;
+		}
+
 		ExpenseCriteria catcriteria = criteria.clone();
 		int daycount = getDayCount(criteria);
 
@@ -867,6 +868,13 @@ return re;
 					.getExpenseTotalByYearAndCategory(catcriteria);
 		}
 
+		if (displays.isEmpty() ) {
+			return null;
+		}
+
+		// check number of subcategories - determine if squashed report will be run
+		boolean runSquashedReport = displays.size()>limit;
+
 		// go through displays, adding daycount, and summing total
 		List<CategorySummary> results = new ArrayList<CategorySummary>();
 		for (CategorySummary catsum : displays) {
@@ -880,9 +888,10 @@ return re;
 			// no use going on - this category doesn't have anything
 			return null;
 		}
+		int size = runSquashedReport?500:250;
 		double catsum = Math.round(totalsum.getSum() * 100.0) / 100.0;
 		String graphurl = generateCategoryGraph(results, cat.getCategory()
-				.getName(), catsum);
+				.getName(), catsum, 250,250);
 
 		// add total to results
 		results.add(totalsum);
@@ -892,6 +901,19 @@ return re;
 		ChartData chart = catSummaryToChart(results, headers);
 		re.setChart(chart);
 		re.addUrl(graphurl);
+		re.setDisplay(cat.getCategory().getName());
+
+		// if runSquashedReport - run the squashedReport.  The previously
+		// generated ReportElement will be added as a subelement of the squashedReport
+		if (runSquashedReport) {
+			ReportElement squashed = crunchNumbersCategoryByMainCategory(criteria,cat);
+			if (squashed == null ){
+			    return re;
+            }
+			squashed.addMember(re);
+			squashed.setDisplay(cat.getCategory().getName());
+			return squashed;
+		}
 
 		return re;
 	}
@@ -922,26 +944,10 @@ return re;
 			// start date depends upon the comparetype, and is
 			// either 12 months earlier, the last calendar year, or all
 			Date enddate = origcriteria.getDateEnd();
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(enddate);
+            Date firstdate = searchService.getFirstTransDate();
 
-			if ((origcriteria.getCompareType() != null)
-					&& origcriteria.getCompareType() == CompareType.LastMonths) {
-				cal.add(Calendar.MONTH, -13);
-				cal.set(Calendar.DAY_OF_MONTH, 1);
-			} else if ((origcriteria.getCompareType() != null)
-					&& origcriteria.getCompareType() == CompareType.CalendarYear) {
-				cal.set(Calendar.MONTH, Calendar.JANUARY);
-				cal.set(Calendar.DAY_OF_MONTH, 1);
-			} else {
-				Date firstdate = searchService.getFirstTransDate();
-				Calendar first = Calendar.getInstance();
-				first.setTime(firstdate);
-				cal.set(Calendar.YEAR, first.get(Calendar.YEAR));
-				cal.set(Calendar.MONTH, first.get(Calendar.MONTH));
-				cal.set(Calendar.DAY_OF_MONTH, 1);
-			}
-			Date startdate = cal.getTime();
+            Date startdate = DateUtils.getStartDateByCompareType(enddate,firstdate,origcriteria.getCompareType());
+
 			criteria.setDateEnd(enddate);
 			criteria.setDateStart(startdate);
 
@@ -1031,7 +1037,7 @@ return re;
 
 			// get url for graph
 			int sorttype = UtilityComparator.Sort.ByMonth;
-			if (("MM-yyyy").equals(dateformatstr)) {
+			if ((monthyearpattern).equals(dateformatstr)) {
 				sorttype = UtilityComparator.Sort.ByMonthYearStr;
 			}
 			String graphurl = generateYearToDateGraph(null, results, sorttype);
@@ -1528,6 +1534,161 @@ return re;
 
 	}
 
+	protected ChartData catSummaryToChart(List<CategorySummary> results,
+			ChartRow headers) {
+		ChartData cd = new ChartData();
+		cd.setHeaders(headers);
+		if (results != null) {
+			for (CategorySummary sum : results) {
+				ChartRow row = new ChartRow();
+				row.addColumn(sum.getCatName());
+				row.addColumn(nf.format(sum.getSum()));
+				cd.addRow(row);
+			}
+
+		}
+		return cd;
+	}
+
+	protected ChartData targetProgressToChart(List<TargetProgressDisp> results,
+			ChartRow headers) {
+		ChartData cd = new ChartData();
+		cd.setHeaders(headers);
+		if (results != null) {
+			for (TargetProgressDisp sum : results) {
+				ChartRow row = new ChartRow();
+				row.addColumn(sum.getCatName());
+				row.addColumn(nf.format(sum.getAmountSpent()));
+				row.addColumn(nf.format(sum.getAmountTargeted()));
+				row.addColumn(sum.getStatusMessage());
+				cd.addRow(row);
+			}
+
+		}
+		return cd;
+	}
+
+	protected  ChartData buildChartDataFromExpenseList(List<ExpenseDao> expenses) {
+		sortAndCategorizeExpenses(expenses);
+		ChartData data = new ChartData();
+		ChartRow headers = new ChartRow();
+		headers.addColumn(BankReportData.DATE);
+		headers.addColumn(BankReportData.CATEGORY);
+		headers.addColumn(BankReportData.SUBCATEGORY);
+		headers.addColumn(BankReportData.Detail);
+		headers.addColumn(BankReportData.AMOUNT);
+		data.setHeaders(headers);
+
+		for (ExpenseDao exp : expenses) {
+			ChartRow row = new ChartRow();
+			row.addColumn(daydateformat.format(exp.getTransdate()));
+			row.addColumn(exp.getDispCat());
+			row.addColumn(exp.getCatName());
+			row.addColumn(exp.getDetail());
+			if (exp.getHascat()) {
+				row.addColumn(nf.format(exp.getCatamount()));
+			} else {
+				row.addColumn(nf.format(exp.getTranstotal()));
+			}
+			data.addRow(row);
+		}
+		return data;
+	}
+
+
+	protected ExpenseCriteria setMonthInCriteria(String month, ExpenseCriteria criteria) {
+		try {
+			Date start;
+			Date startdate;
+			Date enddate;
+			SimpleDateFormat dateformat = new SimpleDateFormat(monthyearpattern);
+
+			start = dateformat.parse(month);
+			Calendar cal = Calendar.getInstance();
+			// get first of month, first of next month
+			cal.setTime(start);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			startdate = cal.getTime();
+			cal.add(Calendar.MONTH, 1);
+			enddate = cal.getTime();
+			// set in criteria
+			criteria.setDateStart(startdate);
+			criteria.setDateEnd(enddate);
+			int daycount = getDayCount(criteria);
+			criteria.setDayCount(daycount);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return criteria;
+	}
+
+	private ReportElement crunchNumbersCategoryByMainCategory(ExpenseCriteria criteria, CategoryLevel cat) {
+		if (cat == null || cat.getCategory() == null) {
+			return null;
+		}
+
+		ExpenseCriteria catcriteria = criteria.clone();
+		int daycount = getDayCount(criteria);
+
+		// create headers
+		ChartRow headers = new ChartRow();
+		headers.addColumn(SUBCATEGORY);
+		headers.addColumn(AMOUNT);
+
+		// get subcategories - main ones only
+		List<Category> catlevels = categoryService.getDirectSubcategories(cat.getCategory().getId());
+		CategorySummary totalsum = new CategorySummary(TOTAL,
+				daycount);
+
+		// cycle through main subcategories
+		List<CategorySummary> results = new ArrayList<>();
+		for (Category subcat: catlevels) {
+			// get all subcategories for this level
+			List<CategoryLevel> subcatlevels = categoryService.getAllSubcategories(subcat);
+
+			subcatlevels.add(new CategoryLevel(subcat,2));
+			catcriteria.setCategoryLevelList(subcatlevels);
+			catcriteria.setShowSubcats(true);
+
+			// get one CategorySummary object summing up
+			// total for this category and all subcategories
+			CategorySummary categorySummary = searchService.getCategorySummaryByMonthYear(catcriteria);
+			if (categorySummary == null ) {
+				continue;
+			}
+			categorySummary.setCatName(subcat.getName());
+
+			// add sum to total
+			totalsum.addExpenseAmt(categorySummary.getSum());
+
+			// add CategorySummary to results
+			results.add(categorySummary);
+		}
+		// generate graph
+		if (totalsum.getSum() == 0) {
+			// no use going on - this category doesn't have anything
+			return null;
+		}
+
+
+		double catsum = Math.round(totalsum.getSum() * 100.0) / 100.0;
+		String graphurl = generateCategoryGraph(results, cat.getCategory()
+				.getName(), catsum, 250,250);
+
+		// add total to results
+		results.add(totalsum);
+
+		// populate ReportElements
+		ReportElement re = new ReportElement();
+		ChartData chart = catSummaryToChart(results, headers);
+		re.setChart(chart);
+		re.addUrl(graphurl);
+
+		return re;
+
+	}
+
 	private String generateTargetGraph(List<TargetProgressDisp> results) {
 		final String exclabel = "Exceeded Target";
 		final String tarlabel = "Target";
@@ -1537,10 +1698,10 @@ return re;
 
 		// fill in dataset
 		List<Double> exc = new ArrayList<>();
-		List<Double> targ = new ArrayList<Double>();
-		List<Double> spe = new ArrayList<Double>();
-		List<Double> notarget = new ArrayList<Double>();
-		List<String> categories = new ArrayList<String>();
+		List<Double> targ = new ArrayList<>();
+		List<Double> spe = new ArrayList<>();
+		List<Double> notarget = new ArrayList<>();
+		List<String> categories = new ArrayList<>();
 
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		int i = 0;
@@ -1609,7 +1770,7 @@ return re;
 				true, // include legend
 				false, // tooltips?
 				false // URLs?
-				);
+		);
 
 		// set the background color for the chart...
 		chart.setBackgroundPaint(Color.white);
@@ -1649,65 +1810,5 @@ return re;
 
 	}
 
-	protected ChartData catSummaryToChart(List<CategorySummary> results,
-			ChartRow headers) {
-		ChartData cd = new ChartData();
-		cd.setHeaders(headers);
-		if (results != null) {
-			for (CategorySummary sum : results) {
-				ChartRow row = new ChartRow();
-				row.addColumn(sum.getCatName());
-				row.addColumn(nf.format(sum.getSum()));
-				cd.addRow(row);
-			}
-
-		}
-		return cd;
-	}
-
-	protected ChartData targetProgressToChart(List<TargetProgressDisp> results,
-			ChartRow headers) {
-		ChartData cd = new ChartData();
-		cd.setHeaders(headers);
-		if (results != null) {
-			for (TargetProgressDisp sum : results) {
-				ChartRow row = new ChartRow();
-				row.addColumn(sum.getCatName());
-				row.addColumn(nf.format(sum.getAmountSpent()));
-				row.addColumn(nf.format(sum.getAmountTargeted()));
-				row.addColumn(sum.getStatusMessage());
-				cd.addRow(row);
-			}
-
-		}
-		return cd;
-	}
-
-	protected  ChartData buildChartDataFromExpenseList(List<ExpenseDao> expenses) {
-		sortAndCategorizeExpenses(expenses);
-		ChartData data = new ChartData();
-		ChartRow headers = new ChartRow();
-		headers.addColumn(BankReportData.DATE);
-		headers.addColumn(BankReportData.CATEGORY);
-		headers.addColumn(BankReportData.SUBCATEGORY);
-		headers.addColumn(BankReportData.Detail);
-		headers.addColumn(BankReportData.AMOUNT);
-		data.setHeaders(headers);
-
-		for (ExpenseDao exp : expenses) {
-			ChartRow row = new ChartRow();
-			row.addColumn(daydateformat.format(exp.getTransdate()));
-			row.addColumn(exp.getDispCat());
-			row.addColumn(exp.getCatName());
-			row.addColumn(exp.getDetail());
-			if (exp.getHascat()) {
-				row.addColumn(nf.format(exp.getCatamount()));
-			} else {
-				row.addColumn(nf.format(exp.getTranstotal()));
-			}
-			data.addRow(row);
-		}
-		return data;
-	}
 
 }

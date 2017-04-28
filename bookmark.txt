@@ -1,6 +1,8 @@
 buggy -
     rules - remove line order - add automatically
+          - also that they're assigned in line order
     round amount in expense edit
+    can't edit category
     done - expenseedit isn't setting has category to true
     save as quick group isn't working - percentages are off
     

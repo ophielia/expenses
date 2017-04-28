@@ -1,5 +1,7 @@
 package meg.swapout.common;
 
+import meg.swapout.reporting.CompareType;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +48,7 @@ public class DateUtils {
 		
 	}
 	public static List<String> getYearsForSelect(Date oldest, Date newest) {
-		List<String> years = new ArrayList<String>();
+		List<String> years = new ArrayList<>();
 
 		Calendar start = Calendar.getInstance();
 		Calendar end = Calendar.getInstance();
@@ -68,5 +70,26 @@ public class DateUtils {
 		years.add(value);
 		return years;
 	}
-	
+
+	public static Date getStartDateByCompareType(Date enddate, Date firsttransdate,CompareType compareType) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(enddate);
+
+		if ((compareType != null)
+				&& compareType == CompareType.LastMonths) {
+			cal.add(Calendar.MONTH, -13);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+		} else if ((compareType != null)
+				&& compareType == CompareType.CalendarYear) {
+			cal.set(Calendar.MONTH, Calendar.JANUARY);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+		} else {
+			Calendar first = Calendar.getInstance();
+			first.setTime(firsttransdate);
+			cal.set(Calendar.YEAR, first.get(Calendar.YEAR));
+			cal.set(Calendar.MONTH, first.get(Calendar.MONTH));
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		return cal.getTime();
+	}
 }
