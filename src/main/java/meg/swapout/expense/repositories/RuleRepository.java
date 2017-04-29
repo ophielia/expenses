@@ -16,8 +16,5 @@ public interface RuleRepository extends JpaRepository<Rule, Long> {
     @Query("select rule from Rule as rule  where rule.lineorder=:lineorder")
     List<Rule> findCategoryRulesByOrder(@Param("lineorder") long lineorder);
 
-    @Query("select rule from Rule as rule  where rule.containing=:text")
-    List<Rule> findCategoryRulesByContaining(@Param("text") String text);
-
-
+    List<Rule> findAllByOrderByLineorderDesc();
 }
