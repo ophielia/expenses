@@ -30,6 +30,7 @@ entities={
         @FieldResult(name="catName", column="catname"),
         @FieldResult(name="nonexpense", column="nonexpense"),
         @FieldResult(name="deleted", column="deleted"),
+        @FieldResult(name="rounded", column="is_rounded"),
         @FieldResult(name="comment", column="comment"),
         @FieldResult(name="month", column="month"),
         @FieldResult(name="year", column="year"),
@@ -58,6 +59,8 @@ public class ExpenseDao {
 	private String catName;
 	private Boolean nonexpense;
 	private Boolean deleted;
+@Column(name="is_rounded")
+	private Boolean rounded;
 	private String comment;
 	private String month;
 	private Long year;
@@ -227,6 +230,11 @@ public class ExpenseDao {
 		this.monthyear = monthyear;
 	}
 
-	
+	public Boolean getRounded() {
+		return rounded;
+	}
 
+	public void setRounded(Boolean rounded) {
+		this.rounded = rounded;
+	}
 }

@@ -27,6 +27,8 @@ public class RawTransaction {
 
 	private Boolean hascat;
 
+	private Boolean isRounded;
+
 	private Boolean deleted;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -130,4 +132,11 @@ public class RawTransaction {
 		this.source = source;
 	}
 
+	public Boolean getRounded() {
+		return isRounded;
+	}
+
+	public void setRounded(Boolean rounded) {
+		isRounded = rounded;
+	}
 }

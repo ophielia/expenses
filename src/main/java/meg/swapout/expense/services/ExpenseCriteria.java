@@ -17,6 +17,8 @@ public class ExpenseCriteria implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Category category;
+	private boolean roundedOnly;
+
 
 
 	public final class SortType {
@@ -74,6 +76,8 @@ public class ExpenseCriteria implements Serializable {
 	private String sorttype;
 	
 	private Long sortdir;
+
+	private Boolean isForRounding=false;
 
 	public void setDateRangeByType(DateRangeType dateRangeType) {
 		this.daterangetype = dateRangeType;
@@ -345,5 +349,19 @@ this.excludeNonExpense=excludeNonExpense;
 		return newobj;
 	}
 
-	
+	public Boolean getForRounding() {
+		return isForRounding;
+	}
+
+	public void setForRounding(Boolean forRounding) {
+		isForRounding = forRounding;
+	}
+
+	public void showRoundedOnly(boolean roundedOnly) {
+		this.roundedOnly = roundedOnly;
+	}
+
+	public Boolean getRoundedOnly() {
+		return this.roundedOnly;
+	}
 }

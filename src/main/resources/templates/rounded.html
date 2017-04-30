@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Expenses - Quick Groups</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<script>
+    /*<![CDATA[*/
+    $(document).ready(function () {
+
+        $("th[id^='aSort']").click(
+            function () {
+                HandleSortClick(event.target, 'aSort');
+            }
+        );
+
+        $("span[id^='clearLine']").click(
+            function () {
+                HandleClick(event.target, 'clearLine');
+            }
+        );
+        $("span[id^='removeLine']").click(
+            function () {
+                HandleClick(event.target, 'removeLine');
+            }
+        );
+
+    });
+
+    function HandleSortClick(param, prefix) {
+        var editIndex = getIndex(prefix, param.id);
+        var inputAction = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "sort").val("sort");
+        var inputSort = document.getElementById("sortField");
+        inputSort.setAttribute("value", editIndex);
+        $("#expenseListForm").append(inputAction);
+
+        $("#expenseListForm").submit();
+    }
+
+
+    function getIndex(prefix, text) {
+        // gets a substring of the text, starting at the char after the length of the prefix
+        var stripped = text.substr(prefix.length);
+        return stripped;
+    }
+
+
+    /*]]>*/
+</script>
+
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>In the Piggy Bank</h2>
+            <form id="expenseListForm" class="form-horizontal form-inline" th:object="${roundingModel}" th:action="@{/rounding/list}"
+                  method="post">
+                <input th:field="*{sortField}" type="hidden"/>
+                <input th:field="*{sortDirection}" type="hidden"/>
+                <input th:field="*{categorizedType}" type="hidden"/>
+                <input th:field="*{transactionType}" type="hidden"/>
+                <input th:field="*{forRounding}" type="hidden"/>
+                <div class="container-fluid">
+
+                </div>
+
+
+                <div class="container topbuffer-med ">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <div class="row">
+                                View To Round <a th:href="${'/rounding/list'}" class="glyphicon glyphicon-th-list"></a>
+
+                            </div>
+                            <div class="row">
+                                <table class="table table-bordered table-striped table-hover moretext">
+                                    <thead class="thead-inverse">
+                                    <th>  </th>
+                                    <th id="aSortDate">Date</th>
+                                    <th id="aSortCat">Category</th>
+                                    <th id="aSortDetail">Desciption</th>
+                                    <th id="aSortAmount">Amount</th>
+                                    <th></th>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="exp,stat : *{expenses}">
+                                        <td><input th:name="'idref['+${stat.index}+']'" th:value="${exp.id}"
+                                                   type="hidden"/>
+                                            <input type="checkbox" th:field="*{checked[__${stat.index}__]}"/></td>
+                                        <td class="nowrap" th:text="${#dates.format(exp.transdate, 'MM-dd-yyyy')}"></td>
+                                        <td th:text="${exp.catName}"/>
+                                        <td th:text="${exp.detail}"/>
+                                        <td th:text="${#numbers.formatDecimal(exp.displayamount, 0, 'DEFAULT', 2, 'DEFAULT')}"/>
+                                        <td><a th:href="${'/expense/edit/' + exp.transid}" class="glyphicon glyphicon-pencil listglyph"></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

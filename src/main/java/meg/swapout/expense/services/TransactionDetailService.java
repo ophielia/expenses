@@ -28,4 +28,6 @@ public interface TransactionDetailService {
     List<CategorizedTransaction> getDetailsForTransaction(RawTransaction transaction);
 
     void assignCategoryToTransaction(Long transid, Category cat);
+
+    void roundTransactions(List<String> toupdate);
 }

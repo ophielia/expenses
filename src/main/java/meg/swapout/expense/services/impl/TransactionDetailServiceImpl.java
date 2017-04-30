@@ -3,6 +3,7 @@ package meg.swapout.expense.services.impl;
 import meg.swapout.expense.domain.*;
 import meg.swapout.expense.repositories.CategorizedTransactionRepository;
 import meg.swapout.expense.repositories.RawTransactionRepository;
+import meg.swapout.expense.services.CategoryService;
 import meg.swapout.expense.services.SearchService;
 import meg.swapout.expense.services.TransactionDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     @Autowired
     private
     CategorizedTransactionRepository categorizedTransactionRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private SearchService searchService;
@@ -100,7 +104,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
         for (CategorizedTransaction detail : details) {
             detail.setBanktrans(transaction);
         }
-        List<CategorizedTransaction> toReturn =  categorizedTransactionRepository.save(details);
+        List<CategorizedTransaction> toReturn = categorizedTransactionRepository.save(details);
 
         transaction.setHascat(true);
         rawTransactionRepo.save(transaction);
@@ -151,6 +155,44 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
             }
         }
     }
+
+    @Override
+    @Transactional
+    public void roundTransactions(List<String> selectedids) {
+        if (selectedids != null && selectedids.size() > 0) {
+            List<ExpenseDao> toupdate = searchService.getExpenseListByIds(selectedids);
+            // loop through selected list
+            for (ExpenseDao expense : toupdate) {
+                Double amount = expense.getTranstotal() * -1;
+
+                int roundCheck = (int) (Math.round(amount * 100) * 100);
+                if ((amount * 100) == roundCheck) {
+                    continue;
+                }
+                // round the sucker here
+                double seed = Math.ceil(amount) * 100D;
+                double roundAmount = seed - (amount * 100D);
+
+                // make new cat transaction
+                CategorizedTransaction categorizedTransaction = new CategorizedTransaction();
+                Category category = categoryService.getCategoryById(expense.getCatid());
+                RawTransaction rawtrans = transactionRepository.findOne(expense.getTransid());
+                categorizedTransaction.setCategory(category);
+                categorizedTransaction.setBanktrans(rawtrans);
+                categorizedTransaction.setCreatedon(new Date());
+                categorizedTransaction.setAmount(roundAmount / -100D);
+
+                // update transaction
+                rawtrans.setRounded(true);
+
+                // save changes
+                transactionRepository.save(rawtrans);
+                categorizedTransactionRepository.save(categorizedTransaction);
+
+            }
+        }
+    }
+
 
     private void assignCategory(Long transid, Category category) {
         // lookup BankTransaction
