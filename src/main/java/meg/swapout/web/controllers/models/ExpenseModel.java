@@ -24,6 +24,7 @@ public class ExpenseModel {
 
     private int inEdit;
     private int toEdit;
+    private boolean amountFlag=false;
 
     public ExpenseModel() {
     }
@@ -87,5 +88,13 @@ public class ExpenseModel {
 
     public void setSaveAsQuickGroup(boolean saveAsQuickGroup) {
         this.saveAsQuickGroup = saveAsQuickGroup;
+    }
+
+    public boolean getAmountFlag() {
+        return amountFlag;
+    }
+
+    public void setAmountFlag(boolean amountFlag) {
+        this.amountFlag = amountFlag;
     }
 }

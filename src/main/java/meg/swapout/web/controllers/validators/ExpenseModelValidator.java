@@ -58,6 +58,9 @@ public class ExpenseModelValidator implements Validator {
 			detailstotal+= detail.getAmount()!=null?detail.getAmount():0;
 		}
 		double transactionamount = transaction.getAmount();
+		if (model.getAmountFlag()) {
+			transactionamount = Math.ceil(Math.abs(transactionamount));
+		}
 		detailstotal=Math.abs(detailstotal);
 		transactionamount=Math.abs(transactionamount);
 

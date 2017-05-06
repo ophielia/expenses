@@ -31,9 +31,6 @@ class BankTransactionServiceImpl implements BankTransactionService {
     RuleRepository ruleRepository;
 
     @Autowired
-    CategoryService categoryService;
-
-    @Autowired
     private TransactionDetailService transactionDetailService;
 
 
@@ -57,6 +54,8 @@ class BankTransactionServiceImpl implements BankTransactionService {
     public RawTransaction addTransaction(RawTransaction trans) {
         // set deleted to false
         trans.setDeleted(Boolean.valueOf(false));
+        // set rounded to false
+        trans.setRounded(false);
         // call Dao interface here
         rawTransactionRepository.save(trans);
         return trans;

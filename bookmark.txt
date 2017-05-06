@@ -5,7 +5,7 @@ buggy -
     can't edit category
     done - expenseedit isn't setting has category to true
     save as quick group isn't working - percentages are off
-    
+    highcharts integration
 
 immediate -
     date format

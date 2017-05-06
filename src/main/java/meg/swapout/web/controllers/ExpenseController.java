@@ -64,6 +64,12 @@ public class ExpenseController {
         // create model
         ExpenseModel expenseModel= fillExpenseModel(id,null);
 
+        // set amount flag (rounding)
+        RawTransaction transaction = expenseModel.getTransaction();
+        if (transaction.getRounded()!=null && transaction.getRounded()) {
+            expenseModel.setAmountFlag(true);
+        }
+
         // add details
         List<CategorizedTransaction> details = categorizedTransactionRepo.findByBankTrans(expenseModel.getTransaction());
         expenseModel.setDetails(details);
@@ -130,6 +136,8 @@ public class ExpenseController {
         }
 
         // call service
+        RawTransaction transaction = expenseModel.getTransaction();
+        transaction.setRounded(expenseModel.getAmountFlag());
         transactionDetailService.saveDetailsAndTransaction(expenseModel.getTransaction(),expenseModel.getDetails());
 
         // check if quick group should be saved
@@ -193,6 +201,7 @@ public class ExpenseController {
 
         // get detail and clear category and percentage
         RawTransaction transaction = expenseModel.getTransaction();
+        transaction.setRounded(expenseModel.getAmountFlag());
         List<CategorizedTransaction> details = expenseModel.getDetails();
         List<CategorizedTransaction> detailresult = transactionDetailService.distributeAmount(transaction,details,false);
 
@@ -209,6 +218,7 @@ public class ExpenseController {
 
         // get detail and clear category and percentage
         RawTransaction transaction = expenseModel.getTransaction();
+        transaction.setRounded(expenseModel.getAmountFlag());
         List<CategorizedTransaction> details = expenseModel.getDetails();
         List<CategorizedTransaction> detailresult = transactionDetailService.distributeAmount(transaction,details,true);
 

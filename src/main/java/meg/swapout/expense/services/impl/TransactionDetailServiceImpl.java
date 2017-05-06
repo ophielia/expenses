@@ -401,7 +401,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
             return null;
         }
 
-        Double transamount = transaction.getAmount();
+        Double transamount = transaction.getRounded()?getRoundedAmount(transaction):transaction.getAmount();
         if (!remainderOnly) {
             return transamount;
         }
@@ -411,6 +411,11 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
         }
 
         return transamount - sumofparts;
+    }
+
+    private Double getRoundedAmount(RawTransaction transaction) {
+        Double amount = Math.ceil(transaction.getAmount()*-1) * -1;
+        return amount;
     }
 
     private List<CategorizedTransaction> getCategoryExpForTrans(Long transid) {
