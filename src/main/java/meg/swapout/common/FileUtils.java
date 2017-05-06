@@ -51,15 +51,4 @@ public class FileUtils {
         return true;
     }
 
-    static public void deleteFile(String path) {
-
-        try {
-            File file = new File(path);
-            file.delete();
-        } catch (Exception e) {
-            return;
-        }
-    }
-
-
 }

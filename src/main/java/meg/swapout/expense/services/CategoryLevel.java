@@ -16,16 +16,8 @@ public class CategoryLevel {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public Category getCategory() {
         return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
 

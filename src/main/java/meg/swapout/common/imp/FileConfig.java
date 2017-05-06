@@ -15,7 +15,7 @@ package meg.swapout.common.imp;
  */
 public interface FileConfig {
 
-	public static final class FileType {
+	final class FileType {
 		public static final int Delimited = 1;
 
 		public static final int Flat = 2;

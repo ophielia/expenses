@@ -144,7 +144,7 @@ public class YearlyReportData extends BankReportData {
 		List<ReportElement> categoryyear = crunchNumbersAllCategories(criteria);
 
 		// run detailed information for other
-		ReportElement detailedother = crunchNumbersOtherDetail(criteria);
+		// MM fix this ReportElement detailedother = crunchNumbersOtherDetail(criteria);
 
 		// Put Together Elements
 		// list of category summary objects - pie graph for entire year all
@@ -188,9 +188,9 @@ public class YearlyReportData extends BankReportData {
 		addElement(catallyears);
 
 		// this year other detail
-		detailedother.setTag("detailedother");
+		/*detailedother.setTag("detailedother");
 		addElement(detailedother);
-
+*/
 		// labels
 		ReportLabel ltitle = new ReportLabel("lbltitle",
 				BankReportData.YEARLY_SUMMARY_REPORT + " - " + year);
@@ -734,7 +734,9 @@ public class YearlyReportData extends BankReportData {
 	}
 
 	private ReportElement crunchNumbersOtherDetail(ExpenseCriteria criteria) {
-		// initialize List of ReportElements
+/*
+
+			// initialize List of ReportElements
 		ReportElement report;
 
 		// make copy of criteria
@@ -761,7 +763,7 @@ public class YearlyReportData extends BankReportData {
 
 		// run numbers for Other category
 		// TODO MM - automatic breakout handlind
-		Category othercat = categoryService
+		/*Category othercat = categoryService
 				.getCategoryByName(CategoryService.OTHERCATEGORYNAME);
 		CategoryLevel catlvl = categoryService.getAsCategoryLevel(othercat
 				.getId());
@@ -770,7 +772,11 @@ public class YearlyReportData extends BankReportData {
 				monthtaglkup, catlvl, totalscolumn, monthcount, avgpermonthcol);
 
 		return report;
+
+	*/
+return null;
 	}
+
 
 	protected ReportElement crunchNumbersYearComparison(
 			ExpenseCriteria origcriteria) {

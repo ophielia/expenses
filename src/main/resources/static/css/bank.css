@@ -3,6 +3,7 @@ h2 {color:crimson}
 a {color:crimson}
 
 html {
+    /*noinspection CssUnknownTarget,CssUnknownTarget*/
     background-image: url(/images/abasin.jpg);
     background-size:cover;
 }

@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@SuppressWarnings("SameReturnValue")
 @RequestMapping("/category")
 @Controller
 public class CategoryController {
 
     private static final String redirectLink = "redirect:/category";
     private static final String categoryTag = "categories";
+    public static final String categoryPage="category";
+    public static final String categoryAttribute="category";
+
     @Autowired
     CategoryService categoryService;
 
@@ -30,7 +34,7 @@ public class CategoryController {
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
         model.addAttribute(categoryTag, categoryService.listAllCategories());
-        return "category";
+        return categoryPage;
     }
 
     @RequestMapping(value="/grid",method = RequestMethod.GET)
@@ -47,7 +51,7 @@ public class CategoryController {
 
     @RequestMapping("/new")
     public String newCategory(Model model) {
-        model.addAttribute("category", new Category());
+        model.addAttribute(categoryAttribute, new Category());
         model.addAttribute(categoryTag, categoryService.listAllCategories(true));
         return "categorynewform";
     }
@@ -85,7 +89,7 @@ public class CategoryController {
         // get subcategory list
         List<Category> subcategories = categoryService.getSubcategories(id);
         // put all into model
-        model.addAttribute("category", category);
+        model.addAttribute(categoryAttribute, category);
         model.addAttribute("parentCategoryName", parentCategory != null ? parentCategory.getName() : "Top Level Category");
         model.addAttribute("subcategories", subcategories);
         model.addAttribute(categoryTag, categoryService.listAllCategories(false));

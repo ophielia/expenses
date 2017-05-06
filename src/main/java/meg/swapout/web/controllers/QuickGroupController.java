@@ -82,7 +82,7 @@ public class QuickGroupController {
         List<QuickGroupDetail> details = qgModel.getDetails();
         QuickGroupDetail detail = details.get(inEdit);
         qgModel.setPercentage(detail.getPercentage() != null ? detail.getPercentage() : 0);
-        qgModel.setCategory(detail.getCategory() != null ? detail.getCategory() : null);
+        qgModel.setCategory(detail.getCategory());
 
         // return QuickGroup
         return qgModel;

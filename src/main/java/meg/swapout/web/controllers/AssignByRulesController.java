@@ -21,20 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class AssignByRulesController {
 
     @Autowired
-    SearchService searchService;
-
-    @Autowired
     BankTransactionService transService;
-
-
-    @Autowired
-    CategoryService categoryService;
-
-    @Autowired
-    ExpenseListModelValidator modelValidator;
-
-    @Autowired
-    QuickGroupService quickGroupService;
 
 
     @ModelAttribute("assignmentListModel")

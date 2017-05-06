@@ -11,6 +11,6 @@ public interface FileConfigManager {
 	 * @param clientkey
 	 * @return
 	 */
-	public abstract FileConfig getFileConfigForClient(int clientkey);
+    FileConfig getFileConfigForClient(int clientkey);
 
 }
