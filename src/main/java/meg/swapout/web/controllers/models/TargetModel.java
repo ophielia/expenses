@@ -18,6 +18,7 @@ public class TargetModel {
     private int toEdit;
 
     public TargetModel() {
+        // empty constructor to keep mvc happy
     }
 
     public TargetModel(Target target) {

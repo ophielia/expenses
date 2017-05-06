@@ -66,11 +66,7 @@ public class RuleController {
 	@ModelAttribute("categorylist")
 	protected List<Category> referenceCategoryData(HttpServletRequest request, Object command,
 												   Errors errors) throws Exception {
-		List<Category> list = categoryService.listAllCategories(true);
-
-
-		// return model
-		return list;
+		return categoryService.listAllCategories(true);
 	}
 
 

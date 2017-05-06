@@ -48,7 +48,7 @@ public class ReportElement {
 	public void addUrl(String urls) {
 		if (urls != null) {
 			if (this.urls == null)
-				this.urls = new ArrayList<String>();
+				this.urls = new ArrayList<>();
 			this.urls.add(urls);
 		}
 	}
@@ -76,7 +76,7 @@ public class ReportElement {
 	public void addMember(ReportElement member) {
 		if (member != null) {
 			if (this.members== null)
-				this.members = new ArrayList<ReportElement>();
+				this.members = new ArrayList<>();
 			this.members.add(member);
 		}
 	}

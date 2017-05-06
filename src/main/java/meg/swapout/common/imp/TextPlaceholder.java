@@ -1,10 +1,10 @@
 package meg.swapout.common.imp;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class TextPlaceholder implements Placeholder {
 
-	final Hashtable hash = new Hashtable();
+	final HashMap hash = new HashMap();
 
 	public void setField(int i, Object field) {
 		String key = "field" + i;

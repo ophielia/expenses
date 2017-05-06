@@ -45,7 +45,7 @@ public class Target {
 	private String tag;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "targetgroup")
-	private List<TargetDetail> targetdetails = new ArrayList<TargetDetail>();
+	private List<TargetDetail> targetdetails = new ArrayList<>();
 
 	public Long getId() {
 		return id;

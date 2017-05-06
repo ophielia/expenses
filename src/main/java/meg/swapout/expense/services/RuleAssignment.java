@@ -36,7 +36,7 @@ public class RuleAssignment {
 
 	public void addTransaction(RuleTransaction exp) {
 		if (transactions == null) {
-			transactions = new ArrayList<RuleTransaction>();
+			transactions = new ArrayList<>();
 		}
 		transactions.add(exp);
 	}
