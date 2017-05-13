@@ -8,32 +8,32 @@ import java.util.List;
 
 public interface SearchService {
 
-	public abstract List<ExpenseDao> getExpenses(ExpenseCriteria criteria);
+	List<ExpenseDao> getExpenses(ExpenseCriteria criteria);
 	
-	public abstract List<ExpenseDao> getAllExpenses();
+	List<ExpenseDao> getAllExpenses();
 	
-	public abstract List<CategorySummary> getExpenseTotalByMonthAndCategory(
-			ExpenseCriteria criteria);
+	List<CategorySummary> getExpenseTotalByMonthAndCategory(
+            ExpenseCriteria criteria);
 	
-	public abstract List<CategorySummary> getExpenseTotalByMonth(
-			ExpenseCriteria criteria);
+	List<CategorySummary> getExpenseTotalByMonth(
+            ExpenseCriteria criteria);
 	
 
-	public abstract List<CategorySummary> getExpenseTotalByYear(
-			ExpenseCriteria criteria);
+	List<CategorySummary> getExpenseTotalByYear(
+            ExpenseCriteria criteria);
 
 	
-	public List<ExpenseDao> getExpenseListByIds(List<String> idlist) ;	
+	List<ExpenseDao> getExpenseListByIds(List<String> idlist) ;
 
-	public abstract Date getFirstTransDate();
+	Date getFirstTransDate();
 	
-	public abstract Date getMostRecentTransDate();
+	Date getMostRecentTransDate();
 
-	public abstract List<CategorySummary> getExpenseTotalByYearAndCategory(
-			ExpenseCriteria criteria);
+	List<CategorySummary> getExpenseTotalByYearAndCategory(
+            ExpenseCriteria criteria);
 
-	public abstract List<CategorySummary> getExpenseTotal(
-			ExpenseCriteria criteria);
+	List<CategorySummary> getExpenseTotal(
+            ExpenseCriteria criteria);
 
     CategorySummary getCategorySummaryByMonthYear(ExpenseCriteria criteria);
 }

@@ -57,7 +57,7 @@ public  class TestHelper {
         toBuild.setDescription(description);
         toBuild.setDetail(detail);
         toBuild.setAmount(amount);
-
+        toBuild.setRounded(false);
         return toBuild;
     }
 }

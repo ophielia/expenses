@@ -30,10 +30,10 @@ public interface RawTransactionRepository extends JpaRepository<RawTransaction, 
 
 
     @Query(value = "SELECT min(at.transdate) FROM RawTransaction at")
-    public Date getFirstTransDate();
+    Date getFirstTransDate();
 
     @Query(value = "SELECT max(at.transdate) FROM RawTransaction at")
-    public Date getMostRecentTransDate();
+    Date getMostRecentTransDate();
 
 	@Query("select trans from RawTransaction as trans where trans.amount = :amount and trans.transdate = :transdate and trans.description = :description ")
 	List<RawTransaction> findTransDuplicates(@Param("amount") Double amount,@Param("transdate") Date transdate,@Param("description") String description);
