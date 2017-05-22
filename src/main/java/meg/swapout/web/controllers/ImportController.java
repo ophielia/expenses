@@ -15,7 +15,6 @@ public class ImportController {
 
     private final ImportManager importManager;
 
-
     @Autowired
     public ImportController(ImportManager importManager) {
         this.importManager = importManager;

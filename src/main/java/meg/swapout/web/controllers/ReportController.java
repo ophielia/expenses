@@ -185,7 +185,7 @@ public class ReportController {
 	private ReportCriteria getDefaultCriteria() {
 		ReportCriteria criteria = new ReportCriteria();
 		criteria.setDaterangetype(DateRangeType.CurrentMonth);
-		criteria.setBreakoutLevel(new Long(2));
+		criteria.setBreakoutLevel(2L);
 		criteria.setExcludeNonExpense(true);
 
 		return criteria;

@@ -23,6 +23,7 @@ public interface FileConfig {
 		public static final int Xml = 3;
 	}
 
+
 	int getFileType();
 
 	int getStartLine();

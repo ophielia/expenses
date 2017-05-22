@@ -73,6 +73,23 @@ public class ExpenseListController {
 		return "expenses";
 	}
 
+	@RequestMapping(method = RequestMethod.POST, produces = "text/html",params = {"unspentCash"})
+	public String setUnspentCash(ExpenseListModel model,Model uiModel,HttpServletRequest request) {
+		ExpenseCriteria criteria = model.getSearchCriteria();
+		Category unspent = categoryService.getCategoryByName("Cash - unspent");
+		criteria.setCategory(unspent);
+		HttpSession session = request.getSession();
+		session.setAttribute(sessioncriteria, criteria);
+
+		model.setSearchCriteria(criteria);
+		List<ExpenseDao> list = searchService.getExpenses(criteria);
+		model.setExpenses(list);
+
+		uiModel.addAttribute("expenseModel",model);
+
+		return "expenses";
+	}
+
 	@RequestMapping(method = RequestMethod.POST,params="sort" ,produces = "text/html")
 	public String sortExpenses(@RequestParam("sortField") String newSort, ExpenseListModel model,Model uiModel,HttpServletRequest request) {
 
@@ -160,39 +177,6 @@ public class ExpenseListController {
 		return "redirect:/expense/list";
 	}
 
-	/*
-
-	
-	@RequestMapping(method = RequestMethod.PUT, params = "batchQuickGroup",produces = "text/html")
-	public String updateMultiQuickGroups(@ModelAttribute("expenseListModel") ExpenseListModel model,Model uiModel,BindingResult bindingResult,HttpServletRequest request) {
-		ExpenseCriteria criteria = model.getSearchCriteria();
-		HttpSession session = request.getSession();
-		session.setAttribute(sessioncriteria,criteria);
-		
-		// error checking here
-		modelValidator.validateUpdateQuickGroup(model, bindingResult);
-		
-		
-		// get expenses to update
-		List<String> toupdate = model.getCheckedExpenseIds();
-		if (bindingResult.hasErrors()) {
-			// retrieve and set list
-			List<ExpenseDao> list = searchService.getExpenses(criteria);
-			model.setExpenses(list);		
-			// return
-			return "expenses";
-		}
-		
-		// update expenses
-		transService.assignQuickGroupToTransactionDetails(model.getBatchQuickgroup(), toupdate);
-		
-		// retrieve and set list
-		List<ExpenseDao> list = searchService.getExpenses(criteria);
-		model.setExpenses(list);		
-		// return
-		return "expenses";
-	}
-*/
 	private ExpenseCriteria getDefaultCriteria() {
 		ExpenseCriteria criteria = new ExpenseCriteria();
 		criteria.setDateRangeByType(DateRangeType.CurrentMonth);
