@@ -251,15 +251,20 @@ public class YearlyReportData extends BankReportData {
 				}
 
 				ReportElement re;
-				if (category.getId().longValue() == 57) {
-					re = processMonthlySubCats(cpycriteria, headers, monthtags,
+				// check if we want to run a direct subcat version here
+				Integer allSubcatCount = categoryService.getAllSubcategoriesCount(category);
+				if (allSubcatCount > 10) {
+					// run for direct subcategories only
+					re = processMonthlySubCats(cpycriteria.clone(), headers, monthtags,
 							monthtaglkup, catlvl, totalscolumn, monthcount,
 							avgpermonthcol);
-				} else {
-					re = processDetailedMonthlySubCats(cpycriteria, headers,
-							monthtags, monthtaglkup, catlvl, totalscolumn,
-							monthcount, avgpermonthcol);
+					// add ReportElements object to List
+					reports.add(re);
+
 				}
+				re = processDetailedMonthlySubCats(cpycriteria, headers,
+						monthtags, monthtaglkup, catlvl, totalscolumn,
+						monthcount, avgpermonthcol);
 
 				if (re != null) {
 					// add ReportElements object to List
@@ -1203,6 +1208,7 @@ return null;
 				// set dates in criteria
 				cpycriteria.setDateStart(startdate);
 				cpycriteria.setDateEnd(enddate);
+				cpycriteria.setShowSubcats(true);
 				// retrieve monthly expense total
 				/*
 				 * orig List<CategorySummary> rawresults = searchService

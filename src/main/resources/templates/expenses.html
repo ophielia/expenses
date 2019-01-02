@@ -93,7 +93,7 @@
                             <option th:each="transtype : ${T(meg.swapout.expense.services.TransactionType).values()}"
                                     th:value="${transtype}" th:text="${transtype.displayName}"></option>
                         </select></div>
-                        <div class="col-md-2"><input type="checkbox"/> include subcategories</div>
+                        <div class="col-md-2"><input th:field="*{showSubcats}" type="checkbox"/> include subcategories</div>
                     </div>
                     <div class="row">
                         <div class="col-md-8"></div>

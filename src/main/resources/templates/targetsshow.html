@@ -13,29 +13,23 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <h2>Monthly Target</h2>
+            <h2 th:text="${target.type} + ' Target'"></h2>
             <form class="form-horizontal">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Name:</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static" th:text="${transaction.name}">name</p></div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Description:</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static" th:text="${transaction.description}">description</p>
-                    </div>
+                        <p class="form-control-static" th:text="${target.name}">name</p></div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Type:</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static" th:text="${transaction.type}">type</p>
+                        <p class="form-control-static" th:text="${target.type}">type</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Tag:</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static" th:text="${transaction.tag}">tag</p>
+                        <p class="form-control-static" th:text="${target.tag}">tag</p>
                     </div>
                 </div>
                 <hr />
@@ -48,7 +42,7 @@
                         <th></th>
                         <th></th>
                     </tr>
-                    <tr th:each="detail : ${transaction.targetdetails}">
+                    <tr th:each="detail : ${target.targetdetails}">
                         <td th:text="${detail.id}">${detail.id}</td>
                         <td th:text="${detail.category.name}">name</td>
                         <td th:text="${detail.amount}">description</td>

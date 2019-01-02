@@ -177,13 +177,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public HashMap<Long, Category> getCategoriesAsMap() {
-        return getCategoriesAsMap(false);
-    }
-
-    @Override
-    public Category getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
+    public Integer getAllSubcategoriesCount(Category category) {
+        List<CategoryLevel> allSubCats = getAllSubcategories(category);
+        if (allSubCats != null) {
+            return allSubCats.size();
+        }
+        return 0;
     }
 
     private HashMap<Long, Category> getCategoriesAsMap(boolean exclNonDisp) {

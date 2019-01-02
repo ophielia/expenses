@@ -39,10 +39,16 @@ public class TargetController {
         return "monthlytargets";
     }
 
+    @RequestMapping(value = "/yearly", method = RequestMethod.GET)
+    public String listYearly(Model model) {
+        model.addAttribute("targets", targetService.listAllTargets(TargetType.Yearly));
+        return "yearlytargets";
+    }
+
     @RequestMapping("/{id}")
     public String showTarget(@PathVariable Long id, Model model) {
         model.addAttribute("target", targetService.getTargetById(id));
-        return "monthlytargetsshow";
+        return "targetsshow";
     }
 
     @RequestMapping("/delete/{id}")
@@ -95,12 +101,24 @@ public class TargetController {
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
     public String saveTarget(@PathVariable Long id, TargetModel targetModel, Model model) {
-        Target target = targetModel.getTarget();
+        Target input = targetModel.getTarget();
+        Target target = targetService.getTargetById(id);
+        copyInputIntoTarget(input, target);
         List<TargetDetail> details = targetModel.getDetails();
         target.setTargetdetails(details);
 
         targetService.saveTarget(target);
+        targetModel.setTarget(target);
         return list(model);
+    }
+
+    private void copyInputIntoTarget(Target input, Target target) {
+        target.setDescription(input.getDescription());
+        target.setIsdefault(input.getIsdefault());
+        target.setName(input.getName());
+        target.setDescription(input.getDescription());
+        target.setTag(input.getTag());
+
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST, params = {"editLine"})
