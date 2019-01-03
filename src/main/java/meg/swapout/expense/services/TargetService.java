@@ -21,4 +21,8 @@ public interface TargetService {
     Target loadTargetForMonth(String month);
 
     Target loadTargetForYear(String year);
+
+     Target getDefaultTargetGroup(TargetType targettype);
+
+    Long copyTargetGroup(TargetType targettype);
 }

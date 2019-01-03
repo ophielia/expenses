@@ -33,8 +33,15 @@ public class TargetController {
     @Autowired
     CategoryService categoryService;
 
+    public String list(Model model, TargetType targetType) {
+        if (TargetType.Monthly.equals(targetType)) {
+            return listMonthly(model);
+        }
+return listYearly(model);
+    }
+
     @RequestMapping(value = "/monthly", method = RequestMethod.GET)
-    public String list(Model model) {
+    public String listMonthly(Model model) {
         model.addAttribute("targets", targetService.listAllTargets(TargetType.Monthly));
         return "monthlytargets";
     }
@@ -53,11 +60,32 @@ public class TargetController {
 
     @RequestMapping("/delete/{id}")
     public String deleteTarget(@PathVariable Long id, Model model) {
+        Target target = targetService.getTargetById(id);
+        TargetType type = target.getType();
         // create model
         targetService.deleteTarget(id);
 
-        return list(model);
+        return list(model,type);
     }
+
+
+    private String createTarget(TargetType targetType,Model model) {
+        // create target
+        Long newId = targetService.copyTargetGroup(targetType);
+
+        return showTarget(newId,model);
+    }
+
+    @RequestMapping("/new/monthly")
+    public String createMonthlyTarget(Model model) {
+        return createTarget(TargetType.Monthly,model);
+    }
+
+    @RequestMapping("/new/yearly")
+    public String createYearlyTarget(Model model) {
+        return createTarget(TargetType.Yearly,model);
+    }
+
 
     @RequestMapping("/edit/{id}")
     public String beginEditTarget(@PathVariable Long id, Model model) {
@@ -109,8 +137,10 @@ public class TargetController {
 
         targetService.saveTarget(target);
         targetModel.setTarget(target);
-        return list(model);
+        return list(model, target.getType());
     }
+
+
 
     private void copyInputIntoTarget(Target input, Target target) {
         target.setDescription(input.getDescription());

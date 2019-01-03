@@ -32,4 +32,6 @@ public interface TargetRepository extends
 
 	@Query("select tgdao from Target as tgdao where tgdao.isdefault = true and tgdao.type = :targettype")
 	Target findDefaultTargetByType(@Param("targettype") TargetType targettype);
+
+
 }
