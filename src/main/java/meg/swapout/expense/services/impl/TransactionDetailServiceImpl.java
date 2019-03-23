@@ -48,7 +48,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 
     @Override
     public CategorizedTransaction getCategorizedTransactionById(Long id) {
-        return categorizedTransactionRepository.findOne(id);
+        return categorizedTransactionRepository.findById(id).get();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
                 }
             }
             if (toDelete.size() > 0) {
-                categorizedTransactionRepository.delete(toDelete);
+                categorizedTransactionRepository.deleteAll(toDelete);
             }
 
 
@@ -104,7 +104,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
         for (CategorizedTransaction detail : details) {
             detail.setBanktrans(transaction);
         }
-        List<CategorizedTransaction> toReturn = categorizedTransactionRepository.save(details);
+        List<CategorizedTransaction> toReturn = categorizedTransactionRepository.saveAll(details);
 
         transaction.setHascat(true);
         rawTransactionRepo.save(transaction);
@@ -176,7 +176,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
                 // make new cat transaction
                 CategorizedTransaction categorizedTransaction = new CategorizedTransaction();
                 Category category = categoryService.getCategoryById(expense.getCatid());
-                RawTransaction rawtrans = transactionRepository.findOne(expense.getTransid());
+                RawTransaction rawtrans = transactionRepository.findById(expense.getTransid()).get();
                 categorizedTransaction.setCategory(category);
                 categorizedTransaction.setBanktrans(rawtrans);
                 categorizedTransaction.setCreatedon(new Date());
@@ -197,7 +197,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     private void assignCategory(Long transid, Category category) {
         // lookup BankTransaction
 
-        RawTransaction bankta = transactionRepository.findOne(transid);
+        RawTransaction bankta = transactionRepository.findById(transid).get();
 
         // begin creating CategorizedTransaction based upon BankTransaction
         CategorizedTransaction catta = new CategorizedTransaction();
@@ -217,7 +217,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     @Transactional
     private void updateCategoryExp(Long catexpid, Category category) {
         // retrieve CategoryExpense
-        CategorizedTransaction catexp = catTransRep.findOne(catexpid);
+        CategorizedTransaction catexp = catTransRep.findById(catexpid).get();
         // update with new catid
         catexp.setCategory(category);
         // persist change
@@ -235,13 +235,13 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
             // loop through selected list
             for (ExpenseDao expense : toupdate) {
                 // get bank transaction
-                RawTransaction banktrans = transactionRepository.findOne(expense.getTransid());
+                RawTransaction banktrans = transactionRepository.findById(expense.getTransid()).get();
 
                 // delete existing expense details
                 List<CategorizedTransaction> expdetails = getCategoryExpForTrans(banktrans.getId());
                 if (expdetails != null && expdetails.size() > 0) {
                     // delete db expense details
-                    catTransRep.delete(expdetails);
+                    catTransRep.deleteAll(expdetails);
                 }
 
                 // update bankta (hascat true)
@@ -259,7 +259,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
                     for (CategorizedTransaction exp : newdetails) {
                         exp.setBanktrans(banktrans);
                     }
-                    catTransRep.save(newdetails);
+                    catTransRep.saveAll(newdetails);
                 }
 
             }
@@ -338,7 +338,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     @Override
     public void assignCategoryToTransaction(Long transid, Category cat) {
         // lookup BankTransaction
-        RawTransaction transaction = transactionRepository.findOne(transid);
+        RawTransaction transaction = transactionRepository.findById(transid).get();
 
         // begin creating CategorizedTransaction based upon BankTransaction
         CategorizedTransaction detail = new CategorizedTransaction();
@@ -419,7 +419,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
     }
 
     private List<CategorizedTransaction> getCategoryExpForTrans(Long transid) {
-        RawTransaction trans = transactionRepository.findOne(transid);
+        RawTransaction trans = transactionRepository.findById(transid).get();
         return catTransRep.findByBankTrans(trans);
     }
 

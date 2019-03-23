@@ -66,7 +66,7 @@ class BankTransactionServiceImpl implements BankTransactionService {
         if (id == null) {
             return null;
         }
-        return rawTransactionRepository.findOne(id);
+        return rawTransactionRepository.findById(id).get();
     }
 
     @Override

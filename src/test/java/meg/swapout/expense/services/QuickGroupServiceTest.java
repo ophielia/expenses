@@ -83,7 +83,7 @@ public class QuickGroupServiceTest {
         savedQuickGroup.setGroupdetails(savedDetails);
 
         // expect
-        expect(mockQuickGroupRepository.findOne(11L)).andReturn(dbQuickGroup);
+        expect(mockQuickGroupRepository.findById(11L).get()).andReturn(dbQuickGroup);
         expect(mockQuickGroupRepository.save(EasyMock.capture(quickGroupCapture))).andReturn(savedQuickGroup);
 
         // replay
@@ -122,7 +122,7 @@ public class QuickGroupServiceTest {
         savedQuickGroup.setGroupdetails(savedDetails);
 
         // expect
-        expect(mockQuickGroupRepository.findOne(11L)).andReturn(dbQuickGroup);
+        expect(mockQuickGroupRepository.findById(11L).get()).andReturn(dbQuickGroup);
         expect(mockQuickGroupRepository.save(toSaveQuickGroup)).andReturn(savedQuickGroup);
 
         // replay

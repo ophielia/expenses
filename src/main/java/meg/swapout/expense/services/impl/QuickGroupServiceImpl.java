@@ -45,7 +45,7 @@ public class QuickGroupServiceImpl implements QuickGroupService {
 
     @Override
     public QuickGroup getQuickGroupById(Long id) {
-        return quickGroupRepository.findOne(id);
+        return quickGroupRepository.findById(id).get();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class QuickGroupServiceImpl implements QuickGroupService {
             }
 
             // get quick group from db
-            QuickGroup dbGroup = quickGroupRepository.findOne(quickGroup.getId());
+            QuickGroup dbGroup = quickGroupRepository.findById(quickGroup.getId()).get();
 
             // squash details from db quickgroup
             HashMap<Long, QuickGroupDetail> dbMap = squashDetails(dbGroup.getGroupdetails());
@@ -91,7 +91,7 @@ public class QuickGroupServiceImpl implements QuickGroupService {
                 }
             }
             if (toDelete.size() > 0) {
-                quickGroupDetailRepository.delete(toDelete);
+                quickGroupDetailRepository.deleteAll(toDelete);
             }
 
             // set details in object

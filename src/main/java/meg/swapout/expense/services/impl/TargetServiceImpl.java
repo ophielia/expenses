@@ -34,7 +34,7 @@ public class TargetServiceImpl implements TargetService {
 
     @Override
     public Target getTargetById(Long id) {
-        return targetRepository.findOne(id);
+        return targetRepository.findById(id).get();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class TargetServiceImpl implements TargetService {
             }
 
             // get quick group from db
-            Target dbGroup = targetRepository.findOne(target.getId());
+            Target dbGroup = targetRepository.findById(target.getId()).get();
 
             // squash details from db quickgroup
             HashMap<Long, TargetDetail> dbMap = squashDetails(dbGroup.getTargetdetails());
@@ -81,7 +81,7 @@ public class TargetServiceImpl implements TargetService {
                 }
             }
             if (toDelete.size() > 0) {
-                targetDetailRepository.delete(toDelete);
+                targetDetailRepository.deleteAll(toDelete);
             }
 
             // set details in object

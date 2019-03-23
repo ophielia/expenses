@@ -5,7 +5,8 @@ import meg.swapout.expense.domain.Target;
 import meg.swapout.expense.domain.TargetDetail;
 import meg.swapout.expense.repositories.TargetRepository;
 import meg.swapout.expense.services.TargetType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class TargetsLoader extends AbstractLoader {
 
 
-    private Logger log = Logger.getLogger(TargetsLoader.class);
+    private Logger log = LoggerFactory.getLogger(TargetsLoader.class);
 
     @Autowired
     public void setTargetRepository(TargetRepository targetRepository) {

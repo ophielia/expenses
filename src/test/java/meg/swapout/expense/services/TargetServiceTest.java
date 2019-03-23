@@ -82,7 +82,7 @@ public class TargetServiceTest {
         savedTarget.setTargetdetails(savedDetails);
 
         // expect
-        expect(mockTargetRepository.findOne(11L)).andReturn(dbTarget);
+        expect(mockTargetRepository.findById(11L).get()).andReturn(dbTarget);
         expect(mockTargetRepository.save(EasyMock.capture(targetCapture))).andReturn(savedTarget);
 
         // replay
@@ -121,7 +121,7 @@ public class TargetServiceTest {
         savedTarget.setTargetdetails(savedDetails);
 
         // expect
-        expect(mockTargetRepository.findOne(11L)).andReturn(dbTarget);
+        expect(mockTargetRepository.findById(11L).get()).andReturn(dbTarget);
         expect(mockTargetRepository.save(toSaveTarget)).andReturn(savedTarget);
 
         // replay

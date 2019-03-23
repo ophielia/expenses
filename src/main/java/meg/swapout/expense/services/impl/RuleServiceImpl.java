@@ -25,7 +25,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public Rule getRuleById(Long id) {
-        return ruleRepository.findOne(id);
+        return ruleRepository.findById(id).get();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public void deleteRule(Long id) {
-        Rule rule = ruleRepository.findOne(id);
+        Rule rule = ruleRepository.findById(id).get();
         ruleRepository.delete(rule);
     }
 }

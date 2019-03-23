@@ -86,7 +86,7 @@ public class TransactionDetailServiceTest {
         savedQuickGroup.setGroupdetails(savedDetails);
 
         // expect
-        expect(mockTransactionRepository.findOne(11L)).andReturn(dbQuickGroup);
+        expect(mockTransactionRepository.findById(11L)).andReturn(dbQuickGroup);
         expect(mockTransactionRepository.save(EasyMock.capture(quickGroupCapture))).andReturn(savedQuickGroup);
 
         // replay
@@ -126,7 +126,7 @@ public class TransactionDetailServiceTest {
         savedQuickGroup.setGroupdetails(savedDetails);
 
         // expect
-        expect(mockTransactionRepository.findOne(11L)).andReturn(dbQuickGroup);
+        expect(mockTransactionRepository.findById(11L)).andReturn(dbQuickGroup);
         expect(mockTransactionRepository.save(toSaveQuickGroup)).andReturn(savedQuickGroup);
 
         // replay

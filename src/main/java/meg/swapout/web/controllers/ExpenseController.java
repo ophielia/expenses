@@ -82,7 +82,7 @@ public class ExpenseController {
 
     private ExpenseModel fillExpenseModel(Long id, ExpenseModel expenseModel) {
         // get transaction
-        RawTransaction rawTransaction = transactionRepository.findOne(id);
+        RawTransaction rawTransaction = transactionRepository.findById(id).get();
 
         // get model - or create, if empty
         if (expenseModel == null) {

@@ -1,10 +1,10 @@
 package meg.swapout.bootstrap;
 
 import meg.swapout.expense.domain.Category;
-import meg.swapout.expense.domain.CategoryRelationship;
 import meg.swapout.expense.domain.Rule;
 import meg.swapout.expense.repositories.CategoryRepository;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -12,12 +12,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 public class CategoryAndRuleLoader extends AbstractLoader {
 
 
-
-
-
-
-
-    private final Logger log = Logger.getLogger(CategoryAndRuleLoader.class);
+    private final Logger log = LoggerFactory.getLogger(CategoryAndRuleLoader.class);
 
     @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {

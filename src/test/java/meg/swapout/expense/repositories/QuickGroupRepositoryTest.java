@@ -44,7 +44,7 @@ import static org.junit.Assert.assertEquals;
             entityManager.persist(quickGroup);
             Long searchId = quickGroup.getId();
 
-            QuickGroup quickGroup1 = quickGroupRepository.findOne(searchId);
+            QuickGroup quickGroup1 = quickGroupRepository.findById(searchId).get();
             Assert.assertNotNull(quickGroup1);
             assertEquals(new Long(searchId), quickGroup.getId());
         }
@@ -103,7 +103,7 @@ import static org.junit.Assert.assertEquals;
         // get id
         Long savedId = savedQuickGroup.getId();
         // get group
-        QuickGroup quickGroup = quickGroupRepository.findOne(savedId);
+        QuickGroup quickGroup = quickGroupRepository.findById(savedId).get();
         List<QuickGroupDetail> details = quickGroup.getGroupdetails();
 
         // remove one detail

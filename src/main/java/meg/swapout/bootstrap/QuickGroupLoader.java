@@ -1,9 +1,13 @@
 package meg.swapout.bootstrap;
 
-import meg.swapout.expense.domain.*;
+import meg.swapout.expense.domain.Category;
+import meg.swapout.expense.domain.CategoryRelationship;
+import meg.swapout.expense.domain.QuickGroup;
+import meg.swapout.expense.domain.QuickGroupDetail;
 import meg.swapout.expense.repositories.CategoryRepository;
 import meg.swapout.expense.repositories.QuickGroupRepository;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 
@@ -13,7 +17,7 @@ import java.util.List;
 //@Component
 public class QuickGroupLoader extends AbstractLoader {
 
-    private final Logger log = Logger.getLogger(QuickGroupLoader.class);
+    private final Logger log = LoggerFactory.getLogger(QuickGroupLoader.class);
 
     @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {
