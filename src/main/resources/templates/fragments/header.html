@@ -7,50 +7,37 @@
 
 <div class="container">
     <div th:fragment="header">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#" th:href="@{/expense/list}">Expenses</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li><a href="#" th:href="@{/import}">Import</a></li>
-                    <li><a href="#" th:href="@{/rounding/list}">Round</a></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a th:href="@{/quickgroup}">Quick Groups</a></li>
-                            <li><a th:href="@{/category}">Categories</a></li>
-                            <li><a th:href="@{/category/grid}">Category Grid</a></li>
-                            <li><a th:href="@{/rule}">Rules</a></li>
-                            <li><a th:href="@{/ruleassignment}">Assign By Rules</a></li>
+        <nav id="primary_nav_wrap">
+            <ul>
+                <li class="current-menu-item"><a th:href="@{/expense/list}">Expenses</a></li>
+                <li class="current-menu-item"><a th:href="@{/import}">Import</a></li>
+                <li class="current-menu-item"><a th:href="@{/rounding/list}">Round</a></li>
+                <li><a href="#">Tools</a>
+                    <ul>
+                        <li><a th:href="@{/quickgroup}">Quick Groups</a></li>
+                        <li><a th:href="@{/category}">Categories</a></li>
+                        <li><a th:href="@{/category/grid}">Category Grid</a></li>
+                        <li><a th:href="@{/rule}">Rules</a></li>
+                        <li><a th:href="@{/ruleassignment}">Assign By Rules</a></li>
+                    </ul>
+                </li>
+                <li><a href="/target/monthly">Targets</a>
+                    <ul>
+                        <li><a href="/target/monthly">Monthly Targets</a></li>
+                        <li><a href="/target/yearly">Yearly Targets</a></li>
+                    </ul>
+                </li>
+                <li><a href="/reports?reporttype=FullMonth">Reports</a>
+                    <ul>
+                        <li><a href="/reports?reporttype=FullMonth">Full Month</a>
+                        <li><a href="/reports?reporttype=Yearly">Yearly</a>
+                        <li><a href="/reports?reporttype=YearlyTarget">Yearly Target</a>
+                        <li><a href="/reports?reporttype=MonthlyTarget">Monthly Target</a>
+                    </ul>
 
-                        </ul>
-                    </li>
+                </li>
 
-
-                    <li><a class="dropdown-toggle" data-toggle="dropdown" href="@{/target/monthly}">Targets</a>
-                        <ul class="dropdown-menu">
-                            <li><a th:href="@{/target/monthly}">Monthly Targets</a></li>
-                            <li><a th:href="@{/target/yearly}">Yearly Targets</a></li>
-
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="@{/reports?reporttype=FullMonth}">Reports
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a th:href="@{/reports?reporttype=FullMonth}">Full Month Report</a></li>
-                            <li><a th:href="@{/reports?reporttype=Yearly}">Yearly</a></li>
-                            <li><a th:href="@{/reports?reporttype=YearlyTarget}">Yearly Target</a></li>
-                            <li><a th:href="@{/reports?reporttype=MonthlyTarget}">Monthly Target</a></li>
-
-                        </ul>
-                    </li>
-
-                </ul>
-
-            </div>
+            </ul>
         </nav>
     </div>
 </div>

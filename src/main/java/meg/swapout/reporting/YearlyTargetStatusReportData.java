@@ -124,7 +124,7 @@ public class YearlyTargetStatusReportData extends BankReportData {
 		// value
 
 		HashMap<String, ArrayList<TargetProgressDisp>> runningTotals = prepareComparisonTable(
-				criteria, lastdatetag);
+				criteria, lastdatetag, true);
 
 		// loop through categories
 		for (CategoryLevel catlvl : categories) {

@@ -47,4 +47,6 @@ public interface CategoryService {
     HashMap<Long, Category> getCategoriesAsMap();
 
     Category getCategoryByName(String othercategoryname);
+
+    Integer getAllSubcategoriesCount(Category category);
 }

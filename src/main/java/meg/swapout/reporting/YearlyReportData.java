@@ -216,7 +216,7 @@ public class YearlyReportData extends BankReportData {
 		ExpenseCriteria cpycriteria = criteria.clone();
 
 		// initialize MonthTag list and lkup
-		List<String> monthtags = getMonthTagList(cpycriteria, "MM-yyyy");
+		List<String> monthtags = getMonthTagList(cpycriteria, "MM-yyyy", false );
 		Hashtable<String, Integer> monthtaglkup = new Hashtable<String, Integer>();
 
 		// create headers row, find values for monthcount, and set totalscolumn

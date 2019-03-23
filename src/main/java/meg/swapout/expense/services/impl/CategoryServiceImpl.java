@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findOne(id);
+        return categoryRepository.findById(id).get();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        Category category = categoryRepository.findOne(id);
+        Category category = categoryRepository.findById(id).get();
         categoryRepository.delete(category);
     }
 
@@ -63,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
                 catRelRep.findByChild(id);
 
         if (result != null && result.getParentId()>0L) {
-           return categoryRepository.findOne(result.getParentId());
+           return categoryRepository.findById(result.getParentId()).get();
         }
 
         return null;
@@ -143,7 +143,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryLevel getAsCategoryLevel(Long categoryid) {
         // service of same name
         // get CategoryDao
-        Category catd = categoryRepository.findOne(categoryid);
+        Category catd = categoryRepository.findById(categoryid).get();
         // get CategoryLevel number
         int catlvl = getCategoryLevel(catd);
         // create CategoryLevel Object and return
@@ -173,6 +173,16 @@ public class CategoryServiceImpl implements CategoryService {
             return result.getParentId();
 
         }
+        return null;
+    }
+
+    @Override
+    public HashMap<Long, Category> getCategoriesAsMap() {
+        return null;
+    }
+
+    @Override
+    public Category getCategoryByName(String othercategoryname) {
         return null;
     }
 

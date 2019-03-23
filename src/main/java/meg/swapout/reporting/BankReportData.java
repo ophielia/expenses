@@ -214,7 +214,7 @@ public abstract class BankReportData implements ReportData {
 	}
 
 	public List<String> getMonthTagList(ExpenseCriteria criteria,
-			String dateformat) {
+										String dateformat, boolean includeMidMonth) {
 		// initialize formatter
 		SimpleDateFormat thisformat = new SimpleDateFormat(dateformat,
 				Locale.US);
@@ -236,6 +236,13 @@ public abstract class BankReportData implements ReportData {
 		while (start.before(end)) {
 			String value = thisformat.format(start.getTime());
 			tags.add(value);
+			if (includeMidMonth) {
+				start.set(Calendar.DAY_OF_MONTH, 15);
+				if (start.before(end)) {
+				value = thisformat.format(start.getTime());
+				tags.add(value);
+				}
+			}
 			start.add(Calendar.MONTH, 1);
 			start.set(Calendar.DAY_OF_MONTH, 1);
 		}
@@ -388,7 +395,7 @@ public abstract class BankReportData implements ReportData {
 		// prepare month hashtable (monthkey as key, and TargetProgressDisp as
 		// value
 		HashMap<String, ArrayList<TargetProgressDisp>> runningTotals = prepareComparisonTable(
-				criteria, lastdatetag);
+				criteria, lastdatetag, false);
 		// get categories
 		List<CategoryLevel> categories = categoryService
 				.getCategoriesUpToLevel(1);
@@ -484,10 +491,10 @@ return re;
 			if (targetdisps != null) {
 				for (TargetProgressDisp targetprog:targetdisps) {
 					double graphvalue = targetprog.getAmountSpent()
-							/ targetprog.getAmountTargeted();
+							/ Math.max(targetprog.getAmountTargeted(),1);
 					if (targetprog.spendingExceedsTarget()) {
 						graphvalue = graphvalue - 1.0;
-					} else {
+					} else if (graphvalue != 0.0){
 						graphvalue = 1.0 - graphvalue;
 						graphvalue = graphvalue * -1.0;
 					}
@@ -774,10 +781,11 @@ return re;
 	 * month.#
 	 * 
 	 * @param criteria
+	 * @param includeMidMonth
 	 * @return
 	 */
 	protected HashMap<String, ArrayList<TargetProgressDisp>> prepareComparisonTable(
-			ExpenseCriteria criteria, String lastdatetag) {
+			ExpenseCriteria criteria, String lastdatetag, boolean includeMidMonth) {
 		// prepare criteria for taglist call
 		Date origbegin = criteria.getDateStart();
 		Date origend = criteria.getDateEnd();
@@ -791,9 +799,8 @@ return re;
 		// initialize the HashMap
 		HashMap<String, ArrayList<TargetProgressDisp>> runningTotals = new HashMap<String, ArrayList<TargetProgressDisp>>();
 		// get month tag list
-		List<String> monthtags = getMonthTagList(criteria, "MM-dd-yyyy");
-		// remove January - first month of year doesn't make sense
-		monthtags.remove(0);
+		List<String> monthtags = getMonthTagList(criteria, "MM-dd-yyyy", includeMidMonth );
+
 		// add last date tag
 		monthtags.add(lastdatetag);
 		// put month tags into hashtable
@@ -961,7 +968,7 @@ return re;
 			HashMap<String, Integer> taglkup = new HashMap<String, Integer>();
 			if (detailedchart) {
 				List<String> monthtags = getMonthTagList(criteria,
-						dateformatstr);
+						dateformatstr, false);
 				int position = headers.getColumns().size();
 				for (String tag : monthtags) {
 					taglkup.put(tag, new Integer(position));
