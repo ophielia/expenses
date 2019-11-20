@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" 
+xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" 
+xmlns:c="http://java.sun.com/jsp/jstl/core" 
+xmlns:spring="http://www.springframework.org/tags" 
+xmlns:form="http://www.springframework.org/tags/form" 
+xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" 
+xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+   
+
+	<spring:message code="label_rpt_reportlist" var="pagetitle"/>
+	<spring:message code="bank_rpt_monthlytarget" var="lmonthlytarget"/>
+	<spring:message code="bank_rpt_yearlytargetstatus" var="lyearlytarget"/>
+	<spring:message code="bank_rpt_fullmonth" var="lfullmonth"/>
+	<spring:message code="bank_rpt_yearly" var="lyearly"/>
+	
+    <spring:url value="/reports?reporttype=1" var="monthlytargeturl"/>
+    <spring:url value="/reports?reporttype=2" var="yearlytargeturl"/>
+    <spring:url value="/reports?reporttype=3" var="fullmonthurl"/>
+    <spring:url value="/reports?reporttype=4" var="yearlyurl"/>
+    <h1>${pagetitle}</h1>
+<br />
+<a href="${monthlytargeturl}">${lmonthlytarget}</a> <br /> 
+<a href="${yearlytargeturl}">${lyearlytarget}</a> <br /> 
+<a href="${fullmonthurl}">${lfullmonth}</a> <br /> 
+<a  href="${yearlyurl}">${lyearly}</a><br />
+
+<hr />
+
+<br />
+<br />
+<br />
+
+<a href="#">Summary</a><br />
+<a  href="#">Total By Month</a><br />
+<a  href="#">Yearly Report</a><br />
+<a  href="#">Categories By Month</a><br />
+<a  href="#">Category Over Time</a><br />
+<a  href="#">Category Breakout</a><br />
+
+
+</div>

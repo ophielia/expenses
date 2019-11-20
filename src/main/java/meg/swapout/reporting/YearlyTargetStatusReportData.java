@@ -18,7 +18,7 @@ import meg.swapout.reporting.elements.TargetProgressDisp;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
@@ -435,7 +435,7 @@ public class YearlyTargetStatusReportData extends BankReportData {
 				+ (new Date()).getTime() + ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 550, 550);
+			ChartUtils.saveChartAsPNG(imagefile, chart, 550, 550);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -21,7 +21,7 @@ public interface RawTransactionRepository extends JpaRepository<RawTransaction, 
 
 
 
-	@Query("select b from RawTransaction b where b.amount < 0 and b.hascat = false order by transdate DESC")
+	@Query("select b from RawTransaction b where b.amount < 0 and b.hascat = false and b.deleted = false order by transdate DESC")
 	List<RawTransaction> findNoCategoryExpenses();
 
 
@@ -35,6 +35,6 @@ public interface RawTransactionRepository extends JpaRepository<RawTransaction, 
     @Query(value = "SELECT max(at.transdate) FROM RawTransaction at")
     Date getMostRecentTransDate();
 
-	@Query("select trans from RawTransaction as trans where trans.amount = :amount and trans.transdate = :transdate and trans.description = :description ")
+	@Query("select trans from RawTransaction as trans where trans.amount = :amount and trans.transdate = :transdate and trans.detail = :description ")
 	List<RawTransaction> findTransDuplicates(@Param("amount") Double amount,@Param("transdate") Date transdate,@Param("description") String description);
 }

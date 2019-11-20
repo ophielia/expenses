@@ -1,10 +1,19 @@
 FROM openjdk:8-jre-alpine
+
+ENV LANG en_GB.UTF-8
+
+# JRE fails to load fonts if there are no standard fonts in the image; DejaVu is a good choice,
+# see https://github.com/docker-library/openjdk/issues/73#issuecomment-207816707
+
+RUN apk add --update ttf-dejavu && rm -rf /var/cache/apk/*
+
 VOLUME /tmp
 ARG APP_DIRECTORY=/Users/margaretmartin/projects/bankmigration
 ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes /app
+RUN mkdir -p /Users/margaretmartin/projects/generated
 EXPOSE 8080
 
 ENV DOCKERIZE_VERSION v0.6.0

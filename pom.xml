@@ -5,7 +5,7 @@
 
 	<groupId>meg.swapout</groupId>
 	<artifactId>bankmigration</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>bankmigration</name>
@@ -104,9 +104,9 @@
 
 		<!-- for charts in reports -->
 		<dependency>
-			<groupId>jfree</groupId>
+			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
-			<version>1.0.9</version>
+			<version>1.5.0</version>
 		</dependency>
 <!--
 	springboot cloud-->

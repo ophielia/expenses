@@ -480,6 +480,9 @@ public class SearchServiceImpl implements SearchService {
             whereclause.add(cb.isTrue(exp.get("rounded")));
         }
 
+        // always exclude deleted
+        whereclause.add(cb.isFalse(exp.get("deleted")));
+
         return whereclause;
     }
 

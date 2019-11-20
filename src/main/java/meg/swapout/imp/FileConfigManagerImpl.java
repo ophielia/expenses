@@ -19,7 +19,7 @@ class FileConfigManagerImpl implements FileConfigManager {
 	public FileConfig getFileConfigForClient(int clientkey) {
 		switch (clientkey) {
 		case ImportManager.ImportClient.SocGen:
-			return new SocGenFileConfig();
+			return new NewSocGenFileConfig();
 		default:
 			return null;
 		}

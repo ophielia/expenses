@@ -13,7 +13,7 @@ import meg.swapout.reporting.tools.ExpenseComparator;
 import meg.swapout.reporting.tools.UtilityComparator;
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
@@ -560,7 +560,8 @@ return re;
 				+ (new Date()).getTime() + ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 550, 550);
+
+			ChartUtils.saveChartAsPNG(imagefile, chart, 550, 550);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -720,7 +721,7 @@ return re;
 				+ (new Date()).getTime() + ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, width, height);
+			ChartUtils.saveChartAsPNG(imagefile, chart, width, height);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -767,7 +768,7 @@ return re;
 		String filename = "fullmonthsummary_" + (new Date()).getTime() + ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 500, 500);
+			ChartUtils.saveChartAsPNG(imagefile, chart, 500, 500);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1203,7 +1204,7 @@ return re;
 				+ ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 550, 550);
+			ChartUtils.saveChartAsPNG(imagefile, chart, 550, 550);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1808,7 +1809,7 @@ return re;
 		String filename = "monthlytargets_" + (new Date()).getTime() + ".png";
 		File imagefile = new File(reportCriteria.getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 550, 550);
+			ChartUtils.saveChartAsPNG(imagefile, chart, 550, 550);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

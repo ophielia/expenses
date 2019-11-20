@@ -20,7 +20,7 @@ class MapConfigManagerImpl implements MapConfigManager {
 	public MapConfig getMapConfigForClient(int clientkey) {
 		switch (clientkey) {
 		case ImportManager.ImportClient.SocGen:
-			return new SocGenMapConfig();
+			return new NewSocGenMapConfig();
 		default:
 			return null;
 		}

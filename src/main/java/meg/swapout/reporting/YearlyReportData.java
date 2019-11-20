@@ -21,7 +21,7 @@ import meg.swapout.reporting.tools.UtilityComparator;
 
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
@@ -224,7 +224,7 @@ public class YearlyReportData extends BankReportData {
 		ChartRow headers = new ChartRow();
 		headers.addColumn("Sub-Category");
 		for (String month : monthtags) {
-			Integer key = new Integer(headers.getColumnCount());
+			Integer key =headers.getColumnCount();
 			monthtaglkup.put(month, key);
 			headers.addColumn(month);
 		}
@@ -730,7 +730,7 @@ public class YearlyReportData extends BankReportData {
 				+ (new Date()).getTime() + ".png";
 		File imagefile = new File(getReportCriteria().getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 550, 550);
+			ChartUtils.saveChartAsPNG(imagefile, chart, 550, 550);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -831,7 +831,7 @@ return null;
 				CategorySummary cattotal = new CategorySummary();
 				cattotal.setCatName(catlvl.getCategory().getName());
 				for (CategorySummary catsum : totals) {
-					cattotal.addExpenseAmt(new Double(catsum.getSum()));
+					cattotal.addExpenseAmt(catsum.getSum());
 					// month key
 					// get date formatter
 					SimpleDateFormat dateformat = new SimpleDateFormat("yyyy");
@@ -865,7 +865,7 @@ return null;
 			CategorySummary catsum = iter.next();
 			double avgpermonth = catsum.getSum() / yearcount;
 			catsum.setAveragePerDivisor(avgpermonth);
-			totsum.addExpenseAmt(new Double(catsum.getSum()));
+			totsum.addExpenseAmt(catsum.getSum());
 		}
 		double avgpermonth = totsum.getSum() / yearcount;
 		totsum.setAveragePerDivisor(avgpermonth);
@@ -926,7 +926,7 @@ return null;
 		ChartRow headers = new ChartRow();
 		headers.addColumn("Sub-Category");
 		for (String year : yeartags) {
-			Integer key = new Integer(headers.getColumnCount());
+			Integer key = headers.getColumnCount();
 			yeartaglkup.put(year, key);
 			headers.addColumn(year);
 		}
@@ -1392,7 +1392,7 @@ return null;
 				+ ".png";
 		File imagefile = new File(getReportCriteria().getImageDir() + filename);
 		try {
-			ChartUtilities.saveChartAsPNG(imagefile, chart, 550, 550);
+			ChartUtils.saveChartAsPNG(imagefile, chart, 550, 550);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
