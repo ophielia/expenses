@@ -37,10 +37,11 @@ class BankTransactionServiceImpl implements BankTransactionService {
     @Override
     public boolean doesDuplicateExist(RawTransaction trans) {
         boolean exists = false;
+        String detail = trans.getDetail() != null ? trans.getDetail().trim().toLowerCase() : "";
         if (trans != null) {
             List<RawTransaction> result = rawTransactionRepository.findTransDuplicates(
                     trans.getAmount(), trans.getTransdate(),
-                    trans.getDescription());
+                    detail);
 
             if (!result.isEmpty()) {
                 // this transaction seems to already exist

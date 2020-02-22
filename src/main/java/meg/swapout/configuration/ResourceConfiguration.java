@@ -1,6 +1,8 @@
 package meg.swapout.configuration;
 
 import org.h2.server.web.WebServlet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,10 @@ public class ResourceConfiguration extends WebMvcConfigurerAdapter{
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/" };
 
+    @Value("${document.tmp.path}")
+    private String tmpdir;
+
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (!registry.hasMappingForPattern("/webjars/**")) {
@@ -23,8 +29,9 @@ public class ResourceConfiguration extends WebMvcConfigurerAdapter{
                     "classpath:/META-INF/resources/webjars/");
         }
         if (!registry.hasMappingForPattern("/generated/**")) {
+            String path = "file:" + tmpdir;
             registry.addResourceHandler("/generated/**").addResourceLocations(
-                    "file:/Users/margaretmartin/projects/generated/");
+                    path);
         }
         if (!registry.hasMappingForPattern("/**")) {
             registry.addResourceHandler("/**").addResourceLocations(
