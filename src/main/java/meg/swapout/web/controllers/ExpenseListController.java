@@ -209,7 +209,7 @@ public class ExpenseListController {
 	@ModelAttribute("categorylist")
 	protected List<Category> referenceCategoryData(HttpServletRequest request, Object command,
 												   Errors errors) throws Exception {
-		List<Category> list = categoryService.listAllCategories(false);
+		List<Category> list = categoryService.listAllCategories(true);
 		
 		
 		// return model
