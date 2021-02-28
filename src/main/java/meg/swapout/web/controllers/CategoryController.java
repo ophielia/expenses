@@ -74,6 +74,17 @@ public class CategoryController {
 
     }
 
+    @RequestMapping(value = "/displayinlist/{id}", method = RequestMethod.GET)
+    public String toggleCategoryDisplayInList(@PathVariable Long id, Category category, Model uiModel, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
+        uiModel.asMap().clear();
+
+        // save category
+        categoryService.toggleDisplayInList(category.getId());
+
+        return redirectLink;
+
+    }
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String saveCategory(Category category) {
         categoryService.updateCategory(category);

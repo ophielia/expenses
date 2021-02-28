@@ -130,6 +130,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category toggleDisplayInList(Long categoryid) {
+        Category category = categoryRepository.getOne(categoryid);
+        boolean displayInList = category.getDisplayInList() != null ? category.getDisplayInList() : false;
+        category.setDisplayInList(!displayInList);
+
+        // update category
+        return categoryRepository.save(category);
+
+    }
+
+    @Override
     public List<CategoryLevel> getCategoriesUpToLevel(int level) {
         return getSubcategoriesRecursive(new Long(0), level, 1, false);
     }

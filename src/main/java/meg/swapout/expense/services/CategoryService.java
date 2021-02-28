@@ -35,7 +35,9 @@ public interface CategoryService {
 
     Category updateCategory(Category category);
 
-    public List<CategoryLevel> getSubcategoriesUpToLevel(Long categoryid,int level);
+    Category toggleDisplayInList(Long categoryid);
+
+    List<CategoryLevel> getSubcategoriesUpToLevel(Long categoryid,int level);
 
     List<CategoryLevel> getCategoriesUpToLevel(int level);
 

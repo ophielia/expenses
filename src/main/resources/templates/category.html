@@ -14,7 +14,7 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
-                <h2>Category List</h2>
+                <h2>Category List!</h2>
                 <p style="    float: right;">
                     <a href="/category/new"><span class="glyphicon glyphicon-plus"></span></a>
                 </p>
@@ -31,7 +31,7 @@
                         <td th:text="${category.id}"><a href="/parentCategory/${parentCategory.id}">Id</a></td>
                         <td th:text="${category.name}">containing</td>
                         <td th:text="${category.description}">cat display</td>
-                        <td th:text="${category.displayInList}">parentCategory id</td>
+                        <td><a th:text="${category.displayInList}" th:href="${'/category/displayinlist/' + category.id}"></a></td>
                         <td th:text="${category.nonexpense}">line order</td>
                         <td><a th:href="${'/category/' + category.id}">View</a></td>
                         <td><a th:href="${'/category/edit/' + category.id}">Edit</a></td>
