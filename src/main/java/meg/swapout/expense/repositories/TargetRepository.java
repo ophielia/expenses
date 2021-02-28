@@ -16,10 +16,10 @@ public interface TargetRepository extends
 		JpaRepository<Target, Long>,
 		JpaSpecificationExecutor<Target> {
 
-	@Query("select tg from Target as tg where tg.type=:targettype and  tg.monthtag = :monthtag")
+	@Query("select tg from Target as tg where tg.type=:targettype and  tg.tag = :tag")
 	Target findTargetsByTypeAndMonthTag(
 			@Param("targettype") TargetType targettype,
-			@Param("monthtag") String monthtag);
+			@Param("tag") String tag);
 
 	@Query("select tg from Target as tg where tg.type=:targettype and  tg.yeartag = :yeartag")
 	List<Target> findTargetsByTypeAndYearTag(

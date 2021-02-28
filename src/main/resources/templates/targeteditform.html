@@ -26,10 +26,17 @@
                 HandleClick(event.target, 'removeLine');
             }
         );
+        $("span[id^='addDetail']").click(
+            function () {
+                HandleClickNoParam( 'addDetail');
+            }
+        );
 
     });
 
     function HandleClick(param, prefix) {
+        console.log(param + "param");
+        console.log(prefix + "prefix");
         var editIndex = getIndex(prefix, param.id);
         var inputAction = $("<input>")
             .attr("type", "hidden")
@@ -37,8 +44,21 @@
         var inputEdit = $("<input>")
             .attr("type", "hidden")
             .attr("name", "toEdit").val(editIndex);
+
+        console.log(inputAction);
+        console.log(inputAction);
         $("#targetForm").append(inputAction);
         $("#targetForm").append(inputEdit);
+
+        $("#targetForm").submit();
+    }
+
+    function HandleClickNoParam(prefix) {
+        var inputAction = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", prefix).val(prefix);
+
+        $("#targetForm").append(inputAction);
 
         $("#targetForm").submit();
     }
@@ -97,7 +117,8 @@
 
 
                 <hr />
-                <button type="submit" class="glyphicon glyphicon-plus buttonglyph" name="addDetail"/>
+                <span th:id="addDetail" class="glyphicon glyphicon-plus buttonglyph"></span>
+
                 <table class="table table-striped">
                     <tr>
                         <th>Category</th>
