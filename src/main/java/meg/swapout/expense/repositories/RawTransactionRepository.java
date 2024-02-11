@@ -36,5 +36,13 @@ public interface RawTransactionRepository extends JpaRepository<RawTransaction, 
     Date getMostRecentTransDate();
 
 	@Query("select trans from RawTransaction as trans where trans.amount = :amount and trans.transdate = :transdate and lower(trim(trans.detail)) = :description ")
-	List<RawTransaction> findTransDuplicates(@Param("amount") Double amount,@Param("transdate") Date transdate,@Param("description") String description);
+	List<RawTransaction> findExactDuplicates(@Param("amount") Double amount, @Param("transdate") Date transdate, @Param("description") String description);
+
+	@Query("select trans from RawTransaction as trans where trans.amount = :amount and trans.transdate = :transdate and lower(trim(trans.matchingLabel)) = :matchinglabel ")
+	List<RawTransaction> findPendingMatch(@Param("amount") Double amount, @Param("transdate") Date transdate, @Param("matchinglabel") String description);
+
+
+	@Query("select trans from RawTransaction as trans where trans.amount = :amount and trans.transdate = :transdate")
+	List<RawTransaction> findDateAmountMatch(@Param("amount") Double amount, @Param("transdate") Date transdate);
+
 }

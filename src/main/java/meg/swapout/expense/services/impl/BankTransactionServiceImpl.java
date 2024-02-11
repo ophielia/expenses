@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by margaretmartin on 30/03/2017.
@@ -33,22 +35,53 @@ class BankTransactionServiceImpl implements BankTransactionService {
     @Autowired
     private TransactionDetailService transactionDetailService;
 
+    final static String bookedRegEx ="CARTE X\\d{4} \\d{2}\\/\\d{2} (.*$)";
+    Pattern bookedPattern = Pattern.compile(bookedRegEx);
 
     @Override
     public boolean doesDuplicateExist(RawTransaction trans) {
+        if (trans == null) {
+            return false;
+        }
         boolean exists = false;
         String detail = trans.getDetail() != null ? trans.getDetail().trim().toLowerCase() : "";
-        if (trans != null) {
-            List<RawTransaction> result = rawTransactionRepository.findTransDuplicates(
+        List<RawTransaction> result = rawTransactionRepository.findExactDuplicates(
+                trans.getAmount(), trans.getTransdate(),
+                detail);
+
+        if (!result.isEmpty()) {
+            // this transaction seems to already exist
+            return true;
+        }
+
+        // if not a card, we're done trying to match
+        if (trans.getDescription().toLowerCase().indexOf(" carte ") < 0) {
+            return false;
+        }
+
+        // check for booked import  match with pending
+        Matcher bookedMatcher = bookedPattern.matcher(trans.getDescription());
+        String bookedLabel = bookedMatcher.group(0);
+        if (bookedLabel == null) {
+            return false;
+        }
+
+            List<RawTransaction> pendingMatch = rawTransactionRepository.findPendingMatch(
                     trans.getAmount(), trans.getTransdate(),
                     detail);
-
-            if (!result.isEmpty()) {
-                // this transaction seems to already exist
-                exists = true;
+            if ( !pendingMatch.isEmpty()) {
+                return true;
             }
-        }
-        return exists;
+
+
+        // if still unmatched
+        List<RawTransaction> lastEffort = rawTransactionRepository.findDateAmountMatch(
+                trans.getAmount(), trans.getTransdate());
+        RawTransaction found =   lastEffort.stream()
+                .filter(rt -> rt.getDescription().toLowerCase().contains(bookedLabel.toLowerCase()))
+                 .findFirst()
+                 .orElse(null);
+        return found != null;
     }
 
     @Override

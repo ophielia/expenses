@@ -1,0 +1,1 @@
+alter table banktrans add column matching_label varchar(256);

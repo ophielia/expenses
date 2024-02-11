@@ -37,7 +37,8 @@ public class RawTransaction {
 
 	private Integer source;
 
-
+	@Column(name = "matching_label")
+	private String matchingLabel;
 
 
 	@Id
@@ -138,5 +139,14 @@ public class RawTransaction {
 
 	public void setRounded(Boolean rounded) {
 		isRounded = rounded;
+	}
+
+
+	public String getMatchingLabel() {
+		return matchingLabel;
+	}
+
+	public void setMatchingLabel(String matchingLabel) {
+		this.matchingLabel = matchingLabel;
 	}
 }
