@@ -55,20 +55,20 @@ class BankTransactionServiceImpl implements BankTransactionService {
         }
 
         // if not a card, we're done trying to match
-        if (trans.getDescription().toLowerCase().indexOf(" carte ") < 0) {
+        if (trans.getDescription().toLowerCase().indexOf("carte ") < 0) {
             return false;
         }
 
         // check for booked import  match with pending
         Matcher bookedMatcher = bookedPattern.matcher(trans.getDescription());
-        String bookedLabel = bookedMatcher.group(0);
-        if (bookedLabel == null) {
+        if (!bookedMatcher.matches()) {
             return false;
         }
+        String bookedLabel = bookedMatcher.group(1).trim().toLowerCase();
 
             List<RawTransaction> pendingMatch = rawTransactionRepository.findPendingMatch(
                     trans.getAmount(), trans.getTransdate(),
-                    detail);
+                    bookedLabel);
             if ( !pendingMatch.isEmpty()) {
                 return true;
             }

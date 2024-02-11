@@ -93,3 +93,12 @@ public class DateUtils {
 		return cal.getTime();
 	}
 }
+
+//MM SUBTRACT DAYS!!
+
+// subtract x days from imported transdate
+// change sql to consider >= passed date
+// change lb_restore back to livebank
+// test
+// make 1.0.2 version, and restart
+
