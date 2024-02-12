@@ -10,9 +10,7 @@ import meg.swapout.expense.domain.RawTransaction;
 
 public class SocGenMappingHelper extends AbstractMappingHelper {
 	final static String pendingRegEx ="(PAIEMENT CARTE DU \\d{2}\\/\\d{2} \\d{2}:\\d{2} )(.*)";
-	final static String bookedRegEx ="CARTE X\\d{4} \\d{2}\\/\\d{2} (.*$)";
 	Pattern pendingPattern = Pattern.compile(pendingRegEx);
-	Pattern bookedPattern = Pattern.compile(bookedRegEx);
 	public void doManualMapping(Object mapped, Placeholder placeholder) {
 		RawTransaction bank = (RawTransaction) mapped;
 		bank.setHascat(new Boolean(false));

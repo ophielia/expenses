@@ -1,5 +1,6 @@
 package meg.swapout.expense.services.impl;
 
+import meg.swapout.common.DateUtils;
 import meg.swapout.expense.domain.Category;
 import meg.swapout.expense.domain.RawTransaction;
 import meg.swapout.expense.domain.Rule;
@@ -11,10 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,12 +36,13 @@ class BankTransactionServiceImpl implements BankTransactionService {
     final static String bookedRegEx ="CARTE X\\d{4} \\d{2}\\/\\d{2} (.*$)";
     Pattern bookedPattern = Pattern.compile(bookedRegEx);
 
+    final static String pendingRegEx ="(PAIEMENT CARTE DU \\d{2}\\/\\d{2} \\d{2}:\\d{2} )(.*)";
+    Pattern pendingPattern = Pattern.compile(pendingRegEx);
     @Override
     public boolean doesDuplicateExist(RawTransaction trans) {
         if (trans == null) {
             return false;
         }
-        boolean exists = false;
         String detail = trans.getDetail() != null ? trans.getDetail().trim().toLowerCase() : "";
         List<RawTransaction> result = rawTransactionRepository.findExactDuplicates(
                 trans.getAmount(), trans.getTransdate(),
@@ -60,28 +59,46 @@ class BankTransactionServiceImpl implements BankTransactionService {
         }
 
         // check for booked import  match with pending
+        Date comparison  = DateUtils.getSubtractDays(trans.getTransdate(), 7);
         Matcher bookedMatcher = bookedPattern.matcher(trans.getDescription());
-        if (!bookedMatcher.matches()) {
-            return false;
-        }
-        String bookedLabel = bookedMatcher.group(1).trim().toLowerCase();
-
+        String bookedLabel = null;
+        if (bookedMatcher.matches()) {
+             bookedLabel = bookedMatcher.group(1).trim().toLowerCase();
             List<RawTransaction> pendingMatch = rawTransactionRepository.findPendingMatch(
-                    trans.getAmount(), trans.getTransdate(),
+                    trans.getAmount(), comparison,
                     bookedLabel);
             if ( !pendingMatch.isEmpty()) {
                 return true;
             }
 
+        }
+
+        Matcher pendingMatcher = pendingPattern.matcher(trans.getDescription());
+        if (pendingMatcher.matches()) {
+            String pendingLabel = pendingMatcher.group(1).trim().toLowerCase();
+            bookedLabel = bookedMatcher.group(1).trim().toLowerCase();
+            List<RawTransaction> pendingMatch = rawTransactionRepository.findPendingMatch(
+                    trans.getAmount(), comparison,
+                    pendingLabel);
+            if ( !pendingMatch.isEmpty()) {
+                return true;
+            }
+
+        }
 
         // if still unmatched
-        List<RawTransaction> lastEffort = rawTransactionRepository.findDateAmountMatch(
-                trans.getAmount(), trans.getTransdate());
-        RawTransaction found =   lastEffort.stream()
-                .filter(rt -> rt.getDescription().toLowerCase().contains(bookedLabel.toLowerCase()))
-                 .findFirst()
-                 .orElse(null);
-        return found != null;
+        if (bookedLabel != null) {
+            List<RawTransaction> lastEffort = rawTransactionRepository.findDateAmountMatch(
+                    trans.getAmount(), trans.getTransdate());
+            String finalBookedLabel = bookedLabel;
+            RawTransaction found =   lastEffort.stream()
+                    .filter(rt -> rt.getDescription().toLowerCase().contains(finalBookedLabel.toLowerCase()))
+                    .findFirst()
+                    .orElse(null);
+            return found != null;
+
+        }
+        return false;
     }
 
     @Override

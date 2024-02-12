@@ -47,6 +47,14 @@ public class DateUtils {
 		return end.getTime();
 		
 	}
+
+	public static Date getSubtractDays(Date start, int daysToSubtract) {
+		Calendar end = Calendar.getInstance();
+		end.setTime(start);
+		end.add(Calendar.DAY_OF_MONTH,daysToSubtract * -1);
+		return end.getTime();
+
+	}
 	public static List<String> getYearsForSelect(Date oldest, Date newest) {
 		List<String> years = new ArrayList<>();
 
