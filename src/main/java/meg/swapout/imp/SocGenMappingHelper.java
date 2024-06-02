@@ -36,7 +36,7 @@ public class SocGenMappingHelper extends AbstractMappingHelper {
 		//      CARTE X5571 08/02 AMAZON EU SARL COMMERCE ELECTRONIQUE
 		Matcher pendingMatcher = pendingPattern.matcher(description);
 		 if (pendingMatcher.matches()) {
-			 return pendingMatcher.group(0);
+			 return pendingMatcher.group(0).trim();
 		 }
 		return null;
 

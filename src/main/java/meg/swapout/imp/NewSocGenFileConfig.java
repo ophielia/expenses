@@ -14,7 +14,7 @@ class NewSocGenFileConfig implements FileConfig {
 	}
 
 	public int getStartLine() {
-		return 3;
+		return 4;
 	}
 
 	public FieldFormat[] getFieldFormats() {
@@ -33,13 +33,12 @@ class NewSocGenFileConfig implements FileConfig {
 		formats[1].setFieldType(FieldFormat.Type.String);
 		formats[1].setFieldTag("field2");
 
-		formats[2].setFieldType(FieldFormat.Type.Double);
+		formats[2].setFieldType(FieldFormat.Type.String);
 		formats[2].setFieldTag("field3");
-		formats[2].setInputPattern("######.##");
 
-		formats[3].setFieldType(FieldFormat.Type.Ignore);
-		formats[3].setFieldType(FieldFormat.Type.Ignore);
+		formats[3].setFieldType(FieldFormat.Type.Double);
 		formats[3].setFieldTag("field4");
+		formats[3].setInputPattern("######.##");
 
 		return formats;
 

@@ -29,12 +29,12 @@ class NewSocGenMapConfig implements MapConfig {
 		mappings.add(map);
 
 		map = new FieldMapping();
-		map.setFromFieldTag("field3");
+		map.setFromFieldTag("field4");
 		map.setSetterMethod("setAmount");
 		mappings.add(map);
 
 		map = new FieldMapping();
-		map.setFromFieldTag("field2");
+		map.setFromFieldTag("field3");
 		map.setSetterMethod("setDescription");
 		mappings.add(map);
 
