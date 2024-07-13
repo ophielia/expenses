@@ -24,7 +24,7 @@ class NewSocGenMapConfig implements MapConfig {
 		mappings.add(map);
 
 		map = new FieldMapping();
-		map.setFromFieldTag("field2");
+		map.setFromFieldTag("field3");
 		map.setSetterMethod("setDetail");
 		mappings.add(map);
 
