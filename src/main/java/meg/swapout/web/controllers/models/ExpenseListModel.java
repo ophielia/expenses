@@ -71,6 +71,13 @@ public class ExpenseListModel implements Serializable {
 		searchCriteria.setDateRangeByType(daterangetype);
 	}
 
+	public String getSearchText() {
+		return searchCriteria.getSearchText();
+	}
+	public void setSearchText(String searchText) {
+		searchCriteria.setSearchText(searchText);
+	}
+
 	public CategorizedType getCategorizedType() {
 		return searchCriteria.getCategorizedType();
 	}

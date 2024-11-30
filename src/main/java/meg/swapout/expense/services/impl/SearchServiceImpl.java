@@ -479,6 +479,11 @@ public class SearchServiceImpl implements SearchService {
             // already rounded
             whereclause.add(cb.isTrue(exp.get("rounded")));
         }
+        // search text
+        if (criteria.getSearchText() != null && criteria.getSearchText().trim()
+                .length() > 0) {
+            whereclause.add(cb.like(cb.lower(exp.get("description")), "%" + criteria.getSearchText().toLowerCase() + "%"));
+        }
 
         // always exclude deleted
         whereclause.add(cb.isFalse(exp.get("deleted")));

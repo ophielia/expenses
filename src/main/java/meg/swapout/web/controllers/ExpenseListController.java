@@ -180,6 +180,7 @@ public class ExpenseListController {
 	private ExpenseCriteria getDefaultCriteria() {
 		ExpenseCriteria criteria = new ExpenseCriteria();
 		criteria.setDateRangeByType(DateRangeType.CurrentMonth);
+		criteria.setSearchText("");
 		criteria.setCategorizedType(CategorizedType.All);
 		criteria.setTransactionType(TransactionType.Debits);
 		criteria.setShowSubcats(false);

@@ -18,6 +18,7 @@ public class ExpenseCriteria implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Category category;
 	private boolean roundedOnly;
+	private String searchText;
 
 
 
@@ -363,5 +364,13 @@ this.excludeNonExpense=excludeNonExpense;
 
 	public Boolean getRoundedOnly() {
 		return this.roundedOnly;
+	}
+
+	public String getSearchText() {
+		return searchText;
+	}
+
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
 	}
 }
